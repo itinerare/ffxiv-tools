@@ -10,13 +10,13 @@
                     <h5>Top Five:</h5>
                     <ol>
                         @foreach($rankedItems[$class]->take(5) as $item=>$price)
-                            <li><strong>{{ $item }}</strong> - {{ $price }} gil</li>
+                            <li><strong>{{ $item }}</strong> - {{ $price }} Gil</li>
                         @endforeach
                     </ol>
                     @foreach($chunk as $node)
                         <div class="alert alert-{{ $class == 'BTN' ? 'success' : 'info' }}"><ul>
                             @foreach($node as $item=>$price)
-                                <li><strong>{{ $item }}</strong> - {{ $price }} gil</li>
+                                <li><strong>{{ $item }}</strong> - {{ $price }} Gil</li>
                             @endforeach
                         </ul></div>
                     @endforeach
