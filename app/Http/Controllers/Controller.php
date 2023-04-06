@@ -198,7 +198,7 @@ class Controller extends BaseController {
         $this->availableItems = $this->availableItems->map(function ($chunk) use ($priceList) {
             return collect($chunk)->map(function ($node) use ($priceList) {
                 return $node->mapWithKeys(function ($item, $id) use ($priceList) {
-                    return [$item => $priceList[$id]];
+                    return [$item => $priceList[$id] ?? 'Unknown'];
                 });
             });
         });
