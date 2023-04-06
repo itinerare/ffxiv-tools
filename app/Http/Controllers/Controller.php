@@ -153,6 +153,21 @@ class Controller extends BaseController {
         ];
 
         $this->availableItems = collect($this->availableItems);
+
+        $this->dataCenters = [
+            'Aether' => [
+                'Adamantoise', 'Cactuar', 'Faerie', 'Gilgamesh', 'Jenova', 'Midgardsormr', 'Sargatanas', 'Siren',
+            ],
+            'Primal' => [
+                'Behemoth', 'Excalibur', 'Exodus', 'Famfrit', 'Hyperion', 'Lamia', 'Leviathan', 'Ultros',
+            ],
+            'Crystal' => [
+                'Balmung', 'Brynhildr', 'Coeurl', 'Diabolos', 'Goblin', 'Malboro', 'Mateus', 'Zalera',
+            ],
+            'Dynamis' => [
+                'Halicarnassus', 'Maduin', 'Marilith', 'Seraph',
+            ],
+        ];
     }
 
     /**
@@ -161,52 +176,55 @@ class Controller extends BaseController {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getIndex(Request $request) {
-        foreach ($this->items as $chunk) {
-            // Format a comma-separated string of item IDs to make a request to Universalis
-            $idString = implode(',', array_keys($chunk->toArray()));
+        if($request->get('world')) {
+            foreach ($this->items as $chunk) {
+                // Format a comma-separated string of item IDs to make a request to Universalis
+                $idString = implode(',', array_keys($chunk->toArray()));
 
-            // Make a request for the lowest listing for each item
-            $client = new Client();
-            $response = $client->request('GET', 'https://universalis.app/api/v2/'.($request->get('world') ?? 'zalera').'/'.$idString.'?listings=1');
+                // Make a request for the lowest listing for each item
+                $client = new Client();
+                $response = $client->request('GET', 'https://universalis.app/api/v2/'.($request->get('world') ?? null).'/'.$idString.'?listings=1');
 
-            // The response is then returned as JSON
-            $response = json_decode($response->getBody(), true);
+                // The response is then returned as JSON
+                $response = json_decode($response->getBody(), true);
 
-            // Assemble a list of items with prices, ignoring any for which no price data exists
-            foreach ($chunk as $id=>$item) {
-                if (isset($response['items'][$id]['listings'][0]['pricePerUnit'])) {
-                    $priceList[$id] = $response['items'][$id]['listings'][0]['pricePerUnit'] ?? null;
+                // Assemble a list of items with prices, ignoring any for which no price data exists
+                foreach ($chunk as $id=>$item) {
+                    if (isset($response['items'][$id]['listings'][0]['pricePerUnit'])) {
+                        $priceList[$id] = $response['items'][$id]['listings'][0]['pricePerUnit'] ?? null;
+                    }
                 }
             }
-        }
 
-        // Assemble a list of available items ranked by price for each class
-        // This provides a very simple overview
-        foreach($this->availableItems as $class=>$chunk) {
-            foreach($chunk as $node) {
-                foreach ($node as $id=>$item) {
-                    $rankedItems[$class][$item] = $priceList[$id] ?? 'Unknown';
+            // Assemble a list of available items ranked by price for each class
+            // This provides a very simple overview
+            foreach($this->availableItems as $class=>$chunk) {
+                foreach($chunk as $node) {
+                    foreach ($node as $id=>$item) {
+                        $rankedItems[$class][$item] = $priceList[$id] ?? 'Unknown';
+                    }
                 }
             }
-        }
-        arsort($rankedItems['BTN']);
-        $rankedItems['BTN'] = collect($rankedItems['BTN']);
-        arsort($rankedItems['MIN']);
-        $rankedItems['MIN'] = collect($rankedItems['MIN']);
+            arsort($rankedItems['BTN']);
+            $rankedItems['BTN'] = collect($rankedItems['BTN']);
+            arsort($rankedItems['MIN']);
+            $rankedItems['MIN'] = collect($rankedItems['MIN']);
 
-        // Update the list organized by node with price information
-        $this->availableItems = $this->availableItems->map(function ($chunk) use ($priceList) {
-            return collect($chunk)->map(function ($node) use ($priceList) {
-                return $node->mapWithKeys(function ($item, $id) use ($priceList) {
-                    return [$item => $priceList[$id] ?? 'Unknown'];
+            // Update the list organized by node with price information
+            $this->availableItems = $this->availableItems->map(function ($chunk) use ($priceList) {
+                return collect($chunk)->map(function ($node) use ($priceList) {
+                    return $node->mapWithKeys(function ($item, $id) use ($priceList) {
+                        return [$item => $priceList[$id] ?? 'Unknown'];
+                    });
                 });
             });
-        });
+        }
 
         return view('index', [
-            'world' => $request->get('world') ?? 'zalera',
+            'dataCenters' => $this->dataCenters,
+            'world' => $request->get('world') ?? null,
             'items' => $this->availableItems,
-            'rankedItems' => $rankedItems,
+            'rankedItems' => $rankedItems ?? null,
         ]);
     }
 }
