@@ -12,7 +12,12 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Diadem Optimization</title>
+    <title>
+        FFXIV Tools
+        @hasSection('title')
+            @yield('title')
+        @endif
+    </title>
 
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.scss', 'resources/js/app.js'])

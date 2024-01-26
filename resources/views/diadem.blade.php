@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title') ◈ Diadem Optimization @endsection
+
 @section('content')
     @include('_data_center_select', ['currentWorld' => $world ?? null])
     @if ($world)
