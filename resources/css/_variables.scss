@@ -1,19 +1,104 @@
 // Body
-$body-bg: #f8fafc;
-
-// Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
+$body-bg: #1f1e22;
+$body-color: #d6c7ba;
 
 // Colors
-$blue: #3490dc;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66d9b;
-$red: #e3342f;
-$orange: #f6993f;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
+$blue: #007bff;
+$indigo: #6610f2;
+$purple: #644a59;
+$pink: #e83e8c;
+$red: #d93f42;
+$orange: #ff874e;
+$yellow: #a9866c;
+$green: #28a745;
+$teal: #20c997;
+$cyan: #17a2b8;
+$white: #2a292e;
+$gray: #6c757d;
+$gray-dark: #343a40;
+$primary: $purple;
+$secondary: #272b2d;
+$success: #c9cec6;
+$info: #bca9a1;
+$warning: $orange;
+$danger: $red;
+$light: #f8f9fa;
+$dark: #343a40;
+$gold: #a4876e;
+$silver: #b1b6bf;
+
+// Typography
+$headings-font-family: IM Fell English, serif;
+$font-family-base: Georgia, serif;
+$font-size-base: 1rem;
+$line-height-base: 1.6;
+
+$link-color: $gold;
+$link-hover-color: $red;
+
+// Nav
+$navbar-dark-brand-color: $gold;
+$navbar-dark-brand-hover-color: $silver;
+
+$navbar-dark-color: $silver;
+$navbar-dark-hover-color: $gold;
+$navbar-dark-active-color: $gold;
+
+$navbar-bg-color: #1f1e22;
+$nav-tabs-border-color: $navbar-bg-color;
+$nav-tabs-border-width: 0;
+
+// Dropdowns
+$dropdown-color: $body-color;
+$dropdown-link-color: $silver;
+$dropdown-divider-bg: $gold;
+$dropdown-link-hover-color: $link-hover-color;
+$dropdown-link-hover-bg: $body-bg;
+$dropdown-link-active-color: $red;
+
+// Breadcrumbs
+$breadcrumb-bg: $white;
+
+// Alerts
+$alert-bg-level: 2;
+$alert-color-level: 8;
+
+// Pagination
+$pagination-border-width: 0;
+$pagination-active-bg: $purple;
+$pagination-active-color: $body-bg;
+$pagination-hover-color: $purple;
+$pagination-hover-bg: $body-color;
+$pagination-disabled-color: $silver;
+
+// Images
+$thumbnail-bg: $white;
+$thumbnail-border-width: 0;
+
+// Cards
+$card-bg: $white;
+$card-border-color: $card-bg;
+
+// Forms
+$input-color: $body-color;
+$input-border-color: $white;
+$input-focus-color: $link-color;
+$input-placeholder-color: $gray;
+$input-disabled-bg: #212529;
+
+$input-group-addon-bg: $secondary;
+$input-group-addon-color: $silver;
+
+// Progress bar
+$progress-bg: $white;
+$progress-bar-color: $body-color;
+
+// Tables
+$table-color: $body-color;
+$table-border-color: #282a2d;
+
+// Tooltip
+$tooltip-color: $body-color;
+
+// Jumbotron
+$jumbotron-bg: $white;
