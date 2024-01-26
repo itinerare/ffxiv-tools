@@ -1,6 +1,6 @@
 <div class="copyright">
-    <div class="float-right align-self-center">
+    <div class="float-end align-self-center">
         <p>Data from <a href="https://universalis.app">Universalis</a></p>
     </div>
-    <p>Diadem Optimization</p>
+    <p>FFXIV Tools</p>
 </div>

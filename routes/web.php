@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DiademController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,4 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(Controller::class)->group(function () {
     Route::get('/', 'getIndex');
+});
+
+Route::controller(DiademController::class)->group(function () {
+    Route::get('diadem', 'getDiadem');
 });
