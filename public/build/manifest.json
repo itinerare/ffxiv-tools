@@ -12,12 +12,12 @@
     "src": "resources/fonts/UnifrakturMaguntia-Regular.ttf"
   },
   "resources/js/app.js": {
-    "file": "assets/app.2a635884.js",
+    "file": "assets/app.7e57ef17.js",
     "src": "resources/js/app.js",
     "isEntry": true
   },
   "resources/css/app.scss": {
-    "file": "assets/app.e8347d03.css",
+    "file": "assets/app.d7880d15.css",
     "src": "resources/css/app.scss",
     "isEntry": true
   }
