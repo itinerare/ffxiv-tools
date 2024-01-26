@@ -39,3 +39,7 @@
         <h1 class="text-center">Please select a world!</h1>
     @endif
 @endsection
+
+@section('credit')
+    <p>Data from <a href="https://universalis.app">Universalis</a></p>
+@endsection

@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    beep
+    Please select one of the tools from the navigation above!
 @endsection

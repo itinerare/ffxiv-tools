@@ -1,6 +1,8 @@
 <div class="copyright">
-    <div class="float-end align-self-center">
-        <p>Data from <a href="https://universalis.app">Universalis</a></p>
-    </div>
+    @if(View::hasSection('credit'))
+        <div class="float-end align-self-center">
+            @yield('credit')
+        </div>
+    @endif
     <p>FFXIV Tools</p>
 </div>
