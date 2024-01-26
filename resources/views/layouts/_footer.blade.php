@@ -1,5 +1,5 @@
 <div class="copyright">
-    @if(View::hasSection('credit'))
+    @if (View::hasSection('credit'))
         <div class="float-end align-self-center">
             @yield('credit')
         </div>

@@ -44,3 +44,11 @@
 .btn-secondary:focus, .btn-secondary.focus, .btn-secondary.disabled, .btn-secondary:disabled, .btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
     color: $body-color;
 }
+
+// Accordion
+.accordion {
+    --bs-accordion-border-color: #29282D;
+    --bs-accordion-bg: #29282D;
+    --bs-accordion-active-bg: #bca9a1;
+    --bs-accordion-active-color: #1f1e22;
+}
