@@ -27,12 +27,12 @@
                     <div>
                         <div class="text-center mb-4">
                             <a href="{{ url('/') }}"
-                                class="btn {{ url()->current() == url('/') ? 'btn-success' : 'btn-primary' }} py-0">Index</a>
+                                class="btn {{ url()->current() == url('/') ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">Index</a>
                             <a href="{{ url('leveling') }}"
-                                class="btn {{ url()->current() == url('leveling') ? 'btn-success' : 'btn-primary' }} py-0">Leveling
+                                class="btn {{ url()->current() == url('leveling') ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">Leveling
                                 Calculator</a>
                             <a href="{{ url('diadem') }}"
-                                class="btn {{ url()->current() == url('diadem') ? 'btn-success' : 'btn-primary' }} py-0">Diadem
+                                class="btn {{ url()->current() == url('diadem') ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">Diadem
                                 Optimization</a>
                         </div>
                         @include('flash::message')
