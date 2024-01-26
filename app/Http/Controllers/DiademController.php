@@ -214,7 +214,7 @@ class DiademController extends Controller {
             });
         }
 
-        return view('index', [
+        return view('diadem', [
             'dataCenters' => $this->dataCenters,
             'world' => $request->get('world') ?? null,
             'items' => $this->availableItems,
