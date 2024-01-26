@@ -170,7 +170,7 @@ class DiademController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getDiadem(Request $request) {
-        if($request->get('world')) {
+        if ($request->get('world')) {
             foreach ($this->items as $chunk) {
                 // Format a comma-separated string of item IDs to make a request to Universalis
                 $idString = implode(',', array_keys($chunk->toArray()));
@@ -192,8 +192,8 @@ class DiademController extends Controller {
 
             // Assemble a list of available items ranked by price for each class
             // This provides a very simple overview
-            foreach($this->availableItems as $class=>$chunk) {
-                foreach($chunk as $node) {
+            foreach ($this->availableItems as $class=>$chunk) {
+                foreach ($chunk as $node) {
                     foreach ($node as $id=>$item) {
                         $rankedItems[$class][$item] = $priceList[$id] ?? 'Unknown';
                     }
@@ -216,8 +216,8 @@ class DiademController extends Controller {
 
         return view('diadem', [
             'dataCenters' => $this->dataCenters,
-            'world' => $request->get('world') ?? null,
-            'items' => $this->availableItems,
+            'world'       => $request->get('world') ?? null,
+            'items'       => $this->availableItems,
             'rankedItems' => $rankedItems ?? null,
         ]);
     }
