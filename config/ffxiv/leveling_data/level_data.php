@@ -8,15 +8,15 @@ return [
     'level_ranges' => [
         1 => [
             'ceiling' => 50,
-            'text'    => 'Below level 15, consider PotD or hunting logs. Once available, dungeons are the most efficient source of EXP. Additionally, Frontline is a good EXP source once available (starting at level 30) until about level 50.',
+            'text'    => 'Below level 15, consider Palace of the Dead or hunting logs. Once available, dungeons are the most efficient source of EXP. Additionally, Frontline is a good EXP source once available (starting at level 30) until about level 50.',
         ],
         51 => [
             'ceiling' => 60,
-            'text'    => 'Dungeons are firmly the most efficient source of EXP. While technically at-level content, PotD falls off somewhat in EXP efficiency past level 50.',
+            'text'    => 'Dungeons are firmly the most efficient source of EXP. While technically at-level content, Palace of the Dead falls off somewhat in EXP efficiency past level 50.',
         ],
         61 => [
             'ceiling' => 70,
-            'text'    => 'HoH becomes available starting at level 61 (once unlocked) and is a viable alternative to dungeons throughout this level range.',
+            'text'    => 'Heaven-on-High becomes available starting at level 61 (once unlocked) and is a viable alternative to dungeons throughout this level range.',
         ],
         71 => [
             'ceiling' => 80,
@@ -24,7 +24,7 @@ return [
         ],
         81 => [
             'ceiling' => 90,
-            'text'    => 'Dungeons and EO are both solid options in this level range, and Bozja remains fairly efficient as well.',
+            'text'    => 'Dungeons and Eureka Orthos are both solid options in this level range, and Bozja remains fairly efficient as well.',
         ],
     ],
 
