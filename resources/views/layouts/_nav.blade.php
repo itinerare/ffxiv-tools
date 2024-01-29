@@ -7,7 +7,7 @@
         Calculator</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link {{ url()->current() == url('diadem') ? 'active' : '' }}" href="{{ url('diadem') }}">Diadem
+      <a class="nav-link {{ url()->current() == url('diadem') ? 'active' : '' }}" href="{{ url('diadem') }}">Diadem Gil
         Optimization</a>
     </li>
     <li class="nav-item">
