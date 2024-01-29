@@ -181,7 +181,7 @@
         @foreach ($levelRanges as $floor => $range)
             @if (
                 (request()->get('character_level') && request()->get('character_level') <= $range['ceiling']) ||
-                    request()->missing('character_level'))
+                    !request()->get('character_level'))
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button
