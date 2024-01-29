@@ -16,7 +16,7 @@
     <li class="nav-item">
         <a class="nav-link" id="frontline-tab-{{ $floor }}" data-bs-toggle="tab" data-bs-target="#exp-frontline-{{ $floor }}" type="button" role="tab" aria-controls="exp-frontline-{{ $floor }}" aria-selected="false">
             PvP (Frontline)
-            ({{ $frontline[$range['ceiling']]['total_runs'] ?? $frontline[$range['ceiling']-1]['total_runs'] }} runs)
+            ({{ $frontline[$range['ceiling']]['total_runs'] ?? $frontline[$range['ceiling']-1]['total_runs'] }} matches)
         </a>
     </li>
 </ul>
