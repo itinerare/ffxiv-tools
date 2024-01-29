@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DiademController;
+use App\Http\Controllers\LevelingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,4 +22,8 @@ Route::controller(Controller::class)->group(function () {
 
 Route::controller(DiademController::class)->group(function () {
     Route::get('diadem', 'getDiadem');
+});
+
+Route::controller(LevelingController::class)->group(function () {
+    Route::get('leveling', 'getLeveling');
 });
