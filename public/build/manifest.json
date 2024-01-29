@@ -1,15 +1,11 @@
 {
-  "resources/fonts/IMFellEnglish-Regular.ttf": {
-    "file": "assets/IMFellEnglish-Regular.ac506157.ttf",
-    "src": "resources/fonts/IMFellEnglish-Regular.ttf"
+  "resources/fonts/RobotoCondensed-Regular.ttf": {
+    "file": "assets/RobotoCondensed-Regular.6a2cfb7e.ttf",
+    "src": "resources/fonts/RobotoCondensed-Regular.ttf"
   },
-  "resources/fonts/Forum-Regular.ttf": {
-    "file": "assets/Forum-Regular.e796323a.ttf",
-    "src": "resources/fonts/Forum-Regular.ttf"
-  },
-  "resources/fonts/UnifrakturMaguntia-Regular.ttf": {
-    "file": "assets/UnifrakturMaguntia-Regular.e3180e91.ttf",
-    "src": "resources/fonts/UnifrakturMaguntia-Regular.ttf"
+  "resources/fonts/Lato-Regular.ttf": {
+    "file": "assets/Lato-Regular.7ae714b6.ttf",
+    "src": "resources/fonts/Lato-Regular.ttf"
   },
   "resources/js/app.js": {
     "file": "assets/app.0d7f7d08.js",
@@ -17,7 +13,7 @@
     "isEntry": true
   },
   "resources/css/app.scss": {
-    "file": "assets/app.e62bea97.css",
+    "file": "assets/app.6b252a02.css",
     "src": "resources/css/app.scss",
     "isEntry": true
   }

@@ -1,54 +1,5 @@
-// Fonts
-@font-face {
-    font-family: IM Fell English;
-    src: url(../fonts/IMFellEnglish-Regular.ttf)
-}
-
-@font-face {
-    font-family: Forum;
-    src: url(../fonts/Forum-Regular.ttf)
-}
-
-@font-face {
-    font-family: UnifrakturMaguntia;
-    src: url(../fonts/UnifrakturMaguntia-Regular.ttf)
-}
-
 // Variables
 @import 'variables';
 
 // Bootstrap
-@import '../../node_modules/bootstrap/scss/bootstrap';
-
-.dropdown-menu {
-    border-bottom: 2px solid $gold;
-}
-
-.card .input-group .form-control {
-    background-color: $body-bg;
-}
-
-.input-group-text.bg-secondary {
-    border-color: $secondary;
-}
-
-.form-control:disabled {
-    border-color: $input-disabled-bg;
-}
-
-.alert-secondary, .btn-outline-secondary, .btn-dark, .btn-outline-dark {
-    color: $body-color;
-}
-
-.btn-primary, .btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary.disabled, .btn-primary:disabled, .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle, .btn-secondary, .btn-secondary:hover,
-.btn-secondary:focus, .btn-secondary.focus, .btn-secondary.disabled, .btn-secondary:disabled, .btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
-    color: $body-color;
-}
-
-// Accordion
-.accordion {
-    --bs-accordion-border-color: #29282D;
-    --bs-accordion-bg: #29282D;
-    --bs-accordion-active-bg: #bca9a1;
-    --bs-accordion-active-color: #1f1e22;
-}
+@import '../node_modules/bootstrap/scss/bootstrap';

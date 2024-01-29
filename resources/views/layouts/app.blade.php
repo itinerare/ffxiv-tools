@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="auto">
 
 <head>
     <meta charset="utf-8">
@@ -21,6 +21,7 @@
 
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    @include('layouts._theme_switch_js')
 </head>
 
 <body>
@@ -30,16 +31,7 @@
                 <div class="col"></div>
                 <div class="main-content col-lg-8 p-4" id="content">
                     <div>
-                        <div class="text-center mb-4">
-                            <a href="{{ url('/') }}"
-                                class="btn {{ url()->current() == url('/') ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">Index</a>
-                            <a href="{{ url('leveling') }}"
-                                class="btn {{ url()->current() == url('leveling') ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">Leveling
-                                Calculator</a>
-                            <a href="{{ url('diadem') }}"
-                                class="btn {{ url()->current() == url('diadem') ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">Diadem
-                                Optimization</a>
-                        </div>
+                        @include('layouts._nav')
                         @include('flash::message')
                         @yield('content')
                     </div>
@@ -64,7 +56,6 @@
                 </div>
             </div>
         </div>
-
         @yield('scripts')
     </div>
 </body>
