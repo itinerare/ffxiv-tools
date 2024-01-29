@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title') ◈ Leveling Calculator @endsection
+@section('title') ・ Leveling Calculator @endsection
 
 @section('content')
     <div class="accordion mb-4" id="SettingsSelect">
