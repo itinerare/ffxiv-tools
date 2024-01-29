@@ -4,5 +4,5 @@
             @yield('credit')
         </div>
     @endif
-    <p>FFXIV Tools</p>
+    <p><a href="https://github.com/itinerare/ffxiv-tools">FFXIV Tools</a></p>
 </div>
