@@ -178,7 +178,7 @@
     <p class="text-center">Up-to-date for 6.55. 7.0 updates will occur on getting sufficient data after release.</p>
 
     <div class="accordion" id="levelAccordion">
-        @foreach ($levelRanges as $floor => $range)
+        @foreach (config('ffxiv.leveling_data.level_data.level_ranges') as $floor => $range)
             @if (
                 (request()->get('character_level') && (request()->get('character_level') <= $range['ceiling'] || request()->get('character_level') == config('ffxiv.leveling_data.level_data.level_cap'))) ||
                     !request()->get('character_level'))

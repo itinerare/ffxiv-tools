@@ -135,11 +135,9 @@ class LevelingController extends Controller {
 
         return view('leveling.index', [
             'bonus'       => $bonus,
-            'levelRanges' => config('ffxiv.leveling_data.level_data.level_ranges'),
             'dungeon'     => $dungeon,
             'deepDungeon' => $deepDungeon,
             'frontline'   => $frontline,
-            'levelCap'    => config('ffxiv.leveling_data.level_data.level_cap'),
         ]);
     }
 }
