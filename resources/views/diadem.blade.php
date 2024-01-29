@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title') ・ Diadem Gil Optimization @endsection
+@section('title')
+    ・ Diadem Gil Optimization
+@endsection
 
 @section('content')
     @include('_data_center_select', ['currentWorld' => $world ?? null])
