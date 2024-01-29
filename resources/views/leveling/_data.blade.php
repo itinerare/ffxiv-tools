@@ -4,7 +4,7 @@
             data-bs-target="#exp-dungeon-{{ $floor }}" type="button" role="tab"
             aria-controls="exp-dungeon-{{ $floor }}" aria-selected="true">
             Dungeon
-            ({{ $dungeon[$range['ceiling']]['total_runs'] ?? $dungeon[$range['ceiling'] - 1]['total_runs'] }} runs)
+            ({{ $dungeon[$range['ceiling']]['total_runs'] ?? $dungeon[$range['ceiling'] - 1]['total_runs'] }} run{{ ($dungeon[$range['ceiling']]['total_runs'] ?? $dungeon[$range['ceiling'] - 1]['total_runs']) > 1 ? 's' : '' }})
         </a>
     </li>
     @if ($floor != 71)
@@ -14,7 +14,7 @@
                 aria-controls="exp-deep-dungeon-{{ $floor }}" aria-selected="false">
                 Deep Dungeon
                 ({{ $deepDungeon[$range['ceiling']]['total_runs'] ?? $deepDungeon[$range['ceiling'] - 1]['total_runs'] }}
-                runs)
+                run{{ ($deepDungeon[$range['ceiling']]['total_runs'] ?? $deepDungeon[$range['ceiling'] - 1]['total_runs']) > 1 ? 's' : '' }})
             </a>
         </li>
     @endif
@@ -24,7 +24,7 @@
             aria-controls="exp-frontline-{{ $floor }}" aria-selected="false">
             PvP (Frontline)
             ({{ $frontline[$range['ceiling']]['total_runs'] ?? $frontline[$range['ceiling'] - 1]['total_runs'] }}
-            matches)
+            match{{ ($frontline[$range['ceiling']]['total_runs'] ?? $frontline[$range['ceiling'] - 1]['total_runs']) > 1 ? 'es' : '' }})
         </a>
     </li>
 </ul>
