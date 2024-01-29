@@ -74,7 +74,7 @@ class DiademController extends Controller {
             });
         }
 
-        return view('diadem', [
+        return view('diadem.index', [
             'dataCenters' => config('ffxiv.data_centers'),
             'world'       => $request->get('world') ?? null,
             'items'       => $this->availableItems,

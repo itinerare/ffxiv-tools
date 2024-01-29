@@ -200,7 +200,7 @@
                             <p>Note that the number of runs given on each tab is how many are required to reach the end of
                                 this level range.</p>
 
-                            @include('_leveling_data')
+                            @include('leveling._data')
                         </div>
                     </div>
                 </div>
