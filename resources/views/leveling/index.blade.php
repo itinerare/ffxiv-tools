@@ -34,7 +34,7 @@
                             {!! Form::label('character_level', 'Current Level', ['class' => 'form-label']) !!}
                             {!! Form::number('character_level', request()->get('character_level') ?? null, [
                                 'class' => 'form-control',
-                                'max' => 90,
+                                'max' => config('ffxiv.leveling_data.level_data.level_cap'),
                             ]) !!}
                         </div>
 
@@ -49,7 +49,7 @@
                             {!! Form::label('character_highest', 'Level of Highest Class/Job', ['class' => 'form-label']) !!}
                             {!! Form::number('character_highest', request()->get('character_highest') ?? null, [
                                 'class' => 'form-control',
-                                'max' => 90,
+                                'max' => config('ffxiv.leveling_data.level_data.level_cap'),
                             ]) !!}
                         </div>
 
@@ -103,8 +103,8 @@
                     <hr>
 
                     <p>
-                        The calculated % bonus is {{ $bonus[1] }}% at 30 or below, {{ $bonus[31] }}% at 80 or below,
-                        and {{ $bonus[81] }}% at 81 and above, plus an additional 50% with rested EXP when and where
+                        The calculated % bonus is {{ $bonus[1] }}% at 30 or below, {{ $bonus[31] }}% at {{ config('ffxiv.leveling_data.level_data.level_cap') - 10 }} or below,
+                        and {{ $bonus[config('ffxiv.leveling_data.level_data.level_cap') - 9] }}% at {{ config('ffxiv.leveling_data.level_data.level_cap') - 9 }} and above, plus an additional 50% with rested EXP when and where
                         applicable. If this does not match values observed in game, you may specify an override value here.
                         Note that the numbers provided here <i>do</i> adjust with this override. Note that deep dungeons and
                         Frontline do not use these numbers directly.
@@ -180,7 +180,7 @@
     <div class="accordion" id="levelAccordion">
         @foreach ($levelRanges as $floor => $range)
             @if (
-                (request()->get('character_level') && request()->get('character_level') <= $range['ceiling']) ||
+                (request()->get('character_level') && (request()->get('character_level') <= $range['ceiling'] || request()->get('character_level') == config('ffxiv.leveling_data.level_data.level_cap'))) ||
                     !request()->get('character_level'))
                 <div class="accordion-item">
                     <h2 class="accordion-header">

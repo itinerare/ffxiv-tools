@@ -36,7 +36,7 @@
                 <div class="col-12 col-md-8 font-weight-bold">EXP to Next</div>
             </div>
 
-            @for ($level = max(request()->get('character_level') ?? 0, $floor); $level <= ($range['ceiling'] == 90 ? 89 : $range['ceiling']); $level++)
+            @for ($level = max(request()->get('character_level') && request()->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? request()->get('character_level') : 1, $floor); $level <= ($range['ceiling'] == config('ffxiv.leveling_data.level_data.level_cap') ? config('ffxiv.leveling_data.level_data.level_cap')-1 : $range['ceiling']); $level++)
                 <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
                     <div class="col-12 col-md-4">{{ $level }}</div>
                     <div class="col-12 col-md-8">
@@ -59,7 +59,7 @@
                         <div class="col-6 col-md-3 font-weight-bold">Total Runs</div>
                     </div>
 
-                    @for ($level = max(request()->get('character_level') ?? 0, $floor); $level <= ($range['ceiling'] == 90 ? 89 : $range['ceiling']); $level++)
+                    @for ($level = max(request()->get('character_level') && request()->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? request()->get('character_level') : 1, $floor); $level <= ($range['ceiling'] == config('ffxiv.leveling_data.level_data.level_cap') ? config('ffxiv.leveling_data.level_data.level_cap')-1 : $range['ceiling']); $level++)
                         <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
                             <div class="col-6 col-md-2">{{ $dungeon[$level]['level'] ?? '-' }}</div>
                             <div class="col-6 col-md-3">{{ $dungeon[$level]['exp'] ?? '' }}</div>
@@ -83,7 +83,7 @@
                             <div class="col-6 col-md-3 font-weight-bold">Total Runs</div>
                         </div>
 
-                        @for ($level = max(request()->get('character_level') ?? 0, $floor); $level <= ($range['ceiling'] == 90 ? 89 : $range['ceiling']); $level++)
+                        @for ($level = max(request()->get('character_level') && request()->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? request()->get('character_level') : 1, $floor); $level <= ($range['ceiling'] == config('ffxiv.leveling_data.level_data.level_cap') ? config('ffxiv.leveling_data.level_data.level_cap')-1 : $range['ceiling']); $level++)
                             <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
                                 <div class="col-6 col-md-2">{{ $deepDungeon[$level]['level'] ?? '-' }}</div>
                                 <div class="col-6 col-md-3">{{ $deepDungeon[$level]['exp'] ?? '' }}</div>
@@ -105,7 +105,7 @@
                         <div class="col-7 col-md-3 font-weight-bold">Total Matches</div>
                     </div>
 
-                    @for ($level = max(request()->get('character_level') ?? 0, $floor); $level <= ($range['ceiling'] == 90 ? 89 : $range['ceiling']); $level++)
+                    @for ($level = max(request()->get('character_level') && request()->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? request()->get('character_level') : 1, $floor); $level <= ($range['ceiling'] == config('ffxiv.leveling_data.level_data.level_cap') ? config('ffxiv.leveling_data.level_data.level_cap')-1 : $range['ceiling']); $level++)
                         <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
                             <div class="col-6 col-md-3">{{ $frontline[$level]['avg_exp'] ?? '-' }}</div>
                             <div class="col-6 col-md-3">{{ $frontline[$level]['runs'] ?? '' }}</div>

@@ -28,6 +28,8 @@ return [
         ],
     ],
 
+    'level_cap' => 90,
+
     'level_exp' => [
         1  => 300,
         2  => 450,

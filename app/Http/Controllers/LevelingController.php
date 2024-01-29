@@ -34,11 +34,11 @@ class LevelingController extends Controller {
                 ($request->get('character_highest') > $request->get('character_level') ? 100 : 0) +
                 ($request->get('character_road') ? 100 : 0) +
                 ($request->get('gear_earring') ? 30 : 0),
-            81 => $bonusBase +
+            (config('ffxiv.leveling_data.level_data.level_cap') - 9) => $bonusBase +
                 ($request->get('character_highest') > $request->get('character_level') ? 50 : 0),
         ];
 
-        for ($level = ($request->get('character_level') ?? 1); $level < 90; $level++) {
+        for ($level = ($request->get('character_level') && $request->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? $request->get('character_level') : 1); $level < config('ffxiv.leveling_data.level_data.level_cap'); $level++) {
             // Calculate dungeon values
             if ($level >= 15) {
                 // Determine the relevant EXP bonus value and convert it from percentage
@@ -139,6 +139,7 @@ class LevelingController extends Controller {
             'dungeon'     => $dungeon,
             'deepDungeon' => $deepDungeon,
             'frontline'   => $frontline,
+            'levelCap'    => config('ffxiv.leveling_data.level_data.level_cap'),
         ]);
     }
 }
