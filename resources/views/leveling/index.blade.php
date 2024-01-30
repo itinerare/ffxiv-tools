@@ -17,7 +17,7 @@
                             at
                             {{ number_format(request()->get('character_exp')) }}/{{ number_format(config('ffxiv.leveling_data.level_data.level_exp.' . request()->get('character_level'))) }}
                             EXP
-                            ({{ number_format(round((request()->get('character_exp') / config('ffxiv.leveling_data.level_data.level_exp.' . request()->get('character_level'))) * 100, 2)) }}%)
+                            ({{ round((request()->get('character_exp') / config('ffxiv.leveling_data.level_data.level_exp.' . request()->get('character_level'))) * 100, 2) }}%)
                         @endif
                     @endif
                 </button>
