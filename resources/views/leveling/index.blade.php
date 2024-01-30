@@ -15,9 +15,9 @@
                         - Level {{ request()->get('character_level') }}
                         @if (request()->get('character_exp'))
                             at
-                            {{ request()->get('character_exp') }}/{{ config('ffxiv.leveling_data.level_data.level_exp.' . request()->get('character_level')) }}
+                            {{ number_format(request()->get('character_exp')) }}/{{ number_format(config('ffxiv.leveling_data.level_data.level_exp.' . request()->get('character_level'))) }}
                             EXP
-                            ({{ round((request()->get('character_exp') / config('ffxiv.leveling_data.level_data.level_exp.' . request()->get('character_level'))) * 100, 2) }}%)
+                            ({{ number_format(round((request()->get('character_exp') / config('ffxiv.leveling_data.level_data.level_exp.' . request()->get('character_level'))) * 100, 2)) }}%)
                         @endif
                     @endif
                 </button>
@@ -109,7 +109,7 @@
                         {{ config('ffxiv.leveling_data.level_data.level_cap') - 9 }} and above, plus an additional 50% with
                         rested EXP when and where
                         applicable. If this does not match values observed in game, you may specify an override value here.
-                        Note that the numbers provided here <i>do</i> adjust with this override. Note that deep dungeons and
+                        Note that the numbers provided here <i>do</i> adjust with this override. Also note that deep dungeons and
                         Frontline do not use these numbers directly.
                     </p>
 
