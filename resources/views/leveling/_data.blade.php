@@ -41,7 +41,7 @@
                 <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
                     <div class="col-12 col-md-4">{{ $level }}</div>
                     <div class="col-12 col-md-8">
-                        {{ number_format(config('ffxiv.leveling_data.level_data.level_exp.' . $level)) ?? '-' }}</div>
+                        {{ number_format(config('ffxiv.leveling_data.level_data.level_exp.' . $level)) }}</div>
                 </div>
             @endfor
         </div>
