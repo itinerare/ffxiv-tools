@@ -109,7 +109,7 @@
 
                     @for ($level = max(request()->get('character_level') && request()->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? request()->get('character_level') : 1, $floor); $level <= ($range['ceiling'] == config('ffxiv.leveling_data.level_data.level_cap') ? config('ffxiv.leveling_data.level_data.level_cap') - 1 : $range['ceiling']); $level++)
                         <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
-                            <div class="col-6 col-md-3">{{ isset($frontline[$level]['avg_exp']) ? number_format($frontline[$level]['avg_exp']) : '' }}</div>
+                            <div class="col-6 col-md-3">{{ isset($frontline[$level]['avg_exp']) ? number_format($frontline[$level]['avg_exp']) : '-' }}</div>
                             <div class="col-6 col-md-3">{{ $frontline[$level]['runs'] ?? '' }}</div>
                             <div class="col-6 col-md-3">{{ isset($frontline[$level]['overage']) ? number_format($frontline[$level]['overage']) : '' }}</div>
                             <div class="col-6 col-md-3">{{ $frontline[$level]['total_runs'] ?? '-' }}</div>
