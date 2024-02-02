@@ -4,5 +4,5 @@
             @yield('credit')
         </div>
     @endif
-    <p><a href="https://github.com/itinerare/ffxiv-tools">FFXIV Tools</a></p>
+    <p><a href="https://github.com/itinerare/ffxiv-tools">FFXIV Tools</a> {{ config('version.string') }}</p>
 </div>
