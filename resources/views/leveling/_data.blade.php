@@ -63,10 +63,13 @@
                     @for ($level = max(request()->get('character_level') && request()->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? request()->get('character_level') : 1, $floor); $level <= ($range['ceiling'] == config('ffxiv.leveling_data.level_data.level_cap') ? config('ffxiv.leveling_data.level_data.level_cap') - 1 : $range['ceiling']); $level++)
                         <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
                             <div class="col-6 col-md-2">{{ $dungeon[$level]['level'] ?? '-' }}</div>
-                            <div class="col-6 col-md-3">{{ isset($dungeon[$level]['exp']) ? number_format($dungeon[$level]['exp']) : '' }}
+                            <div class="col-6 col-md-3">
+                                {{ isset($dungeon[$level]['exp']) ? number_format($dungeon[$level]['exp']) : '' }}
                             </div>
                             <div class="col-3 col-md-2">{{ $dungeon[$level]['runs'] ?? '' }}</div>
-                            <div class="col-3 col-md-2">{{ isset($dungeon[$level]['overage']) ? number_format($dungeon[$level]['overage']) : '' }}</div>
+                            <div class="col-3 col-md-2">
+                                {{ isset($dungeon[$level]['overage']) ? number_format($dungeon[$level]['overage']) : '' }}
+                            </div>
                             <div class="col-6 col-md-3">{{ $dungeon[$level]['total_runs'] ?? '-' }}</div>
                         </div>
                     @endfor
@@ -88,9 +91,13 @@
                         @for ($level = max(request()->get('character_level') && request()->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? request()->get('character_level') : 1, $floor); $level <= ($range['ceiling'] == config('ffxiv.leveling_data.level_data.level_cap') ? config('ffxiv.leveling_data.level_data.level_cap') - 1 : $range['ceiling']); $level++)
                             <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
                                 <div class="col-6 col-md-2">{{ $deepDungeon[$level]['level'] ?? '-' }}</div>
-                                <div class="col-6 col-md-3">{{ isset($deepDungeon[$level]['exp']) ? number_format($deepDungeon[$level]['exp']) : '' }}</div>
+                                <div class="col-6 col-md-3">
+                                    {{ isset($deepDungeon[$level]['exp']) ? number_format($deepDungeon[$level]['exp']) : '' }}
+                                </div>
                                 <div class="col-3 col-md-2">{{ $deepDungeon[$level]['runs'] ?? '' }}</div>
-                                <div class="col-3 col-md-2">{{ isset($deepDungeon[$level]['overage']) ? number_format($deepDungeon[$level]['overage']) : '' }}</div>
+                                <div class="col-3 col-md-2">
+                                    {{ isset($deepDungeon[$level]['overage']) ? number_format($deepDungeon[$level]['overage']) : '' }}
+                                </div>
                                 <div class="col-6 col-md-3">{{ $deepDungeon[$level]['total_runs'] ?? '' }}</div>
                             </div>
                         @endfor
@@ -109,9 +116,13 @@
 
                     @for ($level = max(request()->get('character_level') && request()->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? request()->get('character_level') : 1, $floor); $level <= ($range['ceiling'] == config('ffxiv.leveling_data.level_data.level_cap') ? config('ffxiv.leveling_data.level_data.level_cap') - 1 : $range['ceiling']); $level++)
                         <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
-                            <div class="col-6 col-md-3">{{ isset($frontline[$level]['avg_exp']) ? number_format($frontline[$level]['avg_exp']) : '-' }}</div>
+                            <div class="col-6 col-md-3">
+                                {{ isset($frontline[$level]['avg_exp']) ? number_format($frontline[$level]['avg_exp']) : '-' }}
+                            </div>
                             <div class="col-6 col-md-3">{{ $frontline[$level]['runs'] ?? '' }}</div>
-                            <div class="col-6 col-md-3">{{ isset($frontline[$level]['overage']) ? number_format($frontline[$level]['overage']) : '' }}</div>
+                            <div class="col-6 col-md-3">
+                                {{ isset($frontline[$level]['overage']) ? number_format($frontline[$level]['overage']) : '' }}
+                            </div>
                             <div class="col-6 col-md-3">{{ $frontline[$level]['total_runs'] ?? '-' }}</div>
                         </div>
                     @endfor

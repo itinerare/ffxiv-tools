@@ -109,7 +109,8 @@
                         {{ config('ffxiv.leveling_data.level_data.level_cap') - 9 }} and above, plus an additional 50% with
                         rested EXP when and where
                         applicable. If this does not match values observed in game, you may specify an override value here.
-                        Note that the numbers provided here <i>do</i> adjust with this override. Also note that deep dungeons and
+                        Note that the numbers provided here <i>do</i> adjust with this override. Also note that deep
+                        dungeons and
                         Frontline do not use these numbers directly.
                     </p>
 
