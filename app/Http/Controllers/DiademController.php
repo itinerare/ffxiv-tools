@@ -53,7 +53,7 @@ class DiademController extends Controller {
                             }
                         }
 
-                        // Clear the response after successfully processing it
+                        // Clear the response after processing it
                         unset($response);
                     }
                 }
