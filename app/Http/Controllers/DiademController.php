@@ -50,10 +50,13 @@ class DiademController extends Controller {
                                 $priceList[$id] = $response['items'][$id]['listings'][0]['pricePerUnit'] ?? null;
                             }
                         }
+
+                        // Clear the response after successfully processing it
+                        unset($response);
                     }
                 }
 
-                if (isset($response)) {
+                if (isset($priceList)) {
                     // Collect individual node data
                     $availableItems = [];
                     foreach (config('ffxiv.diadem_items.node_data.BTN') as $node) {
