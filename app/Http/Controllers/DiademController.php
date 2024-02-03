@@ -3,27 +3,10 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ServerException;
 use Illuminate\Http\Request;
 
 class DiademController extends Controller {
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct() {
-        $this->items = config('ffxiv.diadem_items.items');
-        $this->items = collect($this->items)->chunk(100);
-
-        // Collect individual node data
-        $this->availableItems = [];
-        foreach (config('ffxiv.diadem_items.node_data.BTN') as $node) {
-            $this->availableItems['BTN'][] = collect($node);
-        }
-        foreach (config('ffxiv.diadem_items.node_data.MIN') as $node) {
-            $this->availableItems['MIN'][] = collect($node);
-        }
-        $this->availableItems = collect($this->availableItems);
-    }
-
     /**
      * Show the diadem page.
      *
@@ -43,47 +26,67 @@ class DiademController extends Controller {
             }
 
             if ($isValid) {
-                foreach ($this->items as $chunk) {
+                $items = collect(config('ffxiv.diadem_items.items'))->chunk(100);
+
+                foreach ($items as $chunk) {
                     // Format a comma-separated string of item IDs to make a request to Universalis
                     $idString = implode(',', array_keys($chunk->toArray()));
 
                     // Make a request for the lowest listing for each item
                     $client = new Client();
-                    $response = $client->request('GET', 'https://universalis.app/api/v2/'.($request->get('world') ?? null).'/'.$idString.'?listings=1');
+                    try {
+                        $response = $client->request('GET', 'https://universalis.app/api/v2/'.($request->get('world') ?? null).'/'.$idString.'?listings=1');
+                    } catch (ServerException $e) {
+                        flash('It looks like one or more requests to Universalis failed. Please try again later!')->error();
+                    }
 
-                    // The response is then returned as JSON
-                    $response = json_decode($response->getBody(), true);
+                    if (isset($response)) {
+                        // The response is then returned as JSON
+                        $response = json_decode($response->getBody(), true);
 
-                    // Assemble a list of items with prices, ignoring any for which no price data exists
-                    foreach ($chunk as $id=>$item) {
-                        if (isset($response['items'][$id]['listings'][0]['pricePerUnit'])) {
-                            $priceList[$id] = $response['items'][$id]['listings'][0]['pricePerUnit'] ?? null;
+                        // Assemble a list of items with prices, ignoring any for which no price data exists
+                        foreach ($chunk as $id=>$item) {
+                            if (isset($response['items'][$id]['listings'][0]['pricePerUnit'])) {
+                                $priceList[$id] = $response['items'][$id]['listings'][0]['pricePerUnit'] ?? null;
+                            }
                         }
                     }
                 }
 
-                // Assemble a list of available items ranked by price for each class
-                // This provides a very simple overview
-                foreach ($this->availableItems as $class=>$chunk) {
-                    foreach ($chunk as $node) {
-                        foreach ($node as $id=>$item) {
-                            $rankedItems[$class][$item] = $priceList[$id] ?? 'Unknown';
+                if (isset($response)) {
+                    // Collect individual node data
+                    $availableItems = [];
+                    foreach (config('ffxiv.diadem_items.node_data.BTN') as $node) {
+                        $availableItems['BTN'][] = collect($node);
+                    }
+                    foreach (config('ffxiv.diadem_items.node_data.MIN') as $node) {
+                        $availableItems['MIN'][] = collect($node);
+                    }
+                    $availableItems = collect($availableItems);
+
+                    // Assemble a list of available items ranked by price for each class
+                    // This provides a very simple overview
+                    foreach ($availableItems as $class=>$chunk) {
+                        foreach ($chunk as $node) {
+                            foreach ($node as $id=>$item) {
+                                $rankedItems[$class][$item] = $priceList[$id] ?? 'Unknown';
+                            }
                         }
                     }
-                }
-                arsort($rankedItems['BTN']);
-                $rankedItems['BTN'] = collect($rankedItems['BTN']);
-                arsort($rankedItems['MIN']);
-                $rankedItems['MIN'] = collect($rankedItems['MIN']);
+                    arsort($rankedItems['BTN']);
+                    $rankedItems['BTN'] = collect($rankedItems['BTN']);
+                    arsort($rankedItems['MIN']);
+                    $rankedItems['MIN'] = collect($rankedItems['MIN']);
 
-                // Update the list organized by node with price information
-                $this->availableItems = $this->availableItems->map(function ($chunk) use ($priceList) {
-                    return collect($chunk)->map(function ($node) use ($priceList) {
-                        return $node->mapWithKeys(function ($item, $id) use ($priceList) {
-                            return [$item => $priceList[$id] ?? 'Unknown'];
+                    // Update the list organized by node with price information
+                    $availableItems = $availableItems->map(function ($chunk) use ($priceList) {
+                        return collect($chunk)->map(function ($node) use ($priceList) {
+                            return $node->mapWithKeys(function ($item, $id) use ($priceList) {
+                                return [$item => $priceList[$id] ?? 'Unknown'];
+                            });
                         });
                     });
-                });
+                }
             } else {
                 // If the world name is invalid, unset it
                 // so that the frontend treats it as not having selected anything
@@ -94,7 +97,7 @@ class DiademController extends Controller {
         return view('diadem.index', [
             'dataCenters' => config('ffxiv.data_centers'),
             'world'       => $request->get('world') ?? null,
-            'items'       => $this->availableItems,
+            'items'       => $availableItems ?? null,
             'rankedItems' => $rankedItems ?? null,
         ]);
     }
