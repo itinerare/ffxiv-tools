@@ -37,7 +37,7 @@ class DiademController extends Controller {
                     try {
                         $response = $client->request('GET', 'https://universalis.app/api/v2/'.($request->get('world') ?? null).'/'.$idString.'?listings=1');
                     } catch (RequestException $e) {
-                        flash('It looks like one or more requests to Universalis failed. Please try again later!')->error();
+                        flash('It looks like a request to Universalis failed. Please try again later!')->error();
                     }
 
                     if (isset($response)) {
