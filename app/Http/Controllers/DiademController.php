@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 
 class DiademController extends Controller {
@@ -36,18 +36,20 @@ class DiademController extends Controller {
                     $client = new Client();
                     try {
                         $response = $client->request('GET', 'https://universalis.app/api/v2/'.($request->get('world') ?? null).'/'.$idString.'?listings=1');
-                    } catch (ServerException $e) {
+                    } catch (RequestException $e) {
                         flash('It looks like one or more requests to Universalis failed. Please try again later!')->error();
                     }
 
                     if (isset($response)) {
                         // The response is then returned as JSON
                         $response = json_decode($response->getBody(), true);
-
-                        // Assemble a list of items with prices, ignoring any for which no price data exists
-                        foreach ($chunk as $id=>$item) {
-                            if (isset($response['items'][$id]['listings'][0]['pricePerUnit'])) {
-                                $priceList[$id] = $response['items'][$id]['listings'][0]['pricePerUnit'] ?? null;
+                        // Affirm that the response is an array for safety
+                        if (is_array($response)) {
+                            // Assemble a list of items with prices, ignoring any for which no price data exists
+                            foreach ($chunk as $id=>$item) {
+                                if (isset($response['items'][$id]['listings'][0]['pricePerUnit'])) {
+                                    $priceList[$id] = $response['items'][$id]['listings'][0]['pricePerUnit'] ?? null;
+                                }
                             }
                         }
 
