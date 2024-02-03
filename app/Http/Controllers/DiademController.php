@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class DiademController extends Controller {
     /**
@@ -32,15 +31,9 @@ class DiademController extends Controller {
                     // Format a comma-separated string of item IDs to make a request to Universalis
                     $idString = implode(',', array_keys($chunk->toArray()));
 
-                    // Make a request for the lowest listing for each item
-                    $client = new Client();
-                    try {
-                        $response = $client->request('GET', 'https://universalis.app/api/v2/'.($request->get('world') ?? null).'/'.$idString.'?listings=1');
-                    } catch (RequestException $e) {
-                        flash('It looks like a request to Universalis failed. Please try again later!')->error();
-                    }
+                    $response = Http::retry(3, 100, throw: false)->get('https://universalis.app/api/v2/'.($request->get('world') ?? null).'/'.$idString.'?listings=1');
 
-                    if (isset($response)) {
+                    if ($response->successful()) {
                         // The response is then returned as JSON
                         $response = json_decode($response->getBody(), true);
                         // Affirm that the response is an array for safety
