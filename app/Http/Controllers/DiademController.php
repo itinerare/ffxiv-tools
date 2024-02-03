@@ -74,7 +74,7 @@ class DiademController extends Controller {
                     foreach ($availableItems as $class=>$chunk) {
                         foreach ($chunk as $node) {
                             foreach ($node as $id=>$item) {
-                                $rankedItems[$class][$item] = $priceList[$id] ?? 'Unknown';
+                                $rankedItems[$class][$item] = $priceList[$id] ?? 0;
                             }
                         }
                     }
