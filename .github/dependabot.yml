@@ -2,7 +2,7 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
-    target-branch: "develop"
+    target-branch: "main"
     schedule:
       interval: "weekly"
     commit-message:
@@ -10,7 +10,7 @@ updates:
       include: "scope"
   - package-ecosystem: "composer"
     directory: "/"
-    target-branch: "develop"
+    target-branch: "main"
     schedule:
       interval: "weekly"
     commit-message:
