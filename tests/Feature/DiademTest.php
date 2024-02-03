@@ -13,7 +13,7 @@ class DiademTest extends TestCase {
      * @param string $world
      * @param bool   $expected
      */
-    public function testExample($world, $expected): void {
+    public function testGetDiadem($world, $expected): void {
         $response = $this->get('diadem'.($world ? '?world='.$world : ''));
 
         $response->assertStatus(200);
