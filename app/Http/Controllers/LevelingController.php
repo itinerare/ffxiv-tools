@@ -13,26 +13,28 @@ class LevelingController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getLeveling(Request $request) {
-        if ($request->get('use_lodestone') && $request->has('character_id') && $request->has('character_job')) {
-            // Request and parse data from lodestone
-            $response = Http::retry(3, 100, throw: false)->get('https://na.finalfantasyxiv.com/lodestone/character/'.$request->get('character_id').'/class_job/');
+        if ($request->get('use_lodestone')) {
+            if ($request->has('character_id') && $request->has('character_job')) {
+                // Request and parse data from lodestone
+                $response = Http::retry(3, 100, throw: false)->get('https://na.finalfantasyxiv.com/lodestone/character/'.$request->get('character_id').'/class_job/');
 
-            if ($response->successful()) {
-                // Parse data
-                $response = collect((new ParseCharacterClassJobs)->handle($response->getBody())['classjobs']);
+                if ($response->successful()) {
+                    // Parse data
+                    $response = collect((new ParseCharacterClassJobs)->handle($response->getBody())['classjobs']);
 
-                // Record the highest level combat class/job
-                $request->merge(['character_highest' => $response->whereIn('ClassID', array_keys(config('ffxiv.classjob')))->sortByDesc('Level')->first()->Level]);
+                    // Record the highest level combat class/job
+                    $request->merge(['character_highest' => $response->whereIn('ClassID', array_keys(config('ffxiv.classjob')))->sortByDesc('Level')->first()->Level]);
 
-                // Pick out the specified class/job's data
-                $classData = $response->where('ClassID', $request->get('character_job'))->first();
+                    // Pick out the specified class/job's data
+                    $classData = $response->where('ClassID', $request->get('character_job'))->first();
 
-                if ($classData) {
-                    // If class info was retrieved successfully, record data
-                    $request->merge([
-                        'character_level' => $classData->Level ?? 1,
-                        'character_exp'   => $classData->ExpLevel ?? 0,
-                    ]);
+                    if ($classData) {
+                        // If class info was retrieved successfully, record data
+                        $request->merge([
+                            'character_level' => $classData->Level ?? 1,
+                            'character_exp'   => $classData->ExpLevel ?? 0,
+                        ]);
+                    }
                 }
             }
         } else {
