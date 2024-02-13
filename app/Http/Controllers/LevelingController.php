@@ -38,7 +38,7 @@ class LevelingController extends Controller {
         } else {
             // Ensure that the bool is set even if disabled
             // so that the manual entry options display persistently
-            $request->merge(['use_lodestone' => 0,]);
+            $request->merge(['use_lodestone' => 0]);
         }
 
         // Cap out EXP at whatever is appropriate for the level
