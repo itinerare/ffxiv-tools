@@ -1,6 +1,9 @@
 import _ from 'lodash';
 window._ = _;
 
+import jQuery from 'jquery';
+window.$ = jQuery;
+
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 
