@@ -13,6 +13,9 @@
                     Settings
                     @if (request()->get('character_level'))
                         - Level {{ request()->get('character_level') }}
+                        @if(request()->get('use_lodestone') && request()->has('character_job'))
+                            {{ config('ffxiv.classjob')[request()->get('character_job')] }}
+                        @endif
                         @if (request()->get('character_exp'))
                             at
                             {{ number_format(request()->get('character_exp')) }}/{{ number_format(config('ffxiv.leveling_data.level_data.level_exp.' . request()->get('character_level'))) }}
@@ -29,7 +32,28 @@
                         for later, instead save the URL after submitting them!</p>
                     {!! Form::open(['method' => 'GET']) !!}
                     <h5>Character</h5>
-                    <div class="row">
+                    <div class="mb-3">
+                        {!! Form::checkbox('use_lodestone', 1, request()->get('use_lodestone') ?? 1, [
+                            'id' => 'useLodestone',
+                            'class' => 'form-check-input',
+                            'type' => 'checkbox',
+                        ]) !!}
+                        {!! Form::label('use_lodestone', 'Fetch Info from The Lodestone', ['class' => 'form-check-label']) !!}
+                    </div>
+                    <div id="lodestoneContainer" class="row d-none">
+                        <div class="col-md mb-3">
+                            {!! Form::label('character_id', 'Character Lodestone ID', ['class' => 'form-label']) !!}
+                            {!! Form::number('character_id', request()->get('character_id') ?? null, [
+                                'class' => 'form-control',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-md mb-3">
+                            {!! Form::label('character_job', 'Class/Job', ['class' => 'form-label']) !!}
+                            {!! Form::select('character_job', config('ffxiv.classjob'), request()->get('character_job') ?? null, ['class' => 'form-select', 'placeholder' => 'Select Class/Job']) !!}
+                        </div>
+                    </div>
+                    <div id="manualContainer" class="row d-none">
                         <div class="col-md mb-3">
                             {!! Form::label('character_level', 'Current Level', ['class' => 'form-label']) !!}
                             {!! Form::number('character_level', request()->get('character_level') ?? null, [
@@ -52,14 +76,14 @@
                                 'max' => config('ffxiv.leveling_data.level_data.level_cap'),
                             ]) !!}
                         </div>
+                    </div>
 
-                        <div class="col-md mb-3">
-                            {!! Form::label('character_road', '"Road to 80" Buff', ['class' => 'form-check-label']) !!}<br />
-                            {!! Form::checkbox('character_road', 1, request()->get('character_road') ?? 0, [
-                                'class' => 'form-check-input',
-                                'type' => 'checkbox',
-                            ]) !!}
-                        </div>
+                    <div class="mb-3">
+                        {!! Form::checkbox('character_road', 1, request()->get('character_road') ?? 0, [
+                            'class' => 'form-check-input',
+                            'type' => 'checkbox',
+                        ]) !!}
+                        {!! Form::label('character_road', '"Road to 80" Buff', ['class' => 'form-check-label']) !!}
                     </div>
 
                     <h5>Gear</h5>
@@ -84,11 +108,11 @@
                     <h5>Temporary Buffs</h5>
                     <div class="row">
                         <div class="col-md mb-3">
-                            {!! Form::label('temp_food', 'Food Buff', ['class' => 'form-check-label']) !!}<br />
                             {!! Form::checkbox('temp_food', 1, request()->get('temp_food') ?? 0, [
                                 'class' => 'form-check-input',
                                 'type' => 'checkbox',
                             ]) !!}
+                            {!! Form::label('temp_food', 'Food Buff', ['class' => 'form-check-label']) !!}
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -213,6 +237,38 @@
             @endif
         @endforeach
     </div>
+@endsection
+
+@section('scripts')
+@parent
+
+<script type="module">
+    $(document).ready(function() {
+        var $useLodestone = $('#useLodestone');
+        var $lodestoneContainer = $('#lodestoneContainer');
+        var $manualContainer = $('#manualContainer');
+
+        var useLodestone = $useLodestone.is(':checked');
+
+        updateOptions();
+
+        $useLodestone.on('change', function(e) {
+            useLodestone = $useLodestone.is(':checked');
+
+            updateOptions();
+        });
+
+        function updateOptions() {
+            if (useLodestone) {
+                $lodestoneContainer.removeClass('d-none');
+                $manualContainer.addClass('d-none');
+            } else {
+                $lodestoneContainer.addClass('d-none');
+                $manualContainer.removeClass('d-none');
+            }
+        }
+    });
+</script>
 @endsection
 
 @section('credit')

@@ -11,7 +11,8 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.7",
-        "laravelcollective/html": "^6.4"
+        "laravelcollective/html": "^6.4",
+        "xivapi/lodestone-parser": "^2.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

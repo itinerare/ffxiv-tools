@@ -1,20 +1,20 @@
 {
-  "resources/fonts/RobotoCondensed-Regular.ttf": {
-    "file": "assets/RobotoCondensed-Regular.6a2cfb7e.ttf",
-    "src": "resources/fonts/RobotoCondensed-Regular.ttf"
+  "resources/css/app.scss": {
+    "file": "assets/app-5ac12a67.css",
+    "isEntry": true,
+    "src": "resources/css/app.scss"
   },
   "resources/fonts/Lato-Regular.ttf": {
-    "file": "assets/Lato-Regular.7ae714b6.ttf",
+    "file": "assets/Lato-Regular-7ae714b6.ttf",
     "src": "resources/fonts/Lato-Regular.ttf"
   },
-  "resources/js/app.js": {
-    "file": "assets/app.0d7f7d08.js",
-    "src": "resources/js/app.js",
-    "isEntry": true
+  "resources/fonts/RobotoCondensed-Regular.ttf": {
+    "file": "assets/RobotoCondensed-Regular-6a2cfb7e.ttf",
+    "src": "resources/fonts/RobotoCondensed-Regular.ttf"
   },
-  "resources/css/app.scss": {
-    "file": "assets/app.6b252a02.css",
-    "src": "resources/css/app.scss",
-    "isEntry": true
+  "resources/js/app.js": {
+    "file": "assets/app-4baaac7b.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
   }
 }
