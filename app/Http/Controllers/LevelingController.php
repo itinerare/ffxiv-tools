@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Lodestone\Parser\ParseCharacterClassJobs;
 
 class LevelingController extends Controller {
     /**
@@ -11,6 +13,30 @@ class LevelingController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getLeveling(Request $request) {
+        if ($request->has('use_lodestone') && $request->get('use_lodestone') && $request->has('character_id') && $request->has('character_job')) {
+            // Request and parse data from lodestone
+            $response = Http::retry(3, 100, throw: false)->get('https://na.finalfantasyxiv.com/lodestone/character/'.$request->get('character_id').'/class_job/');
+
+            if ($response->successful()) {
+                // Parse data
+                $response = collect((new ParseCharacterClassJobs)->handle($response->getBody())['classjobs']);
+
+                // Record the highest level combat class/job
+                $request->merge(['character_highest' => $response->whereIn('ClassID', array_keys(config('ffxiv.classjob')))->sortByDesc('Level')->first()->Level]);
+
+                // Pick out the specified class/job's data
+                $classData = $response->where('ClassID', $request->get('character_job'))->first();
+
+                if ($classData) {
+                    // If class info was retrieved successfully, record data
+                    $request->merge([
+                        'character_level' => $classData->Level ?? 1,
+                        'character_exp'   => $classData->ExpLevel ?? 0,
+                    ]);
+                }
+            }
+        }
+
         // Cap out EXP at whatever is appropriate for the level
         if ($request->has('character_level') && $request->has('character_exp')) {
             if ($request->get('character_exp') > config('ffxiv.leveling_data.level_data.level_exp.'.$request->get('character_level'))) {
