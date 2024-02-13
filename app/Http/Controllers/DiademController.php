@@ -48,6 +48,8 @@ class DiademController extends Controller {
 
                         // Clear the response after processing it
                         unset($response);
+                    } else {
+                        flash('A request to Universalis failed; please try again later.')->error();
                     }
                 }
 
