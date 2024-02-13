@@ -14,7 +14,7 @@ class LevelingController extends Controller {
      */
     public function getLeveling(Request $request) {
         if ($request->get('use_lodestone')) {
-            if ($request->has('character_id') && $request->has('character_job')) {
+            if ($request->get('character_id') && $request->get('character_job')) {
                 // Request and parse data from lodestone
                 $response = Http::retry(3, 100, throw: false)->get('https://na.finalfantasyxiv.com/lodestone/character/'.$request->get('character_id').'/class_job/');
 
@@ -35,7 +35,11 @@ class LevelingController extends Controller {
                             'character_exp'   => $classData->ExpLevel ?? 0,
                         ]);
                     }
+                } else {
+                    flash('Request to The Lodestone failed; please try again later.')->error();
                 }
+            } else {
+                flash('Please enter both a character ID and class/job to retrieve information from The Lodestone.')->error();
             }
         } else {
             // Ensure that the bool is set even if disabled
