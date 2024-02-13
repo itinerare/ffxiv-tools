@@ -13,7 +13,7 @@ class LevelingController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getLeveling(Request $request) {
-        if ($request->has('use_lodestone') && $request->get('use_lodestone') && $request->has('character_id') && $request->has('character_job')) {
+        if ($request->get('use_lodestone') && $request->has('character_id') && $request->has('character_job')) {
             // Request and parse data from lodestone
             $response = Http::retry(3, 100, throw: false)->get('https://na.finalfantasyxiv.com/lodestone/character/'.$request->get('character_id').'/class_job/');
 
@@ -35,6 +35,10 @@ class LevelingController extends Controller {
                     ]);
                 }
             }
+        } else {
+            // Ensure that the bool is set even if disabled
+            // so that the manual entry options display
+            $request->merge(['use_lodestone' => 0,]);
         }
 
         // Cap out EXP at whatever is appropriate for the level
