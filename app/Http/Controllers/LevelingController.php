@@ -37,7 +37,7 @@ class LevelingController extends Controller {
             }
         } else {
             // Ensure that the bool is set even if disabled
-            // so that the manual entry options display
+            // so that the manual entry options display persistently
             $request->merge(['use_lodestone' => 0,]);
         }
 
@@ -69,6 +69,14 @@ class LevelingController extends Controller {
         ];
 
         for ($level = ($request->get('character_level') && $request->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? $request->get('character_level') : 1); $level < config('ffxiv.leveling_data.level_data.level_cap'); $level++) {
+            // Calculate EXP remaining to level
+            $remainingExp = config('ffxiv.leveling_data.level_data.level_exp.'.$level);
+            if ($request->get('character_exp') && $request->get('character_level') && $request->get('character_level') == $level) {
+                // If the level in question is the current character level,
+                // deduct the current EXP value
+                $remainingExp -= $request->get('character_exp');
+            }
+
             // Calculate dungeon values
             if ($level >= 15) {
                 // Determine the relevant EXP bonus value and convert it from percentage
@@ -87,8 +95,8 @@ class LevelingController extends Controller {
                     // If a dungeon was successfully located, calculate estimated EXP
                     // and from there, estimated runs to next level and excess EXP
                     $dungeon[$level]['exp'] = round((int) $dungeonSearch->last() * $dungeonBonus);
-                    $dungeon[$level]['runs'] = ceil((config('ffxiv.leveling_data.level_data.level_exp.'.$level) - (request()->get('character_exp') ?? 0)) / $dungeon[$level]['exp']);
-                    $dungeon[$level]['overage'] = (($dungeon[$level]['exp'] * $dungeon[$level]['runs']) - ((config('ffxiv.leveling_data.level_data.level_exp.'.$level) - (request()->get('character_exp') ?? 0)))) + ($dungeon[$level - 1]['overage'] ?? 0);
+                    $dungeon[$level]['runs'] = ceil($remainingExp / $dungeon[$level]['exp']);
+                    $dungeon[$level]['overage'] = (($dungeon[$level]['exp'] * $dungeon[$level]['runs']) - $remainingExp) + ($dungeon[$level - 1]['overage'] ?? 0);
                     // The total runs counter resets at the start of a level range
                     // since the frontend displays ranges separately
                     $dungeon[$level]['total_runs'] = (isset($dungeon[$level - 1]['total_runs']) && !in_array($level, array_keys(config('ffxiv.leveling_data.level_data.level_ranges'))) ? $dungeon[$level - 1]['total_runs'] : 0) + $dungeon[$level]['runs'];
@@ -143,8 +151,8 @@ class LevelingController extends Controller {
                 // and then * floor multipler and any applicable EXP bonuses
                 $deepDungeon[$level]['exp'] = round(($level + config('ffxiv.leveling_data.'.strtolower($deepDungeon[$level]['dungeon']).'.level_data.'.$level)[0]) * config('ffxiv.leveling_data.'.strtolower($deepDungeon[$level]['dungeon']).'.level_data.'.$level)[1] * $floorMult * $deepDungeonBonus);
 
-                $deepDungeon[$level]['runs'] = ceil((config('ffxiv.leveling_data.level_data.level_exp.'.$level) - (request()->get('character_exp') ?? 0)) / $deepDungeon[$level]['exp']);
-                $deepDungeon[$level]['overage'] = (($deepDungeon[$level]['exp'] * $deepDungeon[$level]['runs']) - ((config('ffxiv.leveling_data.level_data.level_exp.'.$level) - (request()->get('character_exp') ?? 0)))) + ($deepDungeon[$level - 1]['overage'] ?? 0);
+                $deepDungeon[$level]['runs'] = ceil($remainingExp / $deepDungeon[$level]['exp']);
+                $deepDungeon[$level]['overage'] = (($deepDungeon[$level]['exp'] * $deepDungeon[$level]['runs']) - $remainingExp) + ($deepDungeon[$level - 1]['overage'] ?? 0);
                 $deepDungeon[$level]['total_runs'] = (isset($deepDungeon[$level - 1]['total_runs']) && !in_array($level, array_keys(config('ffxiv.leveling_data.level_data.level_ranges'))) ? $deepDungeon[$level - 1]['total_runs'] : 0) + $deepDungeon[$level]['runs'];
             }
 
@@ -157,8 +165,8 @@ class LevelingController extends Controller {
                 $frontline[$level]['win'] = $frontline[$level]['loss'] * config('ffxiv.leveling_data.frontline.win_mult');
                 $frontline[$level]['avg_exp'] = ($frontline[$level]['loss'] + $frontline[$level]['win']) / 2;
 
-                $frontline[$level]['runs'] = ceil((config('ffxiv.leveling_data.level_data.level_exp.'.$level) - (request()->get('character_exp') ?? 0)) / $frontline[$level]['avg_exp']);
-                $frontline[$level]['overage'] = (($frontline[$level]['avg_exp'] * $frontline[$level]['runs']) - ((config('ffxiv.leveling_data.level_data.level_exp.'.$level) - (request()->get('character_exp') ?? 0)))) + ($frontline[$level - 1]['overage'] ?? 0);
+                $frontline[$level]['runs'] = ceil($remainingExp / $frontline[$level]['avg_exp']);
+                $frontline[$level]['overage'] = (($frontline[$level]['avg_exp'] * $frontline[$level]['runs']) - $remainingExp) + ($frontline[$level - 1]['overage'] ?? 0);
                 $frontline[$level]['total_runs'] = (isset($frontline[$level - 1]['total_runs']) && !in_array($level, array_keys(config('ffxiv.leveling_data.level_data.level_ranges'))) ? $frontline[$level - 1]['total_runs'] : 0) + $frontline[$level]['runs'];
             }
         }
