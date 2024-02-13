@@ -38,7 +38,7 @@
                             'class' => 'form-check-input',
                             'type' => 'checkbox',
                         ]) !!}
-                        {!! Form::label('use_lodestone', 'Fetch Info from The Lodestone', ['class' => 'form-check-label']) !!}
+                        {!! Form::label('use_lodestone', 'Fetch info from The Lodestone', ['class' => 'form-check-label']) !!}
                     </div>
                     <div id="lodestoneContainer" class="row d-none">
                         <div class="col-md mb-3">
