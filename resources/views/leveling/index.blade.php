@@ -13,7 +13,7 @@
                     Settings
                     @if (request()->get('character_level'))
                         - Level {{ request()->get('character_level') }}
-                        @if(request()->get('use_lodestone') && request()->has('character_job'))
+                        @if(request()->get('use_lodestone') && request()->get('character_job'))
                             {{ config('ffxiv.classjob')[request()->get('character_job')] }}
                         @endif
                         @if (request()->get('character_exp'))
