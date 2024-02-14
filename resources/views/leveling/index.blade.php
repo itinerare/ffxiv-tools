@@ -38,7 +38,8 @@
                             'class' => 'form-check-input',
                             'type' => 'checkbox',
                         ]) !!}
-                        {!! Form::label('use_lodestone', 'Retrieve info from The Lodestone', ['class' => 'form-check-label']) !!}
+                        {!! Form::label('use_lodestone', 'Retrieve info from The Lodestone', ['class' => 'form-check-label']) !!}<br/>
+                        Please note that Lodestone data is only updated on logout! Please update manually if wanting to use the most up-to-date values while playing.
                     </div>
                     <div id="lodestoneContainer" class="row d-none">
                         <div class="col-md mb-3">
