@@ -13,7 +13,7 @@
                     Settings
                     @if (request()->get('character_level'))
                         - Level {{ request()->get('character_level') }}
-                        @if(request()->get('use_lodestone') && request()->get('character_job'))
+                        @if (request()->get('use_lodestone') && request()->get('character_job'))
                             {{ config('ffxiv.classjob')[request()->get('character_job')] }}
                         @endif
                         @if (request()->get('character_exp'))
@@ -38,8 +38,9 @@
                             'class' => 'form-check-input',
                             'type' => 'checkbox',
                         ]) !!}
-                        {!! Form::label('use_lodestone', 'Retrieve info from The Lodestone', ['class' => 'form-check-label']) !!}<br/>
-                        Please note that Lodestone data is only updated on logout! Please update manually if wanting to use the most up-to-date values while playing.
+                        {!! Form::label('use_lodestone', 'Retrieve info from The Lodestone', ['class' => 'form-check-label']) !!}<br />
+                        Please note that Lodestone data is only updated on logout! Please update manually if wanting to use
+                        the most up-to-date values while playing.
                     </div>
                     <div id="lodestoneContainer" class="row d-none">
                         <div class="col-md mb-3">
@@ -51,7 +52,10 @@
 
                         <div class="col-md mb-3">
                             {!! Form::label('character_job', 'Class/Job', ['class' => 'form-label']) !!}
-                            {!! Form::select('character_job', config('ffxiv.classjob'), request()->get('character_job') ?? null, ['class' => 'form-select', 'placeholder' => 'Select Class/Job']) !!}
+                            {!! Form::select('character_job', config('ffxiv.classjob'), request()->get('character_job') ?? null, [
+                                'class' => 'form-select',
+                                'placeholder' => 'Select Class/Job',
+                            ]) !!}
                         </div>
                     </div>
                     <div id="manualContainer" class="row d-none">
@@ -241,35 +245,35 @@
 @endsection
 
 @section('scripts')
-@parent
+    @parent
 
-<script type="module">
-    $(document).ready(function() {
-        var $useLodestone = $('#useLodestone');
-        var $lodestoneContainer = $('#lodestoneContainer');
-        var $manualContainer = $('#manualContainer');
+    <script type="module">
+        $(document).ready(function() {
+            var $useLodestone = $('#useLodestone');
+            var $lodestoneContainer = $('#lodestoneContainer');
+            var $manualContainer = $('#manualContainer');
 
-        var useLodestone = $useLodestone.is(':checked');
-
-        updateOptions();
-
-        $useLodestone.on('change', function(e) {
-            useLodestone = $useLodestone.is(':checked');
+            var useLodestone = $useLodestone.is(':checked');
 
             updateOptions();
-        });
 
-        function updateOptions() {
-            if (useLodestone) {
-                $lodestoneContainer.removeClass('d-none');
-                $manualContainer.addClass('d-none');
-            } else {
-                $lodestoneContainer.addClass('d-none');
-                $manualContainer.removeClass('d-none');
+            $useLodestone.on('change', function(e) {
+                useLodestone = $useLodestone.is(':checked');
+
+                updateOptions();
+            });
+
+            function updateOptions() {
+                if (useLodestone) {
+                    $lodestoneContainer.removeClass('d-none');
+                    $manualContainer.addClass('d-none');
+                } else {
+                    $lodestoneContainer.addClass('d-none');
+                    $manualContainer.removeClass('d-none');
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 @endsection
 
 @section('credit')
