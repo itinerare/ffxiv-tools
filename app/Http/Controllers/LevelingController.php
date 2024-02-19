@@ -41,7 +41,7 @@ class LevelingController extends Controller {
             } else {
                 flash('Please enter both a character ID and class/job to retrieve information from The Lodestone.')->error();
             }
-        } elseif($request->all()) {
+        } elseif ($request->all()) {
             // Ensure that the bool is set even if disabled
             // so that the manual entry options display persistently
             $request->merge(['use_lodestone' => 0]);
