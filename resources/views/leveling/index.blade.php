@@ -30,98 +30,71 @@
                 <div class="accordion-body">
                     <p>Please note that no data is saved to the server or your computer; if you wish to save your settings
                         for later, instead save the URL after submitting them!</p>
-                    {!! Form::open(['method' => 'GET']) !!}
+                    {{ html()->form('GET')->open() }}
                     <h5>Character</h5>
                     <div class="mb-3">
-                        {!! Form::checkbox('use_lodestone', 1, request()->get('use_lodestone') ?? 1, [
-                            'id' => 'useLodestone',
-                            'class' => 'form-check-input',
-                            'type' => 'checkbox',
-                        ]) !!}
-                        {!! Form::label('use_lodestone', 'Retrieve info from The Lodestone', ['class' => 'form-check-label']) !!}<br/>
+                        {{ html()->checkbox('use_lodestone', request()->get('use_lodestone') ?? 1)->class('form-check-input')->id('useLodestone') }}
+                        {{ html()->label('Retrieve info from The Lodestone', 'use_lodestone')->class('form-check-label') }}<br/>
                         Please note that Lodestone data is only updated on logout! Please update manually if wanting to use the most up-to-date values while playing.
                     </div>
                     <div id="lodestoneContainer" class="row d-none">
                         <div class="col-md mb-3">
-                            {!! Form::label('character_id', 'Character Lodestone ID', ['class' => 'form-label']) !!}
-                            {!! Form::number('character_id', request()->get('character_id') ?? null, [
-                                'class' => 'form-control',
-                            ]) !!}
+                            {{ html()->label('Character Lodestone ID', 'character_id')->class('form-label') }}
+                            {{ html()->input('number', 'character_id', request()->get('character_id') ?? null)->class('form-control') }}
                         </div>
 
                         <div class="col-md mb-3">
-                            {!! Form::label('character_job', 'Class/Job', ['class' => 'form-label']) !!}
-                            {!! Form::select('character_job', config('ffxiv.classjob'), request()->get('character_job') ?? null, ['class' => 'form-select', 'placeholder' => 'Select Class/Job']) !!}
+                            {{ html()->label('Class/Job', 'character_job')->class('form-label') }}
+                            {{ html()->select('character_job', config('ffxiv.classjob'), request()->get('character_job') ?? null)->class('form-select')->placeholder('Select Class/Job') }}
                         </div>
                     </div>
                     <div id="manualContainer" class="row d-none">
                         <div class="col-md mb-3">
-                            {!! Form::label('character_level', 'Current Level', ['class' => 'form-label']) !!}
-                            {!! Form::number('character_level', request()->get('character_level') ?? null, [
-                                'class' => 'form-control',
-                                'max' => config('ffxiv.leveling_data.level_data.level_cap'),
-                            ]) !!}
+                            {{ html()->label('Current Level', 'character_level')->class('form-label') }}
+                            {{ html()->input('number', 'character_level', request()->get('character_level') ?? null)->class('form-control')->attribute('max', config('ffxiv.leveling_data.level_data.level_cap')) }}
                         </div>
 
                         <div class="col-md mb-3">
-                            {!! Form::label('character_exp', 'Current EXP', ['class' => 'form-label']) !!}
-                            {!! Form::number('character_exp', request()->get('character_exp') ?? null, ['class' => 'form-control']) !!}
+                            {{ html()->label('Current EXP', 'character_exp')->class('form-label') }}
+                            {{ html()->input('number', 'character_exp', request()->get('character_exp') ?? null)->class('form-control') }}
                         </div>
 
                         <div class="w-100"></div>
 
                         <div class="col-md mb-3">
-                            {!! Form::label('character_highest', 'Level of Highest Class/Job', ['class' => 'form-label']) !!}
-                            {!! Form::number('character_highest', request()->get('character_highest') ?? null, [
-                                'class' => 'form-control',
-                                'max' => config('ffxiv.leveling_data.level_data.level_cap'),
-                            ]) !!}
+                            {{ html()->label('Level of Highest Class/Job', 'character_highest')->class('form-label') }}
+                            {{ html()->input('number', 'character_highest', request()->get('character_highest') ?? null)->class('form-control')->attribute('max', config('ffxiv.leveling_data.level_data.level_cap')) }}
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        {!! Form::checkbox('character_road', 1, request()->get('character_road') ?? 0, [
-                            'class' => 'form-check-input',
-                            'type' => 'checkbox',
-                        ]) !!}
-                        {!! Form::label('character_road', '"Road to 80" Buff', ['class' => 'form-check-label']) !!}
+                        {{ html()->checkbox('character_road', request()->get('character_road') ?? 0)->class('form-check-input') }}
+                        {{ html()->label('"Road to 80" Buff', 'character_road')->class('form-check-label') }}
                     </div>
 
                     <h5>Gear</h5>
                     <div class="row">
                         <div class="col-md mb-3">
-                            {!! Form::checkbox('gear_brand_new', 1, request()->get('gear_brand_new') ?? 0, [
-                                'class' => 'form-check-input',
-                                'type' => 'checkbox',
-                            ]) !!}
-                            {!! Form::label('gear_brand_new', 'Brand New Ring', ['class' => 'form-check-label']) !!}
+                            {{ html()->checkbox('gear_brand_new', request()->get('gear_brand_new') ?? 0)->class('form-check-input') }}
+                            {{ html()->label('Brand New Ring', 'gear_brand_new')->class('form-check-label') }}
                         </div>
 
                         <div class="col-md mb-3">
-                            {!! Form::checkbox('gear_earring', 1, request()->get('gear_earring') ?? 0, [
-                                'class' => 'form-check-input',
-                                'type' => 'checkbox',
-                            ]) !!}
-                            {!! Form::label('gear_earring', 'Preorder Bonus Earring (Menphina\'s)', ['class' => 'form-check-label']) !!}
+                            {{ html()->checkbox('gear_earring', request()->get('gear_earring') ?? 0)->class('form-check-input') }}
+                            {{ html()->label('Preorder Bonus Earring (Menphina\'s)', 'gear_earring')->class('form-check-label') }}
                         </div>
                     </div>
 
                     <h5>Temporary Buffs</h5>
                     <div class="row">
                         <div class="col-md mb-3">
-                            {!! Form::checkbox('temp_food', 1, request()->get('temp_food') ?? 0, [
-                                'class' => 'form-check-input',
-                                'type' => 'checkbox',
-                            ]) !!}
-                            {!! Form::label('temp_food', 'Food Buff', ['class' => 'form-check-label']) !!}
+                            {{ html()->label('FC EXP Buff (The Heat of Battle)', 'temp_fc')->class('form-label') }}
+                            {{ html()->select('temp_fc', [1 => 'I', 2 => 'II', 3 => 'III'], request()->get('temp_fc') ?? null)->class('form-select')->placeholder('None/Select Level') }}
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            {!! Form::label('temp_fc', 'FC EXP Buff (The Heat of Battle)', ['class' => 'form-label']) !!}
-                            {!! Form::select('temp_fc', [1 => 'I', 2 => 'II', 3 => 'III'], request()->get('temp_fc') ?? null, [
-                                'class' => 'form-select',
-                                'placeholder' => 'None/Select Level',
-                            ]) !!}
+                        <div class="col-md-6 mb-3 mt-0 mt-md-4">
+                            {{ html()->checkbox('temp_food', request()->get('temp_food') ?? 0)->class('form-check-input') }}
+                            {{ html()->label('Food Buff', 'temp_food')->class('form-check-label') }}
                         </div>
                     </div>
 
@@ -140,14 +113,14 @@
                     </p>
 
                     <div class="col-md mb-3">
-                        {!! Form::label('override', 'Bonus % Override', ['class' => 'form-label']) !!}
-                        {!! Form::number('override', request()->get('override') ?? null, ['class' => 'form-control']) !!}
+                        {{ html()->label('Bonus % Override', 'override')->class('form-label') }}
+                        {{ html()->input('number', 'override', request()->get('override') ?? null)->class('form-control') }}
                     </div>
 
                     <div class="ms-2 mb-3 text-end">
-                        {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
+                        {{ html()->submit('Submit')->class('btn btn-primary') }}
                     </div>
-                    {!! Form::close() !!}
+                    {{ html()->form()->close() }}
                 </div>
             </div>
         </div>
