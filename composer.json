@@ -11,7 +11,7 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.7",
-        "laravelcollective/html": "^6.4",
+        "spatie/laravel-html": "^3.5",
         "xivapi/lodestone-parser": "^2.1"
     },
     "require-dev": {
