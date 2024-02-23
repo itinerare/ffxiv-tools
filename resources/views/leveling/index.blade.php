@@ -8,8 +8,7 @@
     <div class="accordion mb-4" id="SettingsSelect">
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button class="accordion-button {{ request()->all() ? 'collapsed' : '' }}" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#Settings" aria-expanded="true" aria-controls="Settings">
+                <button class="accordion-button {{ request()->all() ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#Settings" aria-expanded="true" aria-controls="Settings">
                     Settings
                     @if (request()->get('character_level'))
                         - Level {{ request()->get('character_level') }}
@@ -25,8 +24,7 @@
                     @endif
                 </button>
             </h2>
-            <div id="Settings" class="accordion-collapse collapse {{ request()->all() ? '' : 'show' }}"
-                data-bs-parent="#SettingsSelect">
+            <div id="Settings" class="accordion-collapse collapse {{ request()->all() ? '' : 'show' }}" data-bs-parent="#SettingsSelect">
                 <div class="accordion-body">
                     <p>Please note that no data is saved to the server or your computer; if you wish to save your settings
                         for later, instead save the URL after submitting them!</p>
@@ -127,8 +125,7 @@
         </div>
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Tips"
-                    aria-expanded="true" aria-controls="Tips">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Tips" aria-expanded="true" aria-controls="Tips">
                     Leveling Tips
                 </button>
             </h2>
@@ -182,22 +179,15 @@
 
     <div class="accordion" id="levelAccordion">
         @foreach (config('ffxiv.leveling_data.level_data.level_ranges') as $floor => $range)
-            @if (
-                (request()->get('character_level') &&
-                    (request()->get('character_level') <= $range['ceiling'] ||
-                        request()->get('character_level') == config('ffxiv.leveling_data.level_data.level_cap'))) ||
-                    !request()->get('character_level'))
+            @if ((request()->get('character_level') && (request()->get('character_level') <= $range['ceiling'] || request()->get('character_level') == config('ffxiv.leveling_data.level_data.level_cap'))) || !request()->get('character_level'))
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button
-                            class="accordion-button {{ request()->get('character_level') && request()->get('character_level') >= $floor && request()->get('character_level') <= $range['ceiling'] ? '' : 'collapsed' }}"
-                            type="button" data-bs-toggle="collapse" data-bs-target="#range{{ $floor }}"
-                            aria-expanded="true" aria-controls="range{{ $floor }}">
+                        <button class="accordion-button {{ request()->get('character_level') && request()->get('character_level') >= $floor && request()->get('character_level') <= $range['ceiling'] ? '' : 'collapsed' }}" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#range{{ $floor }}" aria-expanded="true" aria-controls="range{{ $floor }}">
                             {{ $floor }} to {{ $range['ceiling'] }}
                         </button>
                     </h2>
-                    <div id="range{{ $floor }}"
-                        class="accordion-collapse collapse {{ request()->get('character_level') && request()->get('character_level') >= $floor && request()->get('character_level') <= $range['ceiling'] ? 'show' : '' }}"
+                    <div id="range{{ $floor }}" class="accordion-collapse collapse {{ request()->get('character_level') && request()->get('character_level') >= $floor && request()->get('character_level') <= $range['ceiling'] ? 'show' : '' }}"
                         data-bs-parent="#levelAccordion">
                         <div class="accordion-body">
                             <p>{!! $range['text'] !!}</p>
@@ -248,16 +238,12 @@
 
 @section('credit')
     <p class="text-end">EXP values from:
-        <a
-            href="https://docs.google.com/spreadsheets/d/1CG0xtc_p4o3XzLQxK0A6tXz1koZF11JKN4yCLEGjrFo/edit?usp=sharing">PotD</a>,
-        <a
-            href="https://docs.google.com/spreadsheets/d/1M4gteurUKCGrniPqESBDBbsPpvi8p0oC_V41ShJZJ-s/edit?usp=sharing">HoH</a>,
-        <a
-            href="https://docs.google.com/spreadsheets/d/1yJ9cr606u0WKDVzHFXoa_DPt-bCJTJfUUcwVtQSHxJI/edit?usp=sharing">Dungeons</a>,
+        <a href="https://docs.google.com/spreadsheets/d/1CG0xtc_p4o3XzLQxK0A6tXz1koZF11JKN4yCLEGjrFo/edit?usp=sharing">PotD</a>,
+        <a href="https://docs.google.com/spreadsheets/d/1M4gteurUKCGrniPqESBDBbsPpvi8p0oC_V41ShJZJ-s/edit?usp=sharing">HoH</a>,
+        <a href="https://docs.google.com/spreadsheets/d/1yJ9cr606u0WKDVzHFXoa_DPt-bCJTJfUUcwVtQSHxJI/edit?usp=sharing">Dungeons</a>,
         <a href="https://docs.google.com/spreadsheets/d/1IJl01GIUmrjEpfiVK0ZKqTR-ExTO38dSxG9QIIIBxbk/edit?usp=sharing">own
             data (EO, Frontline)</a><br />
-        Inspired by <a
-            href="https://docs.google.com/spreadsheets/d/1OwfD4w0KMkvaUK-l5-piquWrjYKQDnorTZ_nMWCeCp4/edit?usp=sharing">Deep
+        Inspired by <a href="https://docs.google.com/spreadsheets/d/1OwfD4w0KMkvaUK-l5-piquWrjYKQDnorTZ_nMWCeCp4/edit?usp=sharing">Deep
             Dungeon Runs Calculator</a>
     </p>
 @endsection
