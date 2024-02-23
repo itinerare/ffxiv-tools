@@ -34,8 +34,9 @@
                     <h5>Character</h5>
                     <div class="mb-3">
                         {{ html()->checkbox('use_lodestone', request()->get('use_lodestone') ?? 1)->class('form-check-input')->id('useLodestone') }}
-                        {{ html()->label('Retrieve info from The Lodestone', 'use_lodestone')->class('form-check-label') }}<br/>
-                        Please note that Lodestone data is only updated on logout! Please update manually if wanting to use the most up-to-date values while playing.
+                        {{ html()->label('Retrieve info from The Lodestone', 'use_lodestone')->class('form-check-label') }}<br />
+                        Please note that Lodestone data is only updated on logout! Please update manually if wanting to use
+                        the most up-to-date values while playing.
                     </div>
                     <div id="lodestoneContainer" class="row d-none">
                         <div class="col-md mb-3">
