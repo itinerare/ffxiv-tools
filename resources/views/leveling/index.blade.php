@@ -13,7 +13,7 @@
                     Settings
                     @if (request()->get('character_level'))
                         - Level {{ request()->get('character_level') }}
-                        @if(request()->get('use_lodestone') && request()->get('character_job'))
+                        @if (request()->get('use_lodestone') && request()->get('character_job'))
                             {{ config('ffxiv.classjob')[request()->get('character_job')] }}
                         @endif
                         @if (request()->get('character_exp'))
@@ -214,35 +214,35 @@
 @endsection
 
 @section('scripts')
-@parent
+    @parent
 
-<script type="module">
-    $(document).ready(function() {
-        var $useLodestone = $('#useLodestone');
-        var $lodestoneContainer = $('#lodestoneContainer');
-        var $manualContainer = $('#manualContainer');
+    <script type="module">
+        $(document).ready(function() {
+            var $useLodestone = $('#useLodestone');
+            var $lodestoneContainer = $('#lodestoneContainer');
+            var $manualContainer = $('#manualContainer');
 
-        var useLodestone = $useLodestone.is(':checked');
-
-        updateOptions();
-
-        $useLodestone.on('change', function(e) {
-            useLodestone = $useLodestone.is(':checked');
+            var useLodestone = $useLodestone.is(':checked');
 
             updateOptions();
-        });
 
-        function updateOptions() {
-            if (useLodestone) {
-                $lodestoneContainer.removeClass('d-none');
-                $manualContainer.addClass('d-none');
-            } else {
-                $lodestoneContainer.addClass('d-none');
-                $manualContainer.removeClass('d-none');
+            $useLodestone.on('change', function(e) {
+                useLodestone = $useLodestone.is(':checked');
+
+                updateOptions();
+            });
+
+            function updateOptions() {
+                if (useLodestone) {
+                    $lodestoneContainer.removeClass('d-none');
+                    $manualContainer.addClass('d-none');
+                } else {
+                    $lodestoneContainer.addClass('d-none');
+                    $manualContainer.removeClass('d-none');
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 @endsection
 
 @section('credit')
