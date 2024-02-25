@@ -11,7 +11,7 @@ A collection of small, light-weight browser utilities related to FFXIV. Currentl
 ### Obtain a copy of the code
 
 ```
-$ git clone https://code.itinerare.net/itinerare/alcyone.git
+$ git clone https://code.itinerare.net/itinerare/ffxiv-tools.git
 ```
 
 ### Configure .env in the directory
