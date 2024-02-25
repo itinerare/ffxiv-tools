@@ -6,6 +6,9 @@ A collection of small, light-weight browser utilities related to FFXIV. Currentl
     - Takes user input (e.g. current level, highest level class/job, various EXP buffs) and calculates number of dungeon/deep dungeon runs or frontline matches to get to the next level/to the end of a level range (e.g. 1-50, 51-60). Also supports fetching level, EXP, and highest level class/job from The Lodestone provided character ID and class/job.
 - Diadem Gil Optimization
     - Consults Universalis to see what the current pricest mat on each Diadem node is on a given world, as well as the priciest overall. Supports NA, Europe, JP, and Oceania data centers/worlds.
+    
+An instance can be found at https://ffxiv.itinerare.net and is periodically updated from this repo. 
+
 ## Setup
 
 ### Obtain a copy of the code
@@ -26,7 +29,7 @@ This only needs the bare minimum (e.g. this doesn't use a database for anything)
 
 Install packages with composer:
 ```
-$ composer install
+$ composer install --ignore-platform-reqs
 ```
 
 Generate app key:
