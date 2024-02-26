@@ -1,6 +1,6 @@
 {
   "resources/css/app.scss": {
-    "file": "assets/app-5ac12a67.css",
+    "file": "assets/app-65e74fa8.css",
     "isEntry": true,
     "src": "resources/css/app.scss"
   },
@@ -13,7 +13,7 @@
     "src": "resources/fonts/RobotoCondensed-Regular.ttf"
   },
   "resources/js/app.js": {
-    "file": "assets/app-4baaac7b.js",
+    "file": "assets/app-1c6a07dc.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }
