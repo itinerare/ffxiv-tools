@@ -2,17 +2,17 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class DiademTest extends TestCase {
     /**
      * Test getting the Diadem tool.
      *
-     * @dataProvider diademProvider
-     *
      * @param string $world
      * @param bool   $expected
      */
+    #[DataProvider('diademProvider')]
     public function testGetDiadem($world, $expected): void {
         $response = $this->get('diadem'.($world ? '?world='.$world : ''));
 

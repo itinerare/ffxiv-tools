@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class LevelingTest extends TestCase {
@@ -9,8 +10,6 @@ class LevelingTest extends TestCase {
      * Test getting the Leveling tool.
      * Note that this only tests that it is accessible under various conditions,
      * not that its logic is sound/the numbers it's putting out make sense.
-     *
-     * @dataProvider levelingProvider
      *
      * @param int|null $charLevel
      * @param int|null $charExp
@@ -22,6 +21,7 @@ class LevelingTest extends TestCase {
      * @param int|null $tempFc
      * @param int|null $override
      */
+    #[DataProvider('levelingProvider')]
     public function testGetLeveling($charLevel, $charExp, $charHighest, $charRoad, $gearRing, $gearEarring, $tempFood, $tempFc, $override): void {
         // Add any additional data to the request
         if ($charLevel) {
