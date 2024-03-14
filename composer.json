@@ -11,8 +11,14 @@
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.7",
         "spatie/laravel-html": "^3.5",
-        "xivapi/lodestone-parser": "^1.8"
+        "xivapi/lodestone-parser": "dev-main"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://code.itinerare.net/itinerare/lodestone-parser"
+        }
+    ],
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
