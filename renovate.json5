@@ -3,11 +3,5 @@
     "baseBranches": ["main"],
     "extends": [
         "local>itinerare/renovate-config"
-    ],
-    "packageRules": [
-    {
-      "matchPackageNames": ["xivapi/lodestone-parser"],
-      "watchComposerLatest": true
-    }
-  ]
+    ]
 }
