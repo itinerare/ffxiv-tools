@@ -29,7 +29,7 @@ This only needs the bare minimum (e.g. this doesn't use a database for anything)
 
 Install packages with composer:
 ```
-$ composer install --ignore-platform-reqs
+$ composer install
 ```
 
 Generate app key:
