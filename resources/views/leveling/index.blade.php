@@ -136,7 +136,7 @@
                             Do your dailies!
                             <ul>
                                 <li>Roulettes (especially leveling and alliance raid, and MSQ if you've the patience)</li>
-                                <li>Daily bonus Frontline (which gives a sizeable amount of EXP <i>for whichever class/job you
+                                <li>Daily bonus Frontline (which gives a sizeable amount of EXP <i>for whichever job you
                                         queue as</i>, not necessarily what you <i>play</i> as within the match; just switch
                                     after loading in)</li>
                                 <li>Tribe quests for your current level range/the relevant expansion (the EXP from these
@@ -150,7 +150,7 @@
                             the game.
                             <ul>
                                 <li>Keep in mind as well that if you're facing down long queue times or otherwise not up to
-                                    playing a role/class with others, duty support covers the vast majority of leveling
+                                    playing a role/job with others, duty support covers the vast majority of leveling
                                     dungeons (as most are required for MSQ)! While it may be slower than with a party of
                                     other players, this doesn't account for time lost to queues-- or EXP lost to potentially
                                     not doing a dungeon at all.</li>
@@ -162,11 +162,11 @@
                             little extra, e.g. if very near a level at which a more efficient method becomes avaialble (and
                             provide additional rewards in ShB and later zones).</li>
                         <li>
-                            Wondrous Tails provides 50% of a level once a week on turn-in, to the class active when it is
+                            Wondrous Tails provides 50% of a level once a week on turn-in, to the job active when it is
                             turned in!
                             <ul>
                                 <li>To assist with completion, keep in mind that earlier (especially ARR) Extreme trials can
-                                    be unsynced either with help or as a higher-level class.</li>
+                                    be unsynced either with help or as a higher-level job.</li>
                             </ul>
                         </li>
                     </ul>
