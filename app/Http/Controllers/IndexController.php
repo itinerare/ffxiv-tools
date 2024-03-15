@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-class IndexController extends Controller
-{
+class IndexController extends Controller {
     /**
      * Show the index page.
      *
