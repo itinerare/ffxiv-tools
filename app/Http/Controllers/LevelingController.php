@@ -31,7 +31,7 @@ class LevelingController extends Controller {
                     if ($classData) {
                         // If class info was retrieved successfully, record data
                         $request->merge([
-                            'character_level' => $classData->Level ?? 1,
+                            'character_level' => $classData->Level && $classData->Level > 0 ? $classData->Level : 1,
                             'character_exp'   => $classData->ExpLevel ?? 0,
                         ]);
                     }
