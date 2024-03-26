@@ -70,9 +70,9 @@ class LevelingController extends Controller {
                 ($request->get('character_highest') > $request->get('character_level') ? 100 : 0) +
                 ($request->get('character_road') ? 100 : 0) +
                 ($request->get('gear_earring') ? 30 : 0),
-            (config('ffxiv.leveling_data.level_data.level_cap') - 10) => $bonusBase +
+            (config('ffxiv.leveling_data.level_data.level_cap') - 9) => $bonusBase +
                 ($request->get('character_highest') > $request->get('character_level') ? 50 : 0) +
-                (((config('ffxiv.leveling_data.level_data.level_cap') - 10) <= config('ffxiv.leveling_data.gear.earring.max')) && $request->get('gear_earring') ? 30 : 0),
+                (((config('ffxiv.leveling_data.level_data.level_cap') - 9) <= config('ffxiv.leveling_data.gear.earring.max')) && $request->get('gear_earring') ? 30 : 0),
         ];
 
         for ($level = ($request->get('character_level') && $request->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? $request->get('character_level') : 1); $level < config('ffxiv.leveling_data.level_data.level_cap'); $level++) {
