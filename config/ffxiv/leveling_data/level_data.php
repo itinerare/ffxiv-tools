@@ -5,6 +5,11 @@ return [
      * LEVEL DATA
      */
 
+    'motd'      => [
+        'last_patch' => '6.55',
+        'message'    => '7.0 updates will occur on getting sufficient data after release.',
+    ],
+
     'level_ranges' => [
         1 => [
             'ceiling' => 50,

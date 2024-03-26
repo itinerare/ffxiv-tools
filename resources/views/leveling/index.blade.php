@@ -175,7 +175,10 @@
         </div>
     </div>
 
-    <p class="text-center">Up-to-date for 6.55. 7.0 updates will occur on getting sufficient data after release.</p>
+    <p class="text-center">
+        Up-to-date for {{ config('ffxiv.leveling_data.level_data.motd.last_patch') }}.
+        {{ config('ffxiv.leveling_data.level_data.motd.message') ?? '' }}
+    </p>
 
     <div class="accordion" id="levelAccordion">
         @foreach (config('ffxiv.leveling_data.level_data.level_ranges') as $floor => $range)
