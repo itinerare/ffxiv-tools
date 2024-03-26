@@ -80,7 +80,7 @@
 
                         <div class="col-md mb-3">
                             {{ html()->checkbox('gear_earring', request()->get('gear_earring') ?? 0)->class('form-check-input') }}
-                            {{ html()->label('Preorder Bonus Earring (Menphina\'s)', 'gear_earring')->class('form-check-label') }}
+                            {{ html()->label('Preorder Bonus Earring(s) ('.config('ffxiv.leveling_data.gear.earring.name').')', 'gear_earring')->class('form-check-label') }}
                         </div>
                     </div>
 
