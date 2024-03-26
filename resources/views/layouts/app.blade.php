@@ -22,6 +22,9 @@
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     @include('layouts._theme_switch_js')
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
 </head>
 
 <body>
