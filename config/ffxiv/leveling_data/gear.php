@@ -6,7 +6,7 @@ return [
      */
 
     'earring' => [
-        'name' => 'Menphina\'s',
-        'max'  => 80,
+        'name' => 'Azeyma\'s',
+        'max'  => 90,
     ],
 ];

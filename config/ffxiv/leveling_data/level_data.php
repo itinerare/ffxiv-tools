@@ -6,7 +6,7 @@ return [
      */
 
     'motd'      => [
-        'last_patch' => '6.55',
+        'last_patch' => '6.58',
         'message'    => '7.0 updates will occur on getting sufficient data after release.',
     ],
 
