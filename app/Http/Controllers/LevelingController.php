@@ -164,7 +164,7 @@ class LevelingController extends Controller {
             }
 
             // Calculate Frontline values
-            if ($level >= 30) {
+            if ($level >= 30 && config('ffxiv.leveling_data.frontline.level_data.'.$level)) {
                 // Frontline awards flat EXP unimpacted by any bonuses,
                 // but varies depending on a win or loss, so average those values
                 // Otherwise the EXP formula is similar to deep dungeons'
