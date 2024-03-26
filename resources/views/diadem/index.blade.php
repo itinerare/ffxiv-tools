@@ -5,9 +5,9 @@
 @endsection
 
 @section('content')
-    @include('_data_center_select', ['currentWorld' => $world ?? null])
-    @if ($world)
-        <h3 class="text-center">Showing Results for {{ ucfirst($world) }}</h3>
+    @include('_data_center_select', ['world' => request()->get('world') ?? null])
+    @if (request()->get('world'))
+        <h3 class="text-center">Showing Results for {{ ucfirst(request()->get('world')) }}</h3>
         <div class="card-group">
             @foreach ($items as $class => $chunk)
                 <div class="card">
