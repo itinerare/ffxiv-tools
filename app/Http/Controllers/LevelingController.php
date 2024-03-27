@@ -145,13 +145,13 @@ class LevelingController extends Controller {
                 // Deep dungeon EXP is impacted by only two bonuses: armoury and road
                 $deepDungeonBonus = 1;
                 if ($request->get('character_highest') > $request->get('character_level')) {
-                    if ($level < 80) {
+                    if ($level < (config('ffxiv.leveling_data.level_data.level_cap') - 10)) {
                         $deepDungeonBonus += 1;
                     } else {
                         $deepDungeonBonus += 0.5;
                     }
                 }
-                if ($request->get('character_road') && $level < 80) {
+                if ($request->get('character_road') && $level < (config('ffxiv.leveling_data.level_data.level_cap') - 10)) {
                     $deepDungeonBonus += 1;
                 }
                 // with a general formula of (level + modifier) * base EXP value
