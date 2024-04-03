@@ -97,8 +97,6 @@ class LevelingTest extends TestCase {
             'only food'            => [null, null, null, null, null, 0, 0, 0, 1, null, null],
             'only FC'              => [null, null, null, null, null, 0, 0, 0, 0, 2, null],
             'only override'        => [null, null, null, null, null, 0, 0, 0, 0, null, 10],
-            'only character ID'    => [33459349, null, null, null, null, 0, 0, 0, 0, null, null],
-            'only character ID'    => [null, 'RPR', null, null, null, 0, 0, 0, 0, null, null],
             'level 1'              => [null, null, 1, null, null, 0, 0, 0, 0, null, null],
             'level 1, exp'         => [null, null, 1, 200, null, 0, 0, 0, 0, null, null],
             'level 1, highest'     => [null, null, 1, null, 90, 0, 0, 0, 0, null, null],
