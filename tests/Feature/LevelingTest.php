@@ -68,21 +68,28 @@ class LevelingTest extends TestCase {
         }
 
         $response = $this->get('leveling'.($request ?? ''));
-        $response->assertStatus(200);
 
-        // Test that level ranges are/aren't visible
-        foreach (config('ffxiv.leveling_data.level_data.level_ranges') as $floor=>$range) {
-            if (!$charLevel || ($charLevel <= $range['ceiling'] || $charLevel == config('ffxiv.leveling_data.level_data.level_cap'))) {
-                $response->assertSee($floor.' to '.$range['ceiling']);
-            } elseif ($charLevel && $charLevel < $range['ceiling']) {
-                $response->assertDontSee($floor.' to '.$range['ceiling']);
+        if($charJob && $charJob == 15) {
+            // In the case of a validation error, it is technically handled as a redirect
+            $response->assertSessionHasErrors();
+        } else {
+            $response->assertStatus(200);
+            $response->assertSessionHasNoErrors();
+
+            // Test that level ranges are/aren't visible
+            foreach (config('ffxiv.leveling_data.level_data.level_ranges') as $floor=>$range) {
+                if (!$charLevel || ($charLevel <= $range['ceiling'] || $charLevel == config('ffxiv.leveling_data.level_data.level_cap'))) {
+                    $response->assertSee($floor.' to '.$range['ceiling']);
+                } elseif ($charLevel && $charLevel < $range['ceiling']) {
+                    $response->assertDontSee($floor.' to '.$range['ceiling']);
+                }
             }
-        }
 
-        if ($charId && ($charJob && in_array($charJob, array_keys(config('ffxiv.classjob'))))) {
-            $response->assertSeeText(config('ffxiv.classjob.'.$charJob));
-        } elseif ($charJob || $charId) {
-            $response->assertSeeText('Please enter both a character ID and valid combat class/job to retrieve information from The Lodestone.');
+            if ($charId && ($charJob && in_array($charJob, array_keys(config('ffxiv.classjob'))))) {
+                $response->assertSeeText(config('ffxiv.classjob.'.$charJob));
+            } elseif ($charJob || $charId) {
+                $response->assertSeeText('Please enter both a character ID and valid combat class/job to retrieve information from The Lodestone.');
+            }
         }
     }
 
