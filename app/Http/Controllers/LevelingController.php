@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\Rule;
 use Lodestone\Parser\ParseCharacterClassJobs;
 
 class LevelingController extends Controller {
@@ -13,6 +14,21 @@ class LevelingController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getLeveling(Request $request) {
+        $request->validate([
+            'use_lodestone'     => 'nullable|boolean',
+            'character_id'      => 'nullable|numeric',
+            'character_job'     => ['nullable', Rule::in(array_keys(config('ffxiv.classjob')))],
+            'character_level'   => 'nullable|numeric|max:'.config('ffxiv.leveling_data.level_data.level_cap'),
+            'character_exp'     => 'nullable|numeric',
+            'character_highest' => 'nullable|numeric|max:'.config('ffxiv.leveling_data.level_data.level_cap'),
+            'character_road'    => 'nullable|boolean',
+            'gear_brand_new'    => 'nullable|boolean',
+            'gear_earring'      => 'nullable|boolean',
+            'temp_fc'           => 'nullable|in:1,2,3',
+            'temp_food'         => 'nullable|boolean',
+            'override'          => 'nullable|numeric',
+        ]);
+
         if ($request->get('use_lodestone')) {
             if ($request->get('character_id') && ($request->get('character_job') && in_array($request->get('character_job'), array_keys(config('ffxiv.classjob'))))) {
                 // Request and parse data from lodestone
