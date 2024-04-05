@@ -159,7 +159,7 @@
                             </ul>
                         </li>
                         <li>FATEs generally aren't very efficient for large amounts of EXP, but are an easy way to get a
-                            little extra, e.g. if very near a level at which a more efficient method becomes avaialble (and
+                            little extra, e.g. if very near a level at which a more efficient method becomes available (and
                             provide additional rewards in ShB and later zones).</li>
                         <li>
                             Wondrous Tails provides 50% of a level once a week on turn-in, to the job active when it is
