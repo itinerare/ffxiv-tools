@@ -196,9 +196,9 @@ class LevelingController extends Controller {
 
         return view('leveling.index', [
             'bonus'       => $bonus,
-            'dungeon'     => $dungeon,
-            'deepDungeon' => $deepDungeon,
-            'frontline'   => $frontline,
+            'dungeon'     => $dungeon ?? null,
+            'deepDungeon' => $deepDungeon ?? null,
+            'frontline'   => $frontline ?? null,
         ]);
     }
 }
