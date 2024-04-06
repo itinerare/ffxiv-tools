@@ -69,7 +69,7 @@ class LevelingTest extends TestCase {
 
         $response = $this->get('leveling'.($request ?? ''));
 
-        if($charJob && $charJob == 15) {
+        if ($charJob && $charJob == 15) {
             // In the case of a validation error, it is technically handled as a redirect
             $response->assertSessionHasErrors();
         } else {
