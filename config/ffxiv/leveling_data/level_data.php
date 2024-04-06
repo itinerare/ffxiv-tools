@@ -6,8 +6,8 @@ return [
      */
 
     'motd'      => [
-        'last_patch' => '6.58',
-        'message'    => '7.0 updates will occur on getting sufficient data after release.',
+        'last_patch' => '7.0 (incomplete)',
+        'message'    => '7.0 updates are occurring as data is gathered. Thank you for your patience!',
     ],
 
     'level_ranges' => [
@@ -31,9 +31,13 @@ return [
             'ceiling' => 90,
             'text'    => 'Dungeons and Eureka Orthos are both solid options in this level range, and Bozja remains fairly efficient as well.',
         ],
+        91 => [
+            'ceiling' => 100,
+            'text'    => '- INCOMPLETE/WIP -',
+        ],
     ],
 
-    'level_cap' => 90,
+    'level_cap' => 100,
 
     'level_exp' => [
         1  => 300,
