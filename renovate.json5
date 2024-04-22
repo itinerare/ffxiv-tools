@@ -3,8 +3,5 @@
     "baseBranches": ["main"],
     "extends": [
         "local>internal/renovate-config"
-    ],
-    "lockFileMaintenance": {
-        "enabled": true
-    }
+    ]
 }
