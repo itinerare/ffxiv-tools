@@ -106,7 +106,7 @@ class LevelingController extends Controller {
                 $dungeonBonus = ((int) collect($bonus)->filter(function ($value, $key) use ($level) {
                     return $key <= $level;
                 })->last());
-                $dungeonBonus = $dungeonBonus ? ($dungeonBonus / 100) : 1;
+                $dungeonBonus = $dungeonBonus ? (1 + ($dungeonBonus / 100)) : 1;
 
                 // Determine the highest level "leveling" dungeon available
                 $dungeonSearch = collect(config('ffxiv.leveling_data.dungeon.dungeon_data'))->filter(function ($value, $key) use ($level) {
