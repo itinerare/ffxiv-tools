@@ -163,6 +163,16 @@
                                     desired (and make progress toward the relevant achievements)!</li>
                             </ul>
                         </li>
+                        <li>
+                            Take advantage of rested EXP! Rested EXP is a pool of bonus EXP (about 1.5 levels worth, regardless of current level) that accumulates while resting in a "sanctuary" (generally around aetherytes), whether logged in or out.
+                            Once accumulated, rested EXP is granted in the form of an additional 50% bonus to EXP earned e.g. from dungeons (or from gathering or crafting, for that matter).
+                            <ul>
+                                <li>While it can give a little boost to your roulettes, the fastest way to "cash out" rested EXP is to do at-level dungeons, especially (as above) leveling dungeons.</li>
+                                <li>Rested EXP accumulates per character, but is most useful for leveling higher level classes/jobs-- the EXP received from it scales, so a level {{ config('ffxiv.leveling_data.level_data.level_cap') - 10 }} class/job
+                                    will receive more total EXP from rested EXP than a level 15 one will.
+                                </li>
+                            </ul>
+                        </li>
                         <li>FATEs generally aren't very efficient for large amounts of EXP, but are an easy way to get a
                             little extra, e.g. if very near a level at which a more efficient method becomes available (and
                             provide additional rewards in ShB and later zones).</li>
