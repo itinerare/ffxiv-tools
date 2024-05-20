@@ -26,6 +26,7 @@ class LevelingController extends Controller {
             'gear_earring'      => 'nullable|boolean',
             'temp_fc'           => 'nullable|in:1,2,3',
             'temp_food'         => 'nullable|boolean',
+            'temp_rested'       => 'nullable|boolean',
             'override'          => 'nullable|numeric',
         ]);
 
@@ -91,6 +92,12 @@ class LevelingController extends Controller {
                 (((config('ffxiv.leveling_data.level_data.level_cap') - 9) <= config('ffxiv.leveling_data.gear.earring.max')) && $request->get('gear_earring') ? 30 : 0),
         ];
 
+        // Set up the rested EXP pool if relevant
+        if ($request->get('temp_rested')) {
+            // Rested EXP is a pool of 1.5 levels' worth, conveyed via a 50% boost to EXP gain until spent
+            $restedPool = 1.5;
+        }
+
         for ($level = ($request->get('character_level') && $request->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? $request->get('character_level') : 1); $level < config('ffxiv.leveling_data.level_data.level_cap'); $level++) {
             // Calculate EXP remaining to level
             $remainingExp = config('ffxiv.leveling_data.level_data.level_exp.'.$level);
@@ -118,7 +125,21 @@ class LevelingController extends Controller {
                     // If a dungeon was successfully located, calculate estimated EXP
                     // and from there, estimated runs to next level and excess EXP
                     $dungeon[$level]['exp'] = round((int) $dungeonSearch->last() * $dungeonBonus);
-                    $dungeon[$level]['runs'] = ceil($remainingExp / $dungeon[$level]['exp']);
+                    $dungeon[$level]['runs'] = max(1, ceil($remainingExp / $dungeon[$level]['exp']));
+
+                    // Calculate rested EXP use
+                    if ($request->get('temp_rested') && $restedPool > 0) {
+                        // Rested EXP gained from all intended runs of the dungeon, limited by how much remains in the pool (approximately)
+                        $dungeon[$level]['rested'] = min(min(1, $restedPool) * config('ffxiv.leveling_data.level_data.level_exp.'.$level), ((int) $dungeonSearch->last() * .5) * $dungeon[$level]['runs']);
+
+                        // Recalculate EXP and runs required so the following values are calculated appropriately
+                        $dungeon[$level]['exp'] = round(((int) $dungeonSearch->last() * $dungeonBonus) + ($dungeon[$level]['rested'] / $dungeon[$level]['runs']));
+                        $dungeon[$level]['runs'] = ceil($remainingExp / $dungeon[$level]['exp']);
+
+                        // Adjust the rested pool down accordingly
+                        $restedPool -= config('ffxiv.leveling_data.level_data.level_exp.'.$level) / $dungeon[$level]['rested'];
+                    }
+
                     $dungeon[$level]['overage'] = (($dungeon[$level]['exp'] * $dungeon[$level]['runs']) - $remainingExp) + ($dungeon[$level - 1]['overage'] ?? 0);
                     // The total runs counter resets at the start of a level range
                     // since the frontend displays ranges separately

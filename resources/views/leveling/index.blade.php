@@ -86,14 +86,19 @@
 
                     <h5>Temporary Buffs</h5>
                     <div class="row">
-                        <div class="col-md mb-3">
+                        <div class="col-md-8 mb-3">
                             {{ html()->label('FC EXP Buff (The Heat of Battle)', 'temp_fc')->class('form-label') }}
                             {{ html()->select('temp_fc', [1 => 'I', 2 => 'II', 3 => 'III'], request()->get('temp_fc') ?? null)->class('form-select')->placeholder('None/Select Level') }}
                         </div>
 
-                        <div class="col-md-6 mb-3 mt-0 mt-md-4">
+                        <div class="col-md mb-3 mt-0 mt-md-4">
                             {{ html()->checkbox('temp_food', request()->get('temp_food') ?? 0)->class('form-check-input') }}
                             {{ html()->label('Food Buff', 'temp_food')->class('form-check-label') }}
+                        </div>
+
+                        <div class="col-md mb-3 mt-0 mt-md-4">
+                            {{ html()->checkbox('temp_rested', request()->get('temp_rested') ?? 0)->class('form-check-input') }}
+                            {{ html()->label('Rested EXP (Est.)', 'temp_rested')->class('form-check-label') }}
                         </div>
                     </div>
 
