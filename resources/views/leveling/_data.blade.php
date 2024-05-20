@@ -48,6 +48,9 @@
                                 <div class="col-6 col-md-2">{{ $dungeon[$level]['level'] ?? '-' }}</div>
                                 <div class="col-6 col-md-3">
                                     {{ isset($dungeon[$level]['exp']) ? number_format($dungeon[$level]['exp']) : '' }}
+                                    @isset($dungeon[$level]['rested'])
+                                        <span class="text-primary" data-toggle="tooltip" title="Boosted by rested EXP">*</span>
+                                    @endisset
                                 </div>
                                 <div class="col-3 col-md-2">{{ $dungeon[$level]['runs'] ?? '' }}</div>
                                 <div class="col-3 col-md-2">
