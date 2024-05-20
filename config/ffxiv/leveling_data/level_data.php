@@ -7,7 +7,7 @@ return [
 
     'motd'      => [
         'last_patch' => '6.58',
-        'message'    => '7.0 updates will occur on getting sufficient data after release.',
+        'message'    => '7.0 updates will occur on getting sufficient data after release. - Now with optional rested EXP calculation!',
     ],
 
     'level_ranges' => [
