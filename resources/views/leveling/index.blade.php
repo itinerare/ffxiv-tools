@@ -86,14 +86,19 @@
 
                     <h5>Temporary Buffs</h5>
                     <div class="row">
-                        <div class="col-md mb-3">
+                        <div class="col-md-8 mb-3">
                             {{ html()->label('FC EXP Buff (The Heat of Battle)', 'temp_fc')->class('form-label') }}
                             {{ html()->select('temp_fc', [1 => 'I', 2 => 'II', 3 => 'III'], request()->get('temp_fc') ?? null)->class('form-select')->placeholder('None/Select Level') }}
                         </div>
 
-                        <div class="col-md-6 mb-3 mt-0 mt-md-4">
+                        <div class="col-md mb-3 mt-0 mt-md-4">
                             {{ html()->checkbox('temp_food', request()->get('temp_food') ?? 0)->class('form-check-input') }}
                             {{ html()->label('Food Buff', 'temp_food')->class('form-check-label') }}
+                        </div>
+
+                        <div class="col-md mb-3 mt-0 mt-md-4">
+                            {{ html()->checkbox('temp_rested', request()->get('temp_rested') ?? 0)->class('form-check-input') }}
+                            {{ html()->label('Rested EXP (Est.)', 'temp_rested')->class('form-check-label') }}
                         </div>
                     </div>
 
@@ -136,37 +141,36 @@
                             Do your dailies!
                             <ul>
                                 <li>Roulettes (especially leveling and alliance raid, and MSQ if you've the patience)</li>
-                                <li>Daily bonus Frontline (which gives a sizeable amount of EXP <i>for whichever job you
-                                        queue as</i>, not necessarily what you <i>play</i> as within the match; just switch
-                                    after loading in)</li>
-                                <li>Tribe quests for your current level range/the relevant expansion (the EXP from these
-                                    falls off very sharply outside of their relevant level range); these also benefit from
-                                    rewarding more EXP when ranked up, and are a ready way to get some bonus EXP without too
-                                    much investment</li>
+                                <li>Daily bonus Frontline (which gives a sizeable amount of EXP <i>for whichever job you queue as</i>, not necessarily what you <i>play</i> as within the match; just switch after loading in)</li>
+                                <li>Tribe quests for your current level range/the relevant expansion (the EXP from these falls off very sharply outside of their relevant level range); these also benefit from rewarding more EXP when ranked up, and are a
+                                    ready way to get some bonus EXP without too much investment</li>
                             </ul>
                         </li>
                         <li>
-                            Leveling (non capstone/x0) dungeons are generally the most efficient repeatable source of EXP in
-                            the game.
+                            Leveling (non capstone/x0) dungeons are generally the most efficient repeatable source of EXP in the game.
                             <ul>
-                                <li>Keep in mind as well that if you're facing down long queue times or otherwise not up to
-                                    playing a role/job with others, duty support covers the vast majority of leveling
-                                    dungeons (as most are required for MSQ)! While it may be slower than with a party of
-                                    other players, this doesn't account for time lost to queues-- or EXP lost to potentially
-                                    not doing a dungeon at all.</li>
-                                <li>Alternately, at level 71 and up, you can opt to use this time to level trusts if so
-                                    desired (and make progress toward the relevant achievements)!</li>
+                                <li>Keep in mind as well that if you're facing down long queue times or otherwise not up to playing a role/job with others, duty support covers the vast majority of leveling dungeons (as most are required for MSQ)! While
+                                    it may be slower than with a party of other players, this doesn't account for time lost to queues-- or EXP lost to potentially not doing a dungeon at all.</li>
+                                <li>Alternately, at level 71 and up, you can opt to use this time to level trusts if so desired (and make progress toward the relevant achievements)!</li>
                             </ul>
                         </li>
-                        <li>FATEs generally aren't very efficient for large amounts of EXP, but are an easy way to get a
-                            little extra, e.g. if very near a level at which a more efficient method becomes available (and
-                            provide additional rewards in ShB and later zones).</li>
                         <li>
-                            Wondrous Tails provides 50% of a level once a week on turn-in, to the job active when it is
-                            turned in!
+                            Take advantage of rested EXP! Rested EXP is a pool of bonus EXP (up to about 1.5 levels worth, regardless of current level) that slowly accumulates while resting in a "sanctuary" (generally around aetherytes), whether logged
+                            in or out.
+                            Once accumulated, rested EXP is granted in the form of an additional 50% bonus to EXP earned e.g. from dungeons (or from gathering or crafting, for that matter).
                             <ul>
-                                <li>To assist with completion, keep in mind that earlier (especially ARR) Extreme trials can
-                                    be unsynced either with help or as a higher-level job.</li>
+                                <li>While it can give a little boost to your roulettes, the fastest way to "cash out" rested EXP is to do at-level dungeons, especially (as above) leveling dungeons.</li>
+                                <li>Rested EXP accumulates per character, but is most useful for leveling higher level classes/jobs-- the EXP received from it scales, so a level {{ config('ffxiv.leveling_data.level_data.level_cap') - 10 }} class/job
+                                    will receive more total EXP from rested EXP than a level 15 one will.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>FATEs generally aren't very efficient for large amounts of EXP, but are an easy way to get a little extra, e.g. if very near a level at which a more efficient method becomes available (and provide additional rewards in ShB and
+                            later zones).</li>
+                        <li>
+                            Wondrous Tails provides 50% of a level once a week on turn-in, to the job active when it is turned in!
+                            <ul>
+                                <li>To assist with completion, keep in mind that earlier (especially ARR) Extreme trials can be unsynced either with help or as a higher-level job.</li>
                             </ul>
                         </li>
                     </ul>
@@ -195,8 +199,7 @@
                         <div class="accordion-body">
                             <p>{!! $range['text'] !!}</p>
 
-                            <p>Note that the number of runs given on each tab is how many are required to reach the end of
-                                this level range.</p>
+                            <p>Note that the number of runs given on each tab is how many are required to reach the end of this level range.</p>
 
                             @include('leveling._data')
                         </div>

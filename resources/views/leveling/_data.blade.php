@@ -1,32 +1,16 @@
 <ul class="nav nav-pills justify-content-end" role="tablist">
-    @if (isset($dungeon[$floor]) || isset($dungeon[$range['ceiling']]))
-        <li class="nav-item">
-            <a class="nav-link active" id="dungeon-tab-{{ $floor }}" data-bs-toggle="tab" data-bs-target="#exp-dungeon-{{ $floor }}" type="button" role="tab" aria-controls="exp-dungeon-{{ $floor }}" aria-selected="true">
-                Dungeon
-                ({{ $dungeon[$range['ceiling']]['total_runs'] ?? $dungeon[$range['ceiling'] - 1]['total_runs'] }}
-                run{{ ($dungeon[$range['ceiling']]['total_runs'] ?? $dungeon[$range['ceiling'] - 1]['total_runs']) > 1 ? 's' : '' }})
-            </a>
-        </li>
-    @endif
-    @if (isset($deepDungeon[$floor]) || isset($deepDungeon[$range['ceiling']]))
-        <li class="nav-item">
-            <a class="nav-link" id="deep-dungeon-tab-{{ $floor }}" data-bs-toggle="tab" data-bs-target="#exp-deep-dungeon-{{ $floor }}" type="button" role="tab" aria-controls="exp-deep-dungeon-{{ $floor }}"
-                aria-selected="false">
-                Deep Dungeon
-                ({{ $deepDungeon[$range['ceiling']]['total_runs'] ?? $deepDungeon[$range['ceiling'] - 1]['total_runs'] }}
-                run{{ ($deepDungeon[$range['ceiling']]['total_runs'] ?? $deepDungeon[$range['ceiling'] - 1]['total_runs']) > 1 ? 's' : '' }})
-            </a>
-        </li>
-    @endif
-    @if (isset($frontline[$floor]) || isset($frontline[$range['ceiling']]))
-        <li class="nav-item">
-            <a class="nav-link" id="frontline-tab-{{ $floor }}" data-bs-toggle="tab" data-bs-target="#exp-frontline-{{ $floor }}" type="button" role="tab" aria-controls="exp-frontline-{{ $floor }}" aria-selected="false">
-                PvP (Frontline)
-                ({{ $frontline[$range['ceiling']]['total_runs'] ?? $frontline[$range['ceiling'] - 1]['total_runs'] }}
-                match{{ ($frontline[$range['ceiling']]['total_runs'] ?? $frontline[$range['ceiling'] - 1]['total_runs']) > 1 ? 'es' : '' }})
-            </a>
-        </li>
-    @endif
+    @foreach (['dungeon' => $dungeon, 'deep-dungeon' => $deepDungeon, 'frontline' => $frontline] as $label => $source)
+        @if (isset($source[$floor]) || ($range['ceiling'] != config('ffxiv.leveling_data.level_data.level_cap') ? isset($source[$range['ceiling']]) : isset($source[$range['ceiling'] - 1])))
+            <li class="nav-item">
+                <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $label }}-tab-{{ $floor }}" data-bs-toggle="tab" data-bs-target="#exp-{{ $label }}-{{ $floor }}" type="button" role="tab"
+                    aria-controls="exp-{{ $label }}-{{ $floor }}" aria-selected="true">
+                    {{ ucwords(str_replace('-', ' ', $label)) }}
+                    ({{ $source[$range['ceiling']]['total_runs'] ?? $source[$range['ceiling'] - 1]['total_runs'] }}
+                    {{ $label == 'frontline' ? 'match' : 'run' }}{{ ($source[$range['ceiling']]['total_runs'] ?? $source[$range['ceiling'] - 1]['total_runs']) > 1 ? ($label == 'frontline' ? 'es' : 's') : '' }})
+                </a>
+            </li>
+        @endif
+    @endforeach
 </ul>
 <div class="row g-md-0 ps-2 ps-md-0">
     <div class="col-4 col-md-4">
@@ -48,7 +32,7 @@
 
     <div class="col col-md-8">
         <div class="tab-content" id="nav-tabContent">
-            @if (isset($dungeon[$floor]) || isset($dungeon[$range['ceiling']]))
+            @if (isset($dungeon[$floor]) || ($range['ceiling'] != config('ffxiv.leveling_data.level_data.level_cap') ? isset($dungeon[$range['ceiling']]) : isset($dungeon[$range['ceiling'] - 1])))
                 <div class="tab-pane show active" id="exp-dungeon-{{ $floor }}" role="tabpanel" aria-labelledby="dungeon-tab-{{ $floor }}" tabindex="0">
                     <div class="row ms-md-2 text-center">
                         <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-2 border-info border-bottom">
@@ -64,6 +48,9 @@
                                 <div class="col-6 col-md-2">{{ $dungeon[$level]['level'] ?? '-' }}</div>
                                 <div class="col-6 col-md-3">
                                     {{ isset($dungeon[$level]['exp']) ? number_format($dungeon[$level]['exp']) : '' }}
+                                    @isset($dungeon[$level]['rested_boost'])
+                                        <span class="text-primary" data-toggle="tooltip" title="Boosted by rested EXP ({{ round($dungeon[$level]['rested_boost'] * 100) }}%)"><strong>*</strong></span>
+                                    @endisset
                                 </div>
                                 <div class="col-3 col-md-2">{{ $dungeon[$level]['runs'] ?? '' }}</div>
                                 <div class="col-3 col-md-2">
@@ -75,7 +62,7 @@
                     </div>
                 </div>
             @endif
-            @if (isset($deepDungeon[$floor]) || isset($deepDungeon[$range['ceiling']]))
+            @if (isset($deepDungeon[$floor]) || ($range['ceiling'] != config('ffxiv.leveling_data.level_data.level_cap') ? isset($deepDungeon[$range['ceiling']]) : isset($deepDungeon[$range['ceiling'] - 1])))
                 <div class="tab-pane" id="exp-deep-dungeon-{{ $floor }}" role="tabpanel" aria-labelledby="deep-dungeon-tab-{{ $floor }}" tabindex="0">
                     <div class="row ms-md-2 text-center">
                         <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-2 border-info border-bottom">
@@ -103,7 +90,7 @@
                     </div>
                 </div>
             @endif
-            @if (isset($frontline[$floor]) || isset($frontline[$range['ceiling']]))
+            @if (isset($frontline[$floor]) || ($range['ceiling'] != config('ffxiv.leveling_data.level_data.level_cap') ? isset($frontline[$range['ceiling']]) : isset($frontline[$range['ceiling'] - 1])))
                 <div class="tab-pane" id="exp-frontline-{{ $floor }}" role="tabpanel" aria-labelledby="frontline-tab-{{ $floor }}" tabindex="0">
                     <div class="row ms-md-2 text-center">
                         <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-2 border-info border-bottom">
