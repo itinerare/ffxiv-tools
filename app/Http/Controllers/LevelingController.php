@@ -94,7 +94,7 @@ class LevelingController extends Controller {
 
         // Set up the rested EXP pool if relevant
         if ($request->get('temp_rested')) {
-            // Rested EXP is a pool of 1.5 levels' worth, conveyed via a 50% boost to EXP gain until spent
+            // Rested EXP is a pool of 1.5 levels worth, conveyed via a 50% boost to EXP gain until spent
             $restedPool = 1.5;
         }
 
