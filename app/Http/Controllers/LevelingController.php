@@ -128,21 +128,23 @@ class LevelingController extends Controller {
                     // If a dungeon was successfully located, calculate estimated EXP
                     // and from there, estimated runs to next level and excess EXP
                     $dungeon[$level]['exp'] = round((int) $dungeonSearch->last() * $dungeonBonus);
-                    $dungeon[$level]['runs'] = max(1, ceil($dungeon[$level]['remaining_exp'] / $dungeon[$level]['exp']));
+                    $dungeon[$level]['runs'] = max(0, ceil($dungeon[$level]['remaining_exp'] / $dungeon[$level]['exp']));
 
                     // Calculate rested EXP use
-                    if ($request->get('temp_rested') && $restedPool > 0) {
+                    if ($request->get('temp_rested') && $restedPool > 0 && $dungeon[$level]['runs'] > 0) {
                         // Rested EXP gained from all intended runs of the dungeon, limited by how much remains in the pool (approximately)
                         $dungeon[$level]['rested'] = round(min(min(1, $restedPool) * config('ffxiv.leveling_data.level_data.level_exp.'.$level), ((int) $dungeonSearch->last() * .5) * $dungeon[$level]['runs']));
 
                         if ($dungeon[$level]['rested']) {
                             // Recalculate EXP and runs required so the following values are calculated appropriately
                             $dungeon[$level]['exp'] = round(((int) $dungeonSearch->last() * $dungeonBonus) + ($dungeon[$level]['rested'] / $dungeon[$level]['runs']));
-                            $dungeon[$level]['runs'] = ceil($dungeon[$level]['remaining_exp'] / $dungeon[$level]['exp']);
+                            $dungeon[$level]['runs'] = max(0, ceil($dungeon[$level]['remaining_exp'] / $dungeon[$level]['exp']));
 
                             // Adjust the rested pool down accordingly
-                            $dungeon[$level]['rested_boost'] = $dungeon[$level]['rested'] / config('ffxiv.leveling_data.level_data.level_exp.'.$level);
-                            $restedPool -= $dungeon[$level]['rested_boost'];
+                            $restedPool -= $dungeon[$level]['rested_boost'] = $dungeon[$level]['rested'] / config('ffxiv.leveling_data.level_data.level_exp.'.$level);
+
+                            // Then process the boost info for convenience
+                            $dungeon[$level]['rested_boost'] = round($dungeon[$level]['rested_boost'] * 100);
                         }
                     }
 
@@ -205,7 +207,7 @@ class LevelingController extends Controller {
                 // and then * floor multipler and any applicable EXP bonuses
                 $deepDungeon[$level]['exp'] = round(($level + config('ffxiv.leveling_data.'.strtolower($deepDungeon[$level]['dungeon']).'.level_data.'.$level)[0]) * config('ffxiv.leveling_data.'.strtolower($deepDungeon[$level]['dungeon']).'.level_data.'.$level)[1] * $floorMult * $deepDungeonBonus);
 
-                $deepDungeon[$level]['runs'] = ceil($deepDungeon[$level]['remaining_exp'] / $deepDungeon[$level]['exp']);
+                $deepDungeon[$level]['runs'] = max(0, ceil($deepDungeon[$level]['remaining_exp'] / $deepDungeon[$level]['exp']));
                 $deepDungeon[$level]['overage'] = (($deepDungeon[$level]['exp'] * $deepDungeon[$level]['runs']) - $deepDungeon[$level]['remaining_exp']);
                 $deepDungeon[$level]['total_runs'] = (isset($deepDungeon[$level - 1]['total_runs']) && !in_array($level, array_keys(config('ffxiv.leveling_data.level_data.level_ranges'))) ? $deepDungeon[$level - 1]['total_runs'] : 0) + $deepDungeon[$level]['runs'];
             }
@@ -222,7 +224,7 @@ class LevelingController extends Controller {
                 $frontline[$level]['win'] = $frontline[$level]['loss'] * config('ffxiv.leveling_data.frontline.win_mult');
                 $frontline[$level]['avg_exp'] = ($frontline[$level]['loss'] + $frontline[$level]['win']) / 2;
 
-                $frontline[$level]['runs'] = ceil($frontline[$level]['remaining_exp'] / $frontline[$level]['avg_exp']);
+                $frontline[$level]['runs'] = max(0, ceil($frontline[$level]['remaining_exp'] / $frontline[$level]['avg_exp']));
                 $frontline[$level]['overage'] = (($frontline[$level]['avg_exp'] * $frontline[$level]['runs']) - $frontline[$level]['remaining_exp']);
                 $frontline[$level]['total_runs'] = (isset($frontline[$level - 1]['total_runs']) && !in_array($level, array_keys(config('ffxiv.leveling_data.level_data.level_ranges'))) ? $frontline[$level - 1]['total_runs'] : 0) + $frontline[$level]['runs'];
             }

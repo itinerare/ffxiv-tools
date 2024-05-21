@@ -48,9 +48,9 @@
                                 <div class="col-6 col-md-2">{{ $dungeon[$level]['level'] ?? '-' }}</div>
                                 <div class="col-6 col-md-3">
                                     {{ isset($dungeon[$level]['exp']) ? number_format($dungeon[$level]['exp']) : '' }}
-                                    @isset($dungeon[$level]['rested_boost'])
-                                        <span class="text-primary" data-toggle="tooltip" title="Boosted by rested EXP ({{ round($dungeon[$level]['rested_boost'] * 100) }}%)"><strong>*</strong></span>
-                                    @endisset
+                                    @if (isset($dungeon[$level]['rested_boost']) && $dungeon[$level]['rested_boost'])
+                                        <span class="text-primary" data-toggle="tooltip" title="Boosted by rested EXP ({{ $dungeon[$level]['rested_boost'] }}%)"><strong>*</strong></span>
+                                    @endif
                                 </div>
                                 <div class="col-3 col-md-2">{{ $dungeon[$level]['runs'] ?? '' }}</div>
                                 <div class="col-3 col-md-2">
