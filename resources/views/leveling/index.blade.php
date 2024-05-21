@@ -68,7 +68,7 @@
 
                     <div class="mb-3">
                         {{ html()->checkbox('character_road', request()->get('character_road') ?? 0)->class('form-check-input') }}
-                        {{ html()->label('"Road to 80" Buff', 'character_road')->class('form-check-label') }}
+                        {{ html()->label('"Road to ' . (config('ffxiv.leveling_data.level_data.level_cap') - 10) . '" Buff', 'character_road')->class('form-check-label') }}
                     </div>
 
                     <h5>Gear</h5>
