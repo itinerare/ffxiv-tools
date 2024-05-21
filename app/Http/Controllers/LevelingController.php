@@ -135,13 +135,15 @@ class LevelingController extends Controller {
                         // Rested EXP gained from all intended runs of the dungeon, limited by how much remains in the pool (approximately)
                         $dungeon[$level]['rested'] = round(min(min(1, $restedPool) * config('ffxiv.leveling_data.level_data.level_exp.'.$level), ((int) $dungeonSearch->last() * .5) * $dungeon[$level]['runs']));
 
-                        // Recalculate EXP and runs required so the following values are calculated appropriately
-                        $dungeon[$level]['exp'] = round(((int) $dungeonSearch->last() * $dungeonBonus) + ($dungeon[$level]['rested'] / $dungeon[$level]['runs']));
-                        $dungeon[$level]['runs'] = ceil($dungeon[$level]['remaining_exp'] / $dungeon[$level]['exp']);
+                        if ($dungeon[$level]['rested']) {
+                            // Recalculate EXP and runs required so the following values are calculated appropriately
+                            $dungeon[$level]['exp'] = round(((int) $dungeonSearch->last() * $dungeonBonus) + ($dungeon[$level]['rested'] / $dungeon[$level]['runs']));
+                            $dungeon[$level]['runs'] = ceil($dungeon[$level]['remaining_exp'] / $dungeon[$level]['exp']);
 
-                        // Adjust the rested pool down accordingly
-                        $dungeon[$level]['rested_boost'] = $dungeon[$level]['rested'] / config('ffxiv.leveling_data.level_data.level_exp.'.$level);
-                        $restedPool -= $dungeon[$level]['rested_boost'];
+                            // Adjust the rested pool down accordingly
+                            $dungeon[$level]['rested_boost'] = $dungeon[$level]['rested'] / config('ffxiv.leveling_data.level_data.level_exp.'.$level);
+                            $restedPool -= $dungeon[$level]['rested_boost'];
+                        }
                     }
 
                     $dungeon[$level]['overage'] = (($dungeon[$level]['exp'] * $dungeon[$level]['runs']) - $dungeon[$level]['remaining_exp']);
