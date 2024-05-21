@@ -131,14 +131,15 @@ class LevelingController extends Controller {
                     if ($request->get('temp_rested') && $restedPool > 0) {
                         // Rested EXP gained from all intended runs of the dungeon, limited by how much remains in the pool (approximately)
                         $dungeon[$level]['rested'] = round(min(min(1, $restedPool) * config('ffxiv.leveling_data.level_data.level_exp.'.$level), ((int) $dungeonSearch->last() * .5) * $dungeon[$level]['runs']));
-                        $dungeon[$level]['rested_boost'] = round(($dungeon[$level]['rested'] / config('ffxiv.leveling_data.level_data.level_exp.'.$level)) * 100);
+
 
                         // Recalculate EXP and runs required so the following values are calculated appropriately
                         $dungeon[$level]['exp'] = round(((int) $dungeonSearch->last() * $dungeonBonus) + ($dungeon[$level]['rested'] / $dungeon[$level]['runs']));
                         $dungeon[$level]['runs'] = ceil($remainingExp / $dungeon[$level]['exp']);
 
                         // Adjust the rested pool down accordingly
-                        $restedPool -= $dungeon[$level]['rested'] / config('ffxiv.leveling_data.level_data.level_exp.'.$level);
+                        $dungeon[$level]['rested_boost'] = $dungeon[$level]['rested'] / config('ffxiv.leveling_data.level_data.level_exp.'.$level);
+                        $restedPool -= $dungeon[$level]['rested_boost'];
                     }
 
                     $dungeon[$level]['overage'] = (($dungeon[$level]['exp'] * $dungeon[$level]['runs']) - $remainingExp) + ($dungeon[$level - 1]['overage'] ?? 0);
