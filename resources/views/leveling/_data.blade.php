@@ -47,7 +47,7 @@
                             <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
                                 <div class="col-6 col-md-2">{{ $dungeon[$level]['level'] ?? '-' }}</div>
                                 <div class="col-6 col-md-3">
-                                    {{ isset($dungeon[$level]['exp']) ? number_format($dungeon[$level]['exp']) : '' }}
+                                    {{ isset($dungeon[$level]['exp']) ? number_format($dungeon[$level]['exp']) : '-' }}
                                     @if (isset($dungeon[$level]['rested_boost']) && $dungeon[$level]['rested_boost'])
                                         <span class="text-primary" data-toggle="tooltip" title="Boosted by rested EXP ({{ $dungeon[$level]['rested_boost'] }}%)"><strong>*</strong></span>
                                     @endif
@@ -78,7 +78,7 @@
                             <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
                                 <div class="col-6 col-md-2">{{ $deepDungeon[$level]['level'] ?? '-' }}</div>
                                 <div class="col-6 col-md-3">
-                                    {{ isset($deepDungeon[$level]['exp']) ? number_format($deepDungeon[$level]['exp']) : '' }}
+                                    {{ isset($deepDungeon[$level]['exp']) ? number_format($deepDungeon[$level]['exp']) : '-' }}
                                 </div>
                                 <div class="col-3 col-md-2">{{ $deepDungeon[$level]['runs'] ?? '' }}</div>
                                 <div class="col-3 col-md-2">
