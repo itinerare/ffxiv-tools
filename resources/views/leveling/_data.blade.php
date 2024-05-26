@@ -49,7 +49,7 @@
                                 <div class="col-6 col-md-3">
                                     {{ isset($dungeon[$level]['exp']) ? number_format($dungeon[$level]['exp']) : '-' }}
                                     @if (isset($dungeon[$level]['rested_used']) && $dungeon[$level]['rested_used'])
-                                        <span class="text-primary" data-toggle="tooltip"
+                                        <span class="text-primary" data-bs-toggle="tooltip" data-toggle="tooltip"
                                             title="Boosted by rested EXP (+{{ number_format(round($dungeon[$level]['rested'] / $dungeon[$level]['runs'])) }} EXP (Est.), {{ $dungeon[$level]['rested_used'] }}% used)"><strong>*</strong></span>
                                     @endif
                                 </div>
