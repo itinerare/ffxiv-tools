@@ -105,15 +105,15 @@
                     <hr>
 
                     <p>
-                        The calculated % bonus is {{ $bonus[1] }}% at 30 or below, {{ $bonus[31] }}% at
+                        The calculated % bonus is
+                        @if ($bonus[1] != $bonus[31])
+                            {{ $bonus[1] }}% at 30 or below,
+                        @endif
+                        {{ $bonus[31] }}% at
                         {{ config('ffxiv.leveling_data.level_data.level_cap') - 10 }} or below,
                         and {{ $bonus[config('ffxiv.leveling_data.level_data.level_cap') - 9] }}% at
-                        {{ config('ffxiv.leveling_data.level_data.level_cap') - 9 }} and above, plus an additional 50% with
-                        rested EXP when and where
-                        applicable. If this does not match values observed in game, you may specify an override value here.
-                        Note that the numbers provided here <i>do</i> adjust with this override. Also note that deep
-                        dungeons and
-                        Frontline do not use these numbers directly.
+                        {{ config('ffxiv.leveling_data.level_data.level_cap') - 9 }} and above, plus an additional 50% with rested EXP when and where applicable. If this does not match values observed in game, you may specify an override value here.
+                        Note that the numbers provided here <i>do</i> adjust with this override. Also note that deep dungeons and Frontline do not use these numbers directly.
                     </p>
 
                     <div class="col-md mb-3">
