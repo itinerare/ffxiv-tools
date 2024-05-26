@@ -95,7 +95,7 @@ class LevelingController extends Controller {
         // Set up the rested EXP pool if relevant
         if ($request->get('temp_rested')) {
             // Rested EXP is a pool of 1.5 levels worth, conveyed via a 50% boost to EXP gain until spent
-            $restedPool = 1.5;
+            $restedPool = $restedRemaining = 1.5;
         }
 
         for ($level = ($request->get('character_level') && $request->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? $request->get('character_level') : 1); $level < config('ffxiv.leveling_data.level_data.level_cap'); $level++) {
@@ -136,9 +136,9 @@ class LevelingController extends Controller {
                         $dungeon[$level]['runs'] = max(0, ceil($dungeon[$level]['remaining_exp'] / $dungeon[$level]['exp']));
 
                         // Calculate rested EXP use
-                        if ($request->get('temp_rested') && $restedPool > 0 && $dungeon[$level]['remaining_exp'] > 0) {
+                        if ($request->get('temp_rested') && $restedRemaining > 0 && $dungeon[$level]['remaining_exp'] > 0) {
                             // Rested EXP gained from all intended runs of the dungeon, limited by how much remains in the pool (approximately)
-                            $dungeon[$level]['rested'] = round(min(min(1, $restedPool) * config('ffxiv.leveling_data.level_data.level_exp.'.$level), ((int) $dungeonSearch->last() * .5) * $dungeon[$level]['runs']));
+                            $dungeon[$level]['rested'] = round(min(min(1, $restedRemaining) * config('ffxiv.leveling_data.level_data.level_exp.'.$level), ((int) $dungeonSearch->last() * .5) * $dungeon[$level]['runs']));
 
                             if ($dungeon[$level]['rested']) {
                                 // Recalculate EXP and runs required so the following values are calculated appropriately
@@ -146,10 +146,10 @@ class LevelingController extends Controller {
                                 $dungeon[$level]['runs'] = max(0, ceil($dungeon[$level]['remaining_exp'] / $dungeon[$level]['exp']));
 
                                 // Adjust the rested pool down accordingly
-                                $restedPool -= $dungeon[$level]['rested_boost'] = $dungeon[$level]['rested'] / config('ffxiv.leveling_data.level_data.level_exp.'.$level);
+                                $restedRemaining -= max(0, $dungeon[$level]['rested_used'] = $dungeon[$level]['rested'] / config('ffxiv.leveling_data.level_data.level_exp.'.$level));
 
-                                // Then process the boost info for convenience
-                                $dungeon[$level]['rested_boost'] = round($dungeon[$level]['rested_boost'] * 100);
+                                // Calculate % of reseted EXP used
+                                $dungeon[$level]['rested_used'] = round(($dungeon[$level]['rested_used'] / $restedPool) * 100);
                             }
                         }
                     } else {
