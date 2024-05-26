@@ -87,7 +87,7 @@
                     <h5>Temporary Buffs</h5>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            {{ html()->label('FC EXP Buff (The Heat of Battle)', 'temp_fc')->class('form-label') }}
+                            {{ html()->label('FC/GC EXP Buff (The Heat of Battle)', 'temp_fc')->class('form-label') }}
                             {{ html()->select('temp_fc', [1 => 'I', 2 => 'II', 3 => 'III'], request()->get('temp_fc') ?? null)->class('form-select')->placeholder('None/Select Level') }}
                         </div>
 
