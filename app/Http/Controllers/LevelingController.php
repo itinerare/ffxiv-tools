@@ -71,24 +71,27 @@ class LevelingController extends Controller {
             }
         }
 
+        // Calculate FC bonus separately, since it can also impact armoury bonus
+        $fcBonus = $request->get('temp_fc') ? $request->get('temp_fc') * 5 : 0;
+
         // Calculate EXP bonus
         $bonusBase = 0 +
             ($request->get('temp_food') ? 3 : 0) +
-            ($request->get('temp_fc') ? $request->get('temp_fc') * 5 : 0) +
+            $fcBonus +
             ($request->get('override') ? $request->get('override') : 0);
         // Add level range specific bonuses
         $bonus = [
             1  => $bonusBase +
-                ($request->get('character_highest') > $request->get('character_level') ? 100 : 0) +
+                ($request->get('character_highest') > $request->get('character_level') ? floor(100 * (1 + $fcBonus / 100)) : 0) +
                 ($request->get('character_road') ? 100 : 0) +
                 ($request->get('gear_brand_new') ? 30 : 0) +
                 ($request->get('gear_earring') ? 30 : 0),
             31 => $bonusBase +
-                ($request->get('character_highest') > $request->get('character_level') ? 100 : 0) +
+                ($request->get('character_highest') > $request->get('character_level') ? floor(100 * (1 + $fcBonus / 100)) : 0) +
                 ($request->get('character_road') ? 100 : 0) +
                 ($request->get('gear_earring') ? 30 : 0),
             (config('ffxiv.leveling_data.level_data.level_cap') - 9) => $bonusBase +
-                ($request->get('character_highest') > $request->get('character_level') ? 50 : 0) +
+                ($request->get('character_highest') > $request->get('character_level') ? floor(50 * (1 + $fcBonus / 100)) : 0) +
                 (((config('ffxiv.leveling_data.level_data.level_cap') - 9) <= config('ffxiv.leveling_data.gear.earring.max')) && $request->get('gear_earring') ? 30 : 0),
         ];
 
