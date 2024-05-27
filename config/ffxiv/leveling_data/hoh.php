@@ -3,6 +3,7 @@
 return [
     /*
      * HEAVEN-ON-HIGH EXP DATA
+       Taken from https://docs.google.com/spreadsheets/d/1M4gteurUKCGrniPqESBDBbsPpvi8p0oC_V41ShJZJ-s/edit#gid=1379102985
      */
 
     'label' => '21-30',
