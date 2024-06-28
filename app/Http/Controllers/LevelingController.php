@@ -260,7 +260,7 @@ class LevelingController extends Controller {
                 } else {
                     // If overage accounts for the entirety of a level, set some empty values
                     // This helps keep the frontend display clear as to what's happening
-                    $frontline[$level]['exp'] = null;
+                    $frontline[$level]['avg_exp'] = null;
                     $frontline[$level]['runs'] = 0;
                 }
 
