@@ -3,6 +3,7 @@
 return [
     /*
      * DUNGEON EXP DATA
+       15-89 values taken from https://docs.google.com/spreadsheets/d/1yJ9cr606u0WKDVzHFXoa_DPt-bCJTJfUUcwVtQSHxJI/edit#gid=0
      */
 
     'label' => 'Dungeon',

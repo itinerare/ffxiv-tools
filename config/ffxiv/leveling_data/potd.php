@@ -3,6 +3,7 @@
 return [
     /*
      * PALACE OF THE DEAD EXP DATA
+       Taken from https://docs.google.com/spreadsheets/d/1CG0xtc_p4o3XzLQxK0A6tXz1koZF11JKN4yCLEGjrFo/edit#gid=1379102985
      */
 
     'label' => '51-60',

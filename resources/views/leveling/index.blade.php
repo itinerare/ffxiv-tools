@@ -68,7 +68,7 @@
 
                     <div class="mb-3">
                         {{ html()->checkbox('character_road', request()->get('character_road') ?? 0)->class('form-check-input') }}
-                        {{ html()->label('"Road to 80" Buff', 'character_road')->class('form-check-label') }}
+                        {{ html()->label('"Road to ' . (config('ffxiv.leveling_data.level_data.level_cap') - 10) . '" Buff', 'character_road')->class('form-check-label') }}
                     </div>
 
                     <h5>Gear</h5>
@@ -87,7 +87,7 @@
                     <h5>Temporary Buffs</h5>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            {{ html()->label('FC EXP Buff (The Heat of Battle)', 'temp_fc')->class('form-label') }}
+                            {{ html()->label('FC/GC EXP Buff (The Heat of Battle)', 'temp_fc')->class('form-label') }}
                             {{ html()->select('temp_fc', [1 => 'I', 2 => 'II', 3 => 'III'], request()->get('temp_fc') ?? null)->class('form-select')->placeholder('None/Select Level') }}
                         </div>
 
@@ -105,15 +105,15 @@
                     <hr>
 
                     <p>
-                        The calculated % bonus is {{ $bonus[1] }}% at 30 or below, {{ $bonus[31] }}% at
+                        The calculated % bonus is
+                        @if ($bonus[1] != $bonus[31])
+                            {{ $bonus[1] }}% at 30 or below,
+                        @endif
+                        {{ $bonus[31] }}% at
                         {{ config('ffxiv.leveling_data.level_data.level_cap') - 10 }} or below,
                         and {{ $bonus[config('ffxiv.leveling_data.level_data.level_cap') - 9] }}% at
-                        {{ config('ffxiv.leveling_data.level_data.level_cap') - 9 }} and above, plus an additional 50% with
-                        rested EXP when and where
-                        applicable. If this does not match values observed in game, you may specify an override value here.
-                        Note that the numbers provided here <i>do</i> adjust with this override. Also note that deep
-                        dungeons and
-                        Frontline do not use these numbers directly.
+                        {{ config('ffxiv.leveling_data.level_data.level_cap') - 9 }} and above, plus an additional 50% with rested EXP when and where applicable. If this does not match values observed in game, you may specify an override value here.
+                        Note that the numbers provided here <i>do</i> adjust with this override. Also note that deep dungeons and Frontline do not use these numbers directly.
                     </p>
 
                     <div class="col-md mb-3">
