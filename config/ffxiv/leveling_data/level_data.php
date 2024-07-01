@@ -33,7 +33,7 @@ return [
         ],
         91 => [
             'ceiling' => 100,
-            'text'    => '- INCOMPLETE/WIP -',
+            'text'    => 'For now, dungeons are the most efficient option. This may change with subsequent patches.',
         ],
     ],
 
