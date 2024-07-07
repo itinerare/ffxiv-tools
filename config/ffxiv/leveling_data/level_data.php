@@ -6,8 +6,8 @@ return [
      */
 
     'motd'      => [
-        'last_patch' => '6.58',
-        'message'    => '7.0 updates will occur on getting sufficient data after release. - Now with optional rested EXP calculation!',
+        'last_patch' => '7.0',
+        'message'    => '7.0 updates and data verification are occurring as data is gathered. Thank you for your patience!',
     ],
 
     'level_ranges' => [
@@ -31,9 +31,13 @@ return [
             'ceiling' => 90,
             'text'    => 'Dungeons and Eureka Orthos are both solid options in this level range, and Bozja remains fairly efficient as well.',
         ],
+        91 => [
+            'ceiling' => 100,
+            'text'    => 'For now, dungeons are the most efficient option. This may change with subsequent patches.',
+        ],
     ],
 
-    'level_cap' => 90,
+    'level_cap' => 100,
 
     'level_exp' => [
         1  => 300,
@@ -125,5 +129,15 @@ return [
         87 => 9529000,
         88 => 10459000,
         89 => 10838000,
+        90 => 13278000,
+        91 => 13659000,
+        92 => 15348000,
+        93 => 15912000,
+        94 => 17534000,
+        95 => 18263000,
+        96 => 20322000,
+        97 => 20957000,
+        98 => 22979000,
+        99 => 23789000,
     ],
 ];

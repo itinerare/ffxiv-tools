@@ -16,7 +16,7 @@ return [
             'Balmung', 'Brynhildr', 'Coeurl', 'Diabolos', 'Goblin', 'Malboro', 'Mateus', 'Zalera',
         ],
         'Dynamis' => [
-            'Halicarnassus', 'Maduin', 'Marilith', 'Seraph',
+            'Cuchulainn', 'Golem', 'Halicarnassus', 'Kraken', 'Maduin', 'Marilith', 'Rafflesia', 'Seraph',
         ],
     ],
     'Europe' => [
@@ -25,6 +25,9 @@ return [
         ],
         'Light' => [
             'Alpha', 'Lich', 'Odin', 'Phoenix', 'Raiden', 'Shiva', 'Twintania', 'Zodiark',
+        ],
+        'Shadow' => [
+            'Titania', 'Innocence', 'Pixie', 'Tycoon',
         ],
     ],
     'Japan' => [

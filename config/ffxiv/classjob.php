@@ -14,9 +14,11 @@ return [
     29 => 'ROG/NIN',
     34 => 'SAM',
     39 => 'RPR',
+    41 => 'VPR',
     5  => 'ARC/BRD',
     31 => 'MCH',
     38 => 'DNC',
     7  => 'THM/BLM',
     35 => 'RDM',
+    42 => 'PCT',
 ];
