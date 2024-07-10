@@ -142,7 +142,8 @@
                             <ul>
                                 <li>Roulettes (especially leveling and alliance raid, and MSQ if you've the patience)</li>
                                 <li>Daily bonus Frontline (which gives a sizeable amount of EXP <i>for whichever job you queue as</i>, not necessarily what you <i>play</i> as within the match; just switch after loading in)</li>
-                                <li>Allied society quests for your current level range/the relevant expansion (the EXP from these falls off very sharply outside of their relevant level range); these also benefit from rewarding more EXP when ranked up, and are a
+                                <li>Allied society quests for your current level range/the relevant expansion (the EXP from these falls off very sharply outside of their relevant level range); these also benefit from rewarding more EXP when ranked up,
+                                    and are a
                                     ready way to get some bonus EXP without too much investment</li>
                             </ul>
                         </li>
