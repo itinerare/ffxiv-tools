@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class DiademTest extends TestCase {
+    use RefreshDatabase;
+
     /**
      * Test getting the Diadem tool.
      *
@@ -19,7 +22,7 @@ class DiademTest extends TestCase {
         $response->assertStatus(200);
 
         if ($expected) {
-            $response->assertSee('Showing Results for '.ucfirst($world));
+            $response->assertSee('Item data for '.ucfirst($world));
         } else {
             $response->assertSee('Please select a world!');
         }
