@@ -10,7 +10,9 @@ return [
      * to obtain complete price data in as few requests as possible
      */
 
-    'items' => [29840 => "approved grade 2 skybuilders' switch", 29841 => "tuft of approved grade 2 skybuilders' hemp", 29842 => "chunk of approved grade 2 skybuilders' ore", 29843 => "pinch of approved grade 2 skybuilders' copper sand", 29844 => "approved grade 2 skybuilders' maple log", 29845 => "pot of approved grade 2 skybuilders' maple sap", 29846 => "clump of approved grade 2 skybuilders' flax", 29847 => "chunk of approved grade 2 skybuilders' zinc ore", 29848 => "chunk of approved grade 2 skybuilders' rock salt", 29849 => "pinch of approved grade 2 skybuilders' iron sand", 29850 => "approved grade 2 skybuilders' teak log", 29851 => "sprig of approved grade 2 skybuilders' mistletoe", 29852 => "approved grade 2 skybuilders' beehive", 29853 => "bundle of approved grade 2 skybuilders' straw", 29854 => "basket of approved grade 2 skybuilders' tea leaves", 29855 => "chunk of approved grade 2 skybuilders' cobalt ore", 29856 => "lump of approved grade 2 skybuilders' pigment", 29857 => "pot of approved grade 2 skybuilders' asphaltum", 29858 => "pinch of approved grade 2 skybuilders' mythril sand", 29859 => "chunk of approved grade 2 skybuilders' mica", 29860 => "approved grade 2 skybuilders' oak log", 29861 => "approved grade 2 skybuilders' feather", 29862 => "approved grade 2 skybuilders' vine", 29863 => "approved grade 2 skybuilders' toad", 29864 => "clump of approved grade 2 skybuilders' barbgrass", 29865 => "chunk of approved grade 2 skybuilders' mythrite ore", 29866 => "bottle of approved grade 2 skybuilders' spring water", 29867 => "pinch of approved grade 2 skybuilders' alumen", 29868 => "approved grade 2 skybuilders' rock", 29869 => "sack of approved grade 2 skybuilders' silex", 29870 => "approved grade 2 skybuilders' walnut log", 29871 => "lump of approved grade 2 skybuilders' resin", 29872 => "sheaf of approved grade 2 skybuilders' wheat", 29873 => "approved grade 2 skybuilders' cotton boll", 29874 => "approved grade 2 skybuilders' adder", 29875 => "chunk of approved grade 2 skybuilders' darksteel ore", 29876 => "chunk of approved grade 2 skybuilders' crystal-clear rock salt", 29877 => "bottle of approved grade 2 skybuilders' cloud drop water", 29878 => "pinch of approved grade 2 skybuilders' lutinite", 29879 => "chunk of approved grade 2 skybuilders' basalt", 29880 => "approved grade 2 artisanal skybuilders' log", 29881 => "lump of approved grade 2 artisanal skybuilders' hardened sap", 29882 => "sheaf of approved grade 2 artisanal skybuilders' wheat", 29883 => "approved grade 2 artisanal skybuilders' cotton boll", 29884 => "approved grade 2 artisanal skybuilders' dawn lizard", 29885 => "chunk of approved grade 2 artisanal skybuilders' cloudstone", 29886 => "chunk of approved grade 2 artisanal skybuilders' rock salt", 29887 => "bottle of approved grade 2 artisanal skybuilders' spring water", 29888 => "pinch of approved grade 2 artisanal skybuilders' aurum regis sand", 29889 => "chunk of approved grade 2 artisanal skybuilders' jade", 29890 => "approved grade 2 skybuilders' umbral galewood log", 29891 => "approved grade 2 skybuilders' umbral earthcap", 29892 => "approved grade 2 skybuilders' umbral flarestone", 29893 => "approved grade 2 skybuilders' umbral levinshard", 29992 => "set of grade 2 expert skybuilders' practice materials", 30014 => "approved grade 2 skybuilders' cloudskipper", 30015 => "approved grade 2 skybuilders' meditator", 30016 => "approved grade 2 skybuilders' coeurlfish", 30017 => "approved grade 2 skybuilders' garpike", 30018 => "approved grade 2 skybuilders' pirarucu", 30019 => "approved grade 2 skybuilders' brown bolo", 30020 => "approved grade 2 skybuilders' bitterling", 30021 => "approved grade 2 skybuilders' caiman", 30022 => "approved grade 2 skybuilders' cloud cutter", 30023 => "approved grade 2 skybuilders' vampiric tapestry", 30024 => "approved grade 2 skybuilders' tupuxuara", 30025 => "approved grade 2 skybuilders' blind manta", 30026 => "approved grade 2 artisanal skybuilders' rhomaleosaurus", 30027 => "approved grade 2 artisanal skybuilders' gobbie mask", 30028 => "approved grade 2 artisanal skybuilders' pterodactyl", 30029 => "approved grade 2 artisanal skybuilders' skyfish", 30030 => "approved grade 2 artisanal skybuilders' cometfish", 30031 => "approved grade 2 artisanal skybuilders' anomalocaris", 30032 => "approved grade 2 artisanal skybuilders' rhamphorhynchus", 30033 => "approved grade 2 artisanal skybuilders' dragon's soul", 31232 => "approved grade 3 skybuilders' switch", 31233 => "tuft of approved grade 3 skybuilders' hemp", 31234 => "chunk of approved grade 3 skybuilders' ore", 31235 => "pinch of approved grade 3 skybuilders' bomb ash", 31236 => "approved grade 3 skybuilders' ebony log", 31237 => "tuft of approved grade 3 skybuilders' sesame", 31238 => "approved grade 3 skybuilders' cotton boll", 31239 => "chunk of approved grade 3 skybuilders' titanium ore", 31240 => "chunk of approved grade 3 skybuilders' rock salt", 31241 => "handful of approved grade 3 skybuilders' hardsilver sand", 31242 => "approved grade 3 skybuilders' lauan log", 31243 => "sprig of approved grade 3 skybuilders' mistletoe", 31244 => "approved grade 3 skybuilders' toad", 31245 => "approved grade 3 skybuilders' vine", 31246 => "basket of approved grade 3 skybuilders' tea leaves", 31247 => "chunk of approved grade 3 skybuilders' Diadem iron ore", 31248 => "pinch of approved grade 3 skybuilders' alumen", 31249 => "bottle of approved grade 3 skybuilders' spring water", 31250 => "handful of approved grade 3 skybuilders' Diadem iron sand", 31251 => "slab of approved grade 3 skybuilders' siltstone", 31252 => "approved grade 3 skybuilders' cedar log", 31253 => "lump of approved grade 3 skybuilders' resin", 31254 => "sheaf of approved grade 3 skybuilders' wheat", 31255 => "approved grade 3 skybuilders' gossamer cotton boll", 31256 => "approved grade 3 skybuilders' adder", 31257 => "chunk of approved grade 3 skybuilders' aurum regis ore", 31258 => "chunk of approved grade 3 skybuilders' finest rock salt", 31259 => "bottle of approved grade 3 skybuilders' truespring water", 31260 => "pinch of approved grade 3 skybuilders' fossil dust", 31261 => "slab of approved grade 3 skybuilders' hard mudstone", 31262 => "approved grade 3 artisanal skybuilders' log", 31263 => "piece of approved grade 3 artisanal skybuilders' amber", 31264 => "approved grade 3 artisanal skybuilders' cotton boll", 31265 => "box of approved grade 3 artisanal skybuilders' rice", 31266 => "approved grade 3 artisanal skybuilders' vine", 31267 => "chunk of approved grade 3 artisanal skybuilders' cloudstone", 31268 => "approved grade 3 artisanal skybuilders' basilisk egg", 31269 => "pinch of approved grade 3 artisanal skybuilders' alumen", 31270 => "sack of approved grade 3 artisanal skybuilders' clay", 31271 => "chunk of approved grade 3 artisanal skybuilders' granite", 31272 => "pot of approved grade 3 skybuilders' umbral galewood sap", 31273 => "approved grade 3 skybuilders' umbral tortoise", 31274 => "approved grade 3 skybuilders' umbral magma shard", 31275 => "approved grade 3 skybuilders' umbral levinite", 31604 => "approved grade 3 skybuilders' thunderbolt sculpin", 31605 => "approved grade 3 skybuilders' alligator snapping turtle", 31606 => "approved grade 3 skybuilders' bonytongue", 31607 => "approved grade 3 skybuilders' hermit goby", 31608 => "approved grade 3 skybuilders' mudskipper", 31609 => "approved grade 3 skybuilders' steppe bullfrog", 31610 => "approved grade 3 skybuilders' golden loach", 31611 => "approved grade 3 skybuilders' bass", 31612 => "approved grade 3 skybuilders' cherax", 31613 => "approved grade 3 skybuilders' marimo", 31614 => "approved grade 3 skybuilders' catfish", 31615 => "approved grade 3 skybuilders' ricefish", 31616 => "approved grade 3 skybuilders' scorpionfly", 31617 => "approved grade 3 skybuilders' whiteloom", 31618 => "approved grade 3 skybuilders' pteranodon", 31619 => "approved grade 3 skybuilders' king's mantle", 31620 => "approved grade 3 skybuilders' blue medusa", 31621 => "approved grade 3 skybuilders' gurnard", 31622 => "approved grade 3 artisanal skybuilders' oscar", 31623 => "approved grade 3 artisanal skybuilders' blind manta", 31624 => "approved grade 3 artisanal skybuilders' mosasaur", 31625 => "approved grade 3 artisanal skybuilders' storm chaser", 31626 => "approved grade 3 artisanal skybuilders' archaeopteryx", 31627 => "approved grade 3 artisanal skybuilders' wyvern", 31628 => "approved grade 3 artisanal skybuilders' cloudshark", 31629 => "approved grade 3 artisanal skybuilders' helicoprion", 31961 => "approved grade 4 skybuilders' switch", 31962 => "tuft of approved grade 4 skybuilders' hemp", 31963 => "chunk of approved grade 4 skybuilders' iron ore", 31964 => "pinch of approved grade 4 skybuilders' iron sand", 31965 => "approved grade 4 skybuilders' mahogany log", 31966 => "tuft of approved grade 4 skybuilders' sesame", 31967 => "approved grade 4 skybuilders' cotton boll", 31968 => "chunk of approved grade 4 skybuilders' ore", 31969 => "chunk of approved grade 4 skybuilders' rock salt", 31970 => "pinch of approved grade 4 skybuilders' mythrite sand", 31971 => "approved grade 4 skybuilders' spruce log", 31972 => "sprig of approved grade 4 skybuilders' mistletoe", 31973 => "approved grade 4 skybuilders' toad", 31974 => "approved grade 4 skybuilders' vine", 31975 => "basket of approved grade 4 skybuilders' tea leaves", 31976 => "chunk of approved grade 4 skybuilders' electrum ore", 31977 => "pinch of approved grade 4 skybuilders' alumen", 31978 => "bottle of approved grade 4 skybuilders' spring water", 31979 => "pinch of approved grade 4 skybuilders' gold sand", 31980 => "slab of approved grade 4 skybuilders' ragstone", 31981 => "approved grade 4 skybuilders' white cedar log", 31982 => "lump of approved grade 4 skybuilders' primordial resin", 31983 => "sheaf of approved grade 4 skybuilders' wheat", 31984 => "approved grade 4 skybuilders' gossamer cotton boll", 31985 => "approved grade 4 skybuilders' tortoise", 31986 => "chunk of approved grade 4 skybuilders' gold ore", 31987 => "chunk of approved grade 4 skybuilders' finest rock salt", 31988 => "bottle of approved grade 4 skybuilders' truespring water", 31989 => "pinch of approved grade 4 skybuilders' mineral sand", 31990 => "chunk of approved grade 4 skybuilders' bluespirit ore", 31991 => "approved grade 4 artisanal skybuilders' log", 31992 => "approved grade 4 artisanal skybuilders' raspberry", 31993 => "approved grade 4 artisanal skybuilders' caiman", 31994 => "approved grade 4 artisanal skybuilders' cocoon", 31995 => "clump of approved grade 4 artisanal skybuilders' barbgrass", 31996 => "chunk of approved grade 4 artisanal skybuilders' cloudstone", 31997 => "bottle of approved grade 4 artisanal skybuilders' spring water", 31998 => "approved grade 4 artisanal skybuilders' ice stalagmite", 31999 => "sack of approved grade 4 artisanal skybuilders' silex", 32000 => "chunk of approved grade 4 artisanal skybuilders' prismstone", 32001 => "approved grade 4 skybuilders' umbral galewood branch", 32002 => "clump of approved grade 4 skybuilders' umbral dirtleaf", 32003 => "chunk of approved grade 4 skybuilders' umbral flarerock", 32004 => "pinch of approved grade 4 skybuilders' umbral levinsand", 32908 => "approved grade 4 skybuilders' zagas khaal", 32909 => "approved grade 4 skybuilders' goldsmith crab", 32910 => "approved grade 4 skybuilders' common bitterling", 32911 => "approved grade 4 skybuilders' skyloach", 32912 => "approved grade 4 skybuilders' glacier core", 32913 => "approved grade 4 skybuilders' kissing fish", 32914 => "approved grade 4 skybuilders' cavalry catfish", 32915 => "approved grade 4 skybuilders' manasail", 32916 => "approved grade 4 skybuilders' starflower", 32917 => "approved grade 4 skybuilders' cyan crab", 32918 => "approved grade 4 skybuilders' fickle krait", 32919 => "approved grade 4 skybuilders' proto-hropken", 32920 => "approved grade 4 skybuilders' ghost faerie", 32921 => "approved grade 4 skybuilders' ashfish", 32922 => "approved grade 4 skybuilders' whitehorse", 32923 => "approved grade 4 skybuilders' ocean cloud", 32924 => "approved grade 4 skybuilders' black fanfish", 32925 => "approved grade 4 skybuilders' sunfish", 32926 => "approved grade 4 artisanal skybuilders' sweatfish", 32927 => "approved grade 4 artisanal skybuilders' sculptor", 32928 => "approved grade 4 artisanal skybuilders' little Thalaos", 32929 => "approved grade 4 artisanal skybuilders' lightning chaser", 32930 => "approved grade 4 artisanal skybuilders' marrella", 32931 => "approved grade 4 artisanal skybuilders' crimson namitaro", 32932 => "approved grade 4 artisanal skybuilders' griffin", 32933 => "approved grade 4 artisanal skybuilders' meganeura"],
+    'items' => [
+        29840, 29841, 29842, 29843, 29844, 29845, 29846, 29847, 29848, 29849, 29850, 29851, 29852, 29853, 29854, 29855, 29856, 29857, 29858, 29859, 29860, 29861, 29862, 29863, 29864, 29865, 29866, 29867, 29868, 29869, 29870, 29871, 29872, 29873, 29874, 29875, 29876, 29877, 29878, 29879, 29880, 29881, 29882, 29883, 29884, 29885, 29886, 29887, 29888, 29889, 29890, 29891, 29892, 29893, 29992, 30014, 30015, 30016, 30017, 30018, 30019, 30020, 30021, 30022, 30023, 30024, 30025, 30026, 30027, 30028, 30029, 30030, 30031, 30032, 30033, 31232, 31233, 31234, 31235, 31236, 31237, 31238, 31239, 31240, 31241, 31242, 31243, 31244, 31245, 31246, 31247, 31248, 31249, 31250, 31251, 31252, 31253, 31254, 31255, 31256, 31257, 31258, 31259, 31260, 31261, 31262, 31263, 31264, 31265, 31266, 31267, 31268, 31269, 31270, 31271, 31272, 31273, 31274, 31275, 31604, 31605, 31606, 31607, 31608, 31609, 31610, 31611, 31612, 31613, 31614, 31615, 31616, 31617, 31618, 31619, 31620, 31621, 31622, 31623, 31624, 31625, 31626, 31627, 31628, 31629, 31961, 31962, 31963, 31964, 31965, 31966, 31967, 31968, 31969, 31970, 31971, 31972, 31973, 31974, 31975, 31976, 31977, 31978, 31979, 31980, 31981, 31982, 31983, 31984, 31985, 31986, 31987, 31988, 31989, 31990, 31991, 31992, 31993, 31994, 31995, 31996, 31997, 31998, 31999, 32000, 32001, 32002, 32003, 32004, 32908, 32909, 32910, 32911, 32912, 32913, 32914, 32915, 32916, 32917, 32918, 32919, 32920, 32921, 32922, 32923, 32924, 32925, 32926, 32927, 32928, 32929, 32930, 32931, 32932, 32933,
+    ],
 
     /*
      * Individual node data for BTN and MIN to provide node-specific results
@@ -19,120 +21,120 @@ return [
     'node_data' => [
         'BTN' => [
             [
-                31965 => "approved grade 4 skybuilders' mahogany log",
-                31972 => "sprig of approved grade 4 skybuilders' mistletoe",
-                31981 => "approved grade 4 skybuilders' white cedar log",
-                31992 => "approved grade 4 artisanal skybuilders' raspberry",
+                31965,
+                31972,
+                31981,
+                31992,
 
-                29881 => "lump of approved grade 2 artisanal skybuilders' hardened sap",
-                31263 => "piece of approved grade 3 artisanal skybuilders' amber",
+                29881,
+                31263,
             ],
             [
-                31961 => "approved grade 4 skybuilders' switch",
-                31971 => "approved grade 4 skybuilders' spruce log",
-                31982 => "lump of approved grade 4 skybuilders' primordial resin",
-                31991 => "approved grade 4 artisanal skybuilders' log",
+                31961,
+                31971,
+                31982,
+                31991,
 
-                29880 => "approved grade 2 artisanal skybuilders' log",
-                31262 => "approved grade 3 artisanal skybuilders' log",
+                29880,
+                31262,
             ],
             [
-                31966 => "tuft of approved grade 4 skybuilders' sesame",
-                31974 => "approved grade 4 skybuilders' vine",
-                31985 => "approved grade 4 skybuilders' tortoise",
-                31994 => "approved grade 4 artisanal skybuilders' cocoon",
+                31966,
+                31974,
+                31985,
+                31994,
 
-                29883 => "approved grade 2 artisanal skybuilders' cotton boll",
-                31265 => "box of approved grade 3 artisanal skybuilders' rice",
+                29883,
+                31265,
             ],
             [
-                31967 => "approved grade 4 skybuilders' cotton boll",
-                31975 => "basket of approved grade 4 skybuilders' tea leaves",
-                31984 => "approved grade 4 skybuilders' gossamer cotton boll",
-                31995 => "clump of approved grade 4 artisanal skybuilders' barbgrass",
+                31967,
+                31975,
+                31984,
+                31995,
 
-                29884 => "approved grade 2 artisanal skybuilders' dawn lizard",
-                31266 => "approved grade 3 artisanal skybuilders' vine",
+                29884,
+                31266,
             ],
             [
-                31962 => "tuft of approved grade 4 skybuilders' hemp",
-                31973 => "approved grade 4 skybuilders' toad",
-                31983 => "sheaf of approved grade 4 skybuilders' wheat",
-                31993 => "approved grade 4 artisanal skybuilders' caiman",
+                31962,
+                31973,
+                31983,
+                31993,
 
-                29882 => "sheaf of approved grade 2 artisanal skybuilders' wheat",
-                31264 => "approved grade 3 artisanal skybuilders' cotton boll",
+                29882,
+                31264,
             ],
             [
-                32001 => "approved grade 4 skybuilders' umbral galewood branch",
+                32001,
 
-                29890 => "approved grade 2 skybuilders' umbral galewood log",
-                31272 => "pot of approved grade 3 skybuilders' umbral galewood sap",
+                29890,
+                31272,
             ],
             [
-                32002 => "clump of approved grade 4 skybuilders' umbral dirtleaf",
+                32002,
 
-                29891 => "approved grade 2 skybuilders' umbral earthcap",
-                31273 => "approved grade 3 skybuilders' umbral tortoise",
+                29891,
+                31273,
             ],
         ],
         'MIN' => [
             [
-                31963 => "chunk of approved grade 4 skybuilders' iron ore",
-                31976 => "chunk of approved grade 4 skybuilders' electrum ore",
-                31986 => "chunk of approved grade 4 skybuilders' gold ore",
-                31996 => "chunk of approved grade 4 artisanal skybuilders' cloudstone",
+                31963,
+                31976,
+                31986,
+                31996,
 
-                29885 => "chunk of approved grade 2 artisanal skybuilders' cloudstone",
-                31267 => "chunk of approved grade 3 artisanal skybuilders' cloudstone",
+                29885,
+                31267,
             ],
             [
-                31968 => "chunk of approved grade 4 skybuilders' ore",
-                31977 => "pinch of approved grade 4 skybuilders' alumen",
-                31987 => "chunk of approved grade 4 skybuilders' finest rock salt",
-                31997 => "bottle of approved grade 4 artisanal skybuilders' spring water",
+                31968,
+                31977,
+                31987,
+                31997,
 
-                29886 => "chunk of approved grade 2 artisanal skybuilders' rock salt",
-                31268 => "approved grade 3 artisanal skybuilders' basilisk egg",
+                29886,
+                31268,
             ],
             [
-                31970 => "pinch of approved grade 4 skybuilders' mythrite sand",
-                31980 => "slab of approved grade 4 skybuilders' ragstone",
-                31990 => "chunk of approved grade 4 skybuilders' bluespirit ore",
-                31999 => "sack of approved grade 4 artisanal skybuilders' silex",
+                31970,
+                31980,
+                31990,
+                31999,
 
-                29889 => "chunk of approved grade 2 artisanal skybuilders' jade",
-                31271 => "chunk of approved grade 3 artisanal skybuilders' granite",
+                29889,
+                31271,
             ],
             [
-                31964 => "pinch of approved grade 4 skybuilders' iron sand",
-                31979 => "pinch of approved grade 4 skybuilders' gold sand",
-                31989 => "pinch of approved grade 4 skybuilders' mineral sand",
-                32000 => "chunk of approved grade 4 artisanal skybuilders' prismstone",
+                31964,
+                31979,
+                31989,
+                32000,
 
-                29888 => "pinch of approved grade 2 artisanal skybuilders' aurum regis sand",
-                31270 => "sack of approved grade 3 artisanal skybuilders' clay",
+                29888,
+                31270,
             ],
             [
-                31969 => "chunk of approved grade 4 skybuilders' rock salt",
-                31978 => "bottle of approved grade 4 skybuilders' spring water",
-                31988 => "bottle of approved grade 4 skybuilders' truespring water",
-                31998 => "approved grade 4 artisanal skybuilders' ice stalagmite",
+                31969,
+                31978,
+                31988,
+                31998,
 
-                29887 => "bottle of approved grade 2 artisanal skybuilders' spring water",
-                31269 => "pinch of approved grade 3 artisanal skybuilders' alumen",
+                29887,
+                31269,
             ],
             [
-                32003 => "chunk of approved grade 4 skybuilders' umbral flarerock",
+                32003,
 
-                29892 => "approved grade 2 skybuilders' umbral flarestone",
-                31274 => "approved grade 3 skybuilders' umbral magma shard",
+                29892,
+                31274,
             ],
             [
-                32004 => "pinch of approved grade 4 skybuilders' umbral levinsand",
+                32004,
 
-                29893 => "approved grade 2 skybuilders' umbral levinshard",
-                31275 => "approved grade 3 skybuilders' umbral levinite",
+                29893,
+                31275,
             ],
         ],
     ],
