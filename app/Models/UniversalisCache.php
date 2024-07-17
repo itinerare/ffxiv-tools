@@ -122,8 +122,6 @@ class UniversalisCache extends Model {
                 ->orWhereNull('price_per_unit');
         })->get()->chunk(100);
 
-        return true;
-
         foreach ($items as $chunk) {
             // Format a comma-separated string of item IDs to make a request to Universalis
             $idString = implode(',', $chunk->pluck('item_id')->toArray());
