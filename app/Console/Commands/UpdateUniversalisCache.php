@@ -34,7 +34,7 @@ class UpdateUniversalisCache extends Command {
         $this->line('Initializing records as necessary...');
         if ($items->count() > GameItem::whereIn('item_id', $items->toArray())->whereNotNull('name')->count()) {
             $this->info('Queuing jobs to create game item records...');
-            $gameItemsBar = $this->output->createProgressBar($items->count() / 20);
+            $gameItemsBar = $this->output->createProgressBar(ceil($items->count() / 20));
             $gameItemsBar->start();
 
             foreach ($items->chunk(20) as $chunk) {
@@ -58,7 +58,7 @@ class UpdateUniversalisCache extends Command {
                         $universalisRecordsBar->advance();
                     }
                 } else {
-                    for ($i = 1; $i < $items->count() / 100; $i++) {
+                    for ($i = 1; $i < ceil($items->count() / 100); $i++) {
                         $universalisRecordsBar->advance();
                     }
                 }
