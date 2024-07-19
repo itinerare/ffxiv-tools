@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\UpdateUnivsersalisCaches;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -17,6 +19,8 @@ class DiademTest extends TestCase {
      */
     #[DataProvider('diademProvider')]
     public function testGetDiadem($world, $expected): void {
+        Queue::fake();
+
         $response = $this->get('diadem'.($world ? '?world='.$world : ''));
 
         $response->assertStatus(200);
@@ -26,6 +30,8 @@ class DiademTest extends TestCase {
         } else {
             $response->assertSee('Please select a world!');
         }
+
+        Queue::assertNotPushed(UpdateUnivsersalisCaches::class);
     }
 
     public static function diademProvider() {
