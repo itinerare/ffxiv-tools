@@ -19,8 +19,8 @@
                         <ol>
                             @foreach ($rankedItems[$class] as $name => $item)
                                 <li>
-                                    <strong>{{ $name }}</strong> - {{ number_format($item->min_price_nq) ?? '???' }} Gil<br />
-                                    <small class="text-muted">Sales per day: {{ number_format($item->nq_sale_velocity) ?? '(No Data)' }} ・ Last updated: {!! $item->updatedTime !!}</small>
+                                    <strong>{{ $name }}</strong> - {{ isset($item->min_price_nq) ? number_format($item->min_price_nq) : '???' }} Gil<br />
+                                    <small class="text-muted">Sales per day: {{ isset($item->nq_sale_velocity) ? number_format($item->nq_sale_velocity) : '(No Data)' }} ・ Last updated: {!! $item->updatedTime !!}</small>
                                 </li>
                             @endforeach
                         </ol>
@@ -29,8 +29,8 @@
                                 <ul>
                                     @foreach ($node as $name => $item)
                                         <li>
-                                            <strong>{{ $name }}</strong> - {{ number_format($item->min_price_nq) ?? '???' }} Gil<br />
-                                            <small class="text-muted">Sales per day: {{ number_format($item->nq_sale_velocity) ?? '(No Data)' }} ・ Last updated: {!! $item->updatedTime !!}</small>
+                                            <strong>{{ $name }}</strong> - {{ isset($item->min_price_nq) ? number_format($item->min_price_nq) : '???' }} Gil<br />
+                                            <small class="text-muted">Sales per day: {{ isset($item->nq_sale_velocity) ? number_format($item->nq_sale_velocity) : '(No Data)' }} ・ Last updated: {!! $item->updatedTime !!}</small>
                                         </li>
                                     @endforeach
                                 </ul>
