@@ -19,7 +19,7 @@
                         <ol>
                             @foreach ($rankedItems[$class] as $name => $item)
                                 <li>
-                                    <strong>{{ $name }}</strong> - {{ $item->price_per_unit ?? '???' }} Gil<br />
+                                    <strong>{{ $name }}</strong> - {{ $item->min_price_nq ?? '???' }} Gil<br />
                                     <small class="text-muted">Sales per day: {{ $item->nq_sale_velocity ?? '(No Data)' }} ・ Last updated: {!! $item->updatedTime !!}</small>
                                 </li>
                             @endforeach
@@ -29,7 +29,7 @@
                                 <ul>
                                     @foreach ($node as $name => $item)
                                         <li>
-                                            <strong>{{ $name }}</strong> - {{ $item->price_per_unit ?? '???' }} Gil<br />
+                                            <strong>{{ $name }}</strong> - {{ $item->min_price_nq ?? '???' }} Gil<br />
                                             <small class="text-muted">Sales per day: {{ $item->nq_sale_velocity ?? '(No Data)' }} ・ Last updated: {!! $item->updatedTime !!}</small>
                                         </li>
                                     @endforeach
