@@ -98,12 +98,6 @@ class UniversalisCache extends Model {
             'world'   => $world,
         ]);
 
-        if (!$gameItem) {
-            echo 'Failed to create game item.';
-
-            return false;
-        }
-
         return true;
     }
 
@@ -125,15 +119,12 @@ class UniversalisCache extends Model {
 
         // Only make a request to Universalis if there are items to update
         if ($items->count()) {
-            echo 'Updating '.$items->count().' items, starting at '.$items->first()->item_id.'...'."\n";
-
             // Format a comma-separated string of item IDs to make a request to Universalis
             $idString = implode(',', $items->pluck('item_id')->toArray());
 
             $response = Http::retry(3, 100, throw: false)->get('https://universalis.app/api/v2/'.$world.'/'.$idString.'?fields=items.minPriceNQ%2Citems.minPriceHQ%2Citems.nqSaleVelocity%2Citems.hqSaleVelocity');
 
             if ($response->successful()) {
-                echo 'Successful response...'."\n";
                 // The response is then returned as JSON
                 $response = json_decode($response->getBody(), true);
                 // Affirm that the response is an array for safety
@@ -148,8 +139,6 @@ class UniversalisCache extends Model {
                         ]);
                     }
                 }
-            } else {
-                echo 'Unsuccessful response...'."\n";
             }
         }
 
