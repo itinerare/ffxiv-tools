@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\UpdateUnivsersalisCaches;
+use App\Models\GameItem;
 use App\Models\UniversalisCache;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,7 @@ class DiademController extends Controller {
                 }
             }
 
-            if ($isValid && count((array) config('ffxiv.diadem_items.items')) == UniversalisCache::world($request->get('world'))->whereIn('item_id', config('ffxiv.diadem_items.items'))->count()) {
+            if ($isValid && count((array) config('ffxiv.diadem_items.items')) == UniversalisCache::world($request->get('world'))->whereIn('item_id', config('ffxiv.diadem_items.items'))->count() && count((array) config('ffxiv.diadem_items.items')) == GameItem::whereIn('item_id', config('ffxiv.diadem_items.items'))->count()) {
                 // Check and, if necessary, update cached data
                 UpdateUnivsersalisCaches::dispatch($request->get('world'), collect(config('ffxiv.diadem_items.items')));
 
