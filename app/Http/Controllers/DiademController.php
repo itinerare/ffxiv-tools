@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UpdateUnivsersalisCaches;
 use App\Models\UniversalisCache;
 use Illuminate\Http\Request;
 
@@ -24,9 +25,9 @@ class DiademController extends Controller {
                 }
             }
 
-            if ($isValid && count(config('ffxiv.diadem_items.items')) == UniversalisCache::world($request->get('world'))->whereIn('item_id', config('ffxiv.diadem_items.items'))->count()) {
+            if ($isValid && count((array) config('ffxiv.diadem_items.items')) == UniversalisCache::world($request->get('world'))->whereIn('item_id', config('ffxiv.diadem_items.items'))->count()) {
                 // Check and, if necessary, update cached data
-                (new UniversalisCache)->updateCaches($request->get('world'), config('ffxiv.diadem_items.items'));
+                UpdateUnivsersalisCaches::dispatch($request->get('world'), collect(config('ffxiv.diadem_items.items')));
 
                 // Get cached item records
                 $items = UniversalisCache::world($request->get('world'))->whereIn('item_id', config('ffxiv.diadem_items.items'))->get();
@@ -50,14 +51,12 @@ class DiademController extends Controller {
                         }
                     }
                 }
-                arsort($rankedItems['BTN']);
-                arsort($rankedItems['MIN']);
                 $rankedItems = collect($rankedItems)->map(function ($class) use ($items) {
                     return collect($class)->mapWithKeys(function ($item, $id) use ($items) {
                         $itemCache = $items->where('item_id', $id)->first();
 
                         return [$itemCache->gameItem->name => $itemCache];
-                    })->take(5);
+                    })->sortByDesc('min_price_nq')->take(5);
                 });
 
                 // Update the list organized by node with price information
