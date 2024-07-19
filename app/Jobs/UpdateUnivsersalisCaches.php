@@ -32,15 +32,6 @@ class UpdateUnivsersalisCaches implements ShouldQueue {
     }
 
     /**
-     * Get the middleware the job should pass through.
-     *
-     * @return array<int, object>
-     */
-    public function middleware(): array {
-        return [new WithoutOverlapping('update-universalis-cache')];
-    }
-
-    /**
      * Execute the job.
      */
     public function handle(): void {

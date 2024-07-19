@@ -69,10 +69,12 @@ class UpdateUniversalisCache extends Command {
 
         // Queue jobs to update cached data from Universalis
         $this->info('Queuing jobs to update cached Universalis data...');
-        $universalisBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count());
+        $universalisBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count() * ($items->count() / 100));
         foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
-            UpdateUnivsersalisCaches::dispatch(strtolower($world), $items->toArray());
-            $universalisBar->advance();
+            foreach ($items->chunk(100) as $chunk) {
+                UpdateUnivsersalisCaches::dispatch(strtolower($world), $chunk->toArray());
+                $universalisBar->advance();
+            }
         }
         $universalisBar->finish();
         $this->line("\n");

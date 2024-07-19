@@ -24,9 +24,10 @@ return new class extends Migration {
             $table->integer('item_id')->unsigned()->index();
             $table->string('world');
 
-            $table->string('price_per_unit')->nullable()->default(null);
-            $table->string('nq_sale_velocity')->nullable()->default(null);
-            $table->string('hq_sale_velocity')->nullable()->default(null);
+            $table->integer('min_price_nq')->nullable()->default(null);
+            $table->integer('min_price_hq')->nullable()->default(null);
+            $table->integer('nq_sale_velocity')->nullable()->default(null);
+            $table->integer('hq_sale_velocity')->nullable()->default(null);
 
             $table->timestamps();
         });
