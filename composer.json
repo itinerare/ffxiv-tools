@@ -10,6 +10,7 @@
         "laracasts/flash": "^3.2",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.7",
+        "nesbot/carbon": "^3.7",
         "spatie/laravel-html": "^3.5",
         "xivapi/lodestone-parser": "dev-main"
     },

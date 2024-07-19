@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UpdateUnivsersalisCaches;
+use App\Models\UniversalisCache;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class DiademController extends Controller {
     /**
@@ -24,69 +25,52 @@ class DiademController extends Controller {
                 }
             }
 
-            if ($isValid) {
-                $items = collect(config('ffxiv.diadem_items.items'))->chunk(100);
+            if ($isValid && count((array) config('ffxiv.diadem_items.items')) == UniversalisCache::world($request->get('world'))->whereIn('item_id', config('ffxiv.diadem_items.items'))->count()) {
+                // Check and, if necessary, update cached data
+                UpdateUnivsersalisCaches::dispatch($request->get('world'), collect(config('ffxiv.diadem_items.items')));
 
-                foreach ($items as $chunk) {
-                    // Format a comma-separated string of item IDs to make a request to Universalis
-                    $idString = implode(',', array_keys($chunk->toArray()));
+                // Get cached item records
+                $items = UniversalisCache::world($request->get('world'))->whereIn('item_id', config('ffxiv.diadem_items.items'))->get();
 
-                    $response = Http::retry(3, 100, throw: false)->get('https://universalis.app/api/v2/'.($request->get('world') ?? null).'/'.$idString.'?listings=1');
+                // Collect individual node data
+                $availableItems = [];
+                foreach (config('ffxiv.diadem_items.node_data.BTN') as $node) {
+                    $availableItems['BTN'][] = collect($node);
+                }
+                foreach (config('ffxiv.diadem_items.node_data.MIN') as $node) {
+                    $availableItems['MIN'][] = collect($node);
+                }
+                $availableItems = collect($availableItems);
 
-                    if ($response->successful()) {
-                        // The response is then returned as JSON
-                        $response = json_decode($response->getBody(), true);
-                        // Affirm that the response is an array for safety
-                        if (is_array($response)) {
-                            // Assemble a list of items with prices, ignoring any for which no price data exists
-                            foreach ($chunk as $id=>$item) {
-                                if (isset($response['items'][$id]['listings'][0]['pricePerUnit'])) {
-                                    $priceList[$id] = $response['items'][$id]['listings'][0]['pricePerUnit'] ?? null;
-                                }
-                            }
+                // Assemble a list of available items ranked by price for each class
+                // This provides a very simple overview
+                foreach ($availableItems as $class => $chunk) {
+                    foreach ($chunk as $node) {
+                        foreach ($node as $id => $item) {
+                            $rankedItems[$class][$item] = $items->where('item_id', $item)->first();
                         }
-
-                        // Clear the response after processing it
-                        unset($response);
-                    } else {
-                        flash('A request to Universalis failed; please try again later.')->error();
                     }
                 }
+                $rankedItems = collect($rankedItems)->map(function ($class) use ($items) {
+                    return collect($class)->mapWithKeys(function ($item, $id) use ($items) {
+                        $itemCache = $items->where('item_id', $id)->first();
 
-                if (isset($priceList)) {
-                    // Collect individual node data
-                    $availableItems = [];
-                    foreach (config('ffxiv.diadem_items.node_data.BTN') as $node) {
-                        $availableItems['BTN'][] = collect($node);
-                    }
-                    foreach (config('ffxiv.diadem_items.node_data.MIN') as $node) {
-                        $availableItems['MIN'][] = collect($node);
-                    }
-                    $availableItems = collect($availableItems);
+                        return [$itemCache->gameItem->name => $itemCache];
+                    })->sortByDesc('min_price_nq')->take(5);
+                });
 
-                    // Assemble a list of available items ranked by price for each class
-                    // This provides a very simple overview
-                    foreach ($availableItems as $class=>$chunk) {
-                        foreach ($chunk as $node) {
-                            foreach ($node as $id=>$item) {
-                                $rankedItems[$class][$item] = $priceList[$id] ?? 0;
-                            }
-                        }
-                    }
-                    arsort($rankedItems['BTN']);
-                    $rankedItems['BTN'] = collect($rankedItems['BTN']);
-                    arsort($rankedItems['MIN']);
-                    $rankedItems['MIN'] = collect($rankedItems['MIN']);
+                // Update the list organized by node with price information
+                $availableItems = $availableItems->map(function ($chunk) use ($items) {
+                    return collect($chunk)->map(function ($node) use ($items) {
+                        return $node->mapWithKeys(function ($item, $id) use ($items) {
+                            $itemCache = $items->where('item_id', $item)->first();
 
-                    // Update the list organized by node with price information
-                    $availableItems = $availableItems->map(function ($chunk) use ($priceList) {
-                        return collect($chunk)->map(function ($node) use ($priceList) {
-                            return $node->mapWithKeys(function ($item, $id) use ($priceList) {
-                                return [$item => $priceList[$id] ?? 'Unknown'];
-                            });
+                            return [$itemCache->gameItem->name => $itemCache];
                         });
                     });
-                }
+                });
+            } elseif ($isValid) {
+                // Do nothing, and do not unset the selected world
             } else {
                 // If the world name is invalid, unset it
                 // so that the frontend treats it as not having selected anything

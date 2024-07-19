@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         target: ['8.2', '8.3']
-    uses: itinerare/github-actions/.github/workflows/laravel_tests_no_db.yml@main
+    uses: itinerare/github-actions/.github/workflows/laravel_tests_sqlite.yml@main
     with:
       php-version: ${{ matrix.target }}
     concurrency:

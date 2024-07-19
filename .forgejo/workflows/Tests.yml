@@ -18,6 +18,7 @@ jobs:
       uses: https://github.com/shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.target }}
+        extensions: pdo_sqlite, sqlite3
 
     - name: Checkout code
       uses: actions/checkout@v4
