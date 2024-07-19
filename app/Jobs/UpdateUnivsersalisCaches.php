@@ -2,10 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Models\UniversalisCache;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
+use Illuminate\Queue\Middleware\RateLimited;
 
 class UpdateUnivsersalisCaches implements ShouldQueue {
     use Queueable;
@@ -15,26 +14,37 @@ class UpdateUnivsersalisCaches implements ShouldQueue {
      *
      * @var int
      */
-    public $tries = 2;
+    public $tries = 3;
 
     /**
      * Create a new job instance.
      *
      * @param string $world
-     * @param array  $ids
+     * @param @param \Illuminate\Support\Collection $items
      */
     public function __construct(
         public $world,
-        public $ids
+        public $items
     ) {
         $this->world = $world;
-        $this->ids = $ids;
+        $this->items = $items;
+    }
+
+    /**
+     * Get the middleware the job should pass through.
+     *
+     * @return array<int, object>
+     */
+    public function middleware(): array {
+        return [(new RateLimited('universalis-cache-updates'))->dontRelease()];
     }
 
     /**
      * Execute the job.
      */
     public function handle(): void {
-        (new UniversalisCache)->updateCaches($this->world, $this->ids);
+        foreach ($this->items->chunk(100) as $chunk) {
+            UpdateUniversalisCacheChunk::dispatch($this->world, $chunk);
+        }
     }
 }

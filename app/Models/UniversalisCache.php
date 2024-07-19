@@ -99,7 +99,7 @@ class UniversalisCache extends Model {
         ]);
 
         if (!$gameItem) {
-            flash('Failed to create game item.')->error();
+            echo 'Failed to create game item.';
 
             return false;
         }
@@ -112,50 +112,44 @@ class UniversalisCache extends Model {
      * Attempts to make as few requests as possible.
      *
      * @param string $world
-     * @param array  $ids
+     * @param mixed  $chunk
      *
      * @return \Illuminate\Support\Collection
      */
-    public function updateCaches($world, $ids) {
+    public function updateCaches($world, $chunk) {
         // Filter down to only items that have not been updated recently, or without price data
-        $items = self::world($world)->whereIn('item_id', $ids)->where(function ($query) {
+        $items = self::world($world)->whereIn('item_id', $chunk)->where(function ($query) {
             $query->where('updated_at', '<', Carbon::now()->subHours(6))
                 ->orWhereNull('min_price_nq');
         })->get();
 
-        echo 'Updating '.$items->count().' items, starting at '.collect($ids)->first().'...'."\n";
+        echo 'Updating '.$items->count().' items, starting at '.$items->first()->item_id.'...'."\n";
 
         // Only make a request to Universalis if there are items to update
         if ($items->count()) {
-            foreach ($items->chunk(100) as $chunk) {
-                // Format a comma-separated string of item IDs to make a request to Universalis
-                $idString = implode(',', $chunk->pluck('item_id')->toArray());
+            // Format a comma-separated string of item IDs to make a request to Universalis
+            $idString = implode(',', $items->pluck('item_id')->toArray());
 
-                $response = Http::retry(3, 100, throw: false)->get('https://universalis.app/api/v2/'.$world.'/'.$idString.'?listings=1');
+            $response = Http::retry(3, 100, throw: false)->get('https://universalis.app/api/v2/'.$world.'/'.$idString.'?listings=1');
 
-                if ($response->successful()) {
-                    echo 'Successful response...'."\n";
-                    // The response is then returned as JSON
-                    $response = json_decode($response->getBody(), true);
-                    // Affirm that the response is an array for safety
-                    if (is_array($response)) {
-                        // Assemble a list of items with prices, ignoring any for which no price data exists
-                        foreach ($chunk as $item) {
-                            $item->update([
-                                'min_price_nq'     => $response['items'][$item->item_id]['minPriceNQ'] ?? null,
-                                'min_price_hq'     => $response['items'][$item->item_id]['minPriceHQ'] ?? null,
-                                'nq_sale_velocity' => $response['items'][$item->item_id]['nqSaleVelocity'] ?? null,
-                                'hq_sale_velocity' => $response['items'][$item->item_id]['hqSaleVelocity'] ?? null,
-                            ]);
-                        }
+            if ($response->successful()) {
+                echo 'Successful response...'."\n";
+                // The response is then returned as JSON
+                $response = json_decode($response->getBody(), true);
+                // Affirm that the response is an array for safety
+                if (is_array($response)) {
+                    // Assemble a list of items with prices, ignoring any for which no price data exists
+                    foreach ($items as $item) {
+                        $item->update([
+                            'min_price_nq'     => $response['items'][$item->item_id]['minPriceNQ'] ?? null,
+                            'min_price_hq'     => $response['items'][$item->item_id]['minPriceHQ'] ?? null,
+                            'nq_sale_velocity' => $response['items'][$item->item_id]['nqSaleVelocity'] ?? null,
+                            'hq_sale_velocity' => $response['items'][$item->item_id]['hqSaleVelocity'] ?? null,
+                        ]);
                     }
-
-                    // Clear the response after processing it
-                    unset($response);
-                } else {
-                    echo 'Unsuccessful response...'."\n";
-                    flash('A request to Universalis failed; please try again later.')->error();
                 }
+            } else {
+                echo 'Unsuccessful response...'."\n";
             }
         }
 
