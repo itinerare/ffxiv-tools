@@ -6,6 +6,7 @@ use App\Jobs\CreateUniversalisRecords;
 use App\Jobs\UpdateGameItem;
 use App\Jobs\UpdateUniversalisCacheChunk;
 use App\Jobs\UpdateUnivsersalisCaches;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
@@ -69,6 +70,7 @@ class UniversalisTest extends TestCase {
                 'hqSaleVelocity' => 0,
                 'minPriceNQ'     => mt_rand(1, 2000),
                 'minPriceHQ'     => mt_rand(1, 2000),
+                'lastUploadTime' => '1721492174306',
             ];
         }
 
@@ -81,9 +83,10 @@ class UniversalisTest extends TestCase {
         // Check that the appropriate number of empty records has been created
         foreach ($chunk as $item) {
             $this->assertDatabaseHas('universalis_cache', [
-                'item_id'      => $item,
-                'min_price_nq' => null,
-                'min_price_hq' => null,
+                'item_id'          => $item,
+                'min_price_nq'     => null,
+                'min_price_hq'     => null,
+                'last_upload_time' => null,
             ]);
         }
 
@@ -93,9 +96,10 @@ class UniversalisTest extends TestCase {
         // Assert that records have been updated with the data from the fake response body
         foreach ($chunk as $item) {
             $this->assertDatabaseHas('universalis_cache', [
-                'item_id'      => $item,
-                'min_price_nq' => $responseBody['items'][$item]['minPriceNQ'],
-                'min_price_hq' => $responseBody['items'][$item]['minPriceHQ'],
+                'item_id'          => $item,
+                'min_price_nq'     => $responseBody['items'][$item]['minPriceNQ'],
+                'min_price_hq'     => $responseBody['items'][$item]['minPriceHQ'],
+                'last_upload_time' => Carbon::createFromTimestampMs($responseBody['items'][$item]['lastUploadTime']),
             ]);
         }
     }
