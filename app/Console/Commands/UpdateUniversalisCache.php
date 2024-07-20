@@ -76,5 +76,17 @@ class UpdateUniversalisCache extends Command {
         }
         $universalisBar->finish();
         $this->line("\n");
+
+        $this->line('Pruning old records as necessary...');
+        if (GameItem::whereNotIn('item_id', $items->toArray())->count()) {
+            GameItem::whereNotIn('item_id', $items->toArray())->delete();
+            $this->info('Pruned game item records...');
+        }
+        if (UniversalisCache::whereNotIn('item_id', $items->toArray())->count()) {
+            UniversalisCache::whereNotIn('item_id', $items->toArray())->delete();
+            $this->info('Pruned Universalis cache records...');
+        }
+
+        $this->info('Done!');
     }
 }
