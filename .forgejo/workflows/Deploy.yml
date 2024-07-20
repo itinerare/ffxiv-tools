@@ -21,8 +21,9 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
 
       - name: Deploy to prod
+        shell: bash
         run: |
-          ssh -v -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<'ENDSSH'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<'ENDSSH'
           cd "${{ vars.DEPLOY_APP_PATH }}"
           git pull
           composer install
