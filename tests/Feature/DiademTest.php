@@ -2,8 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\CreateUniversalisRecords;
+use App\Jobs\UpdateGameItem;
 use App\Jobs\UpdateUnivsersalisCaches;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -18,27 +21,46 @@ class DiademTest extends TestCase {
      * @param bool   $expected
      */
     #[DataProvider('diademProvider')]
-    public function testGetDiadem($world, $expected): void {
+    public function testGetDiadem($world, $initialized, $expected): void {
         Queue::fake();
+
+        if ($initialized) {
+            // Fake requests to XIVAPI to save time/requests
+            Http::fake(['xivapi.com/*' => Http::response()]);
+
+            $items = collect(config('ffxiv.diadem_items.node_data'))->flatten();
+
+            // Initialize game item and Universalis records, echoing the chunking usually used to do so
+            foreach ($items->chunk(20) as $chunk) {
+                (new UpdateGameItem($chunk))->handle();
+            }
+            foreach ($items->chunk(100) as $chunk) {
+                (new CreateUniversalisRecords($world, $chunk))->handle();
+            }
+        }
 
         $response = $this->get('diadem'.($world ? '?world='.$world : ''));
 
         $response->assertStatus(200);
 
-        if ($expected) {
+        if ($expected && $initialized) {
+            $response->assertSee('Showing Results for '.ucfirst($world));
+            Queue::assertPushed(UpdateUnivsersalisCaches::class);
+        } elseif ($expected) {
             $response->assertSee('Item data for '.ucfirst($world));
+            Queue::assertNotPushed(UpdateUnivsersalisCaches::class);
         } else {
             $response->assertSee('Please select a world!');
+            Queue::assertNotPushed(UpdateUnivsersalisCaches::class);
         }
-
-        Queue::assertNotPushed(UpdateUnivsersalisCaches::class);
     }
 
     public static function diademProvider() {
         return [
-            'no world'      => [null, 0],
-            'valid world'   => ['zalera', 1],
-            'invalid world' => ['fake', 0],
+            'no world'                 => [null, 0, 0],
+            'valid world'              => ['zalera', 0, 1],
+            'valid world, initialized' => ['zalera', 1, 1],
+            'invalid world'            => ['fake', 0, 0],
         ];
     }
 }
