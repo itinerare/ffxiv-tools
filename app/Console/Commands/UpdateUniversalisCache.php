@@ -29,7 +29,7 @@ class UpdateUniversalisCache extends Command {
      */
     public function handle() {
         // Gather all relevant game item IDs
-        $items = collect(config('ffxiv.diadem_items.items'));
+        $items = collect(config('ffxiv.diadem_items.node_data'))->flatten();
 
         $this->line('Initializing records as necessary...');
         if ($items->count() > GameItem::whereIn('item_id', $items->toArray())->whereNotNull('name')->count()) {

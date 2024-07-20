@@ -26,12 +26,14 @@ class DiademController extends Controller {
                 }
             }
 
-            if ($isValid && count((array) config('ffxiv.diadem_items.items')) == UniversalisCache::world($request->get('world'))->whereIn('item_id', config('ffxiv.diadem_items.items'))->count() && count((array) config('ffxiv.diadem_items.items')) == GameItem::whereIn('item_id', config('ffxiv.diadem_items.items'))->count()) {
+            $diademItems = collect(config('ffxiv.diadem_items.node_data'))->flatten();
+
+            if ($isValid && $diademItems->count() == UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems->toArray())->count() && $diademItems->count() == GameItem::whereIn('item_id', $diademItems->toArray())->count()) {
                 // Check and, if necessary, update cached data
-                UpdateUnivsersalisCaches::dispatch($request->get('world'), collect(config('ffxiv.diadem_items.items')));
+                UpdateUnivsersalisCaches::dispatch($request->get('world'), $diademItems);
 
                 // Get cached item records
-                $items = UniversalisCache::world($request->get('world'))->whereIn('item_id', config('ffxiv.diadem_items.items'))->get();
+                $items = UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems)->get();
 
                 // Collect individual node data
                 $availableItems = [];
