@@ -8,7 +8,7 @@ A collection of small, light-weight browser utilities related to FFXIV. Currentl
     - Consults Universalis to see what the current pricest mat on each Diadem node is on a given world, as well as the priciest overall. Supports NA, Europe, JP, and Oceania data centers/worlds.
     - Universalis data is stored locally to reduce strain and maintain availability.
     
-An instance can be found at https://ffxiv.itinerare.net and is periodically updated from this repo. 
+An instance can be found at https://ffxiv.itinerare.net and is automatically updated from this repo. 
 
 ## Setup
 
