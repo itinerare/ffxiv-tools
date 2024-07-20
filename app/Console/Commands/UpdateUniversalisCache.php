@@ -48,7 +48,7 @@ class UpdateUniversalisCache extends Command {
 
         if ((collect(config('ffxiv.data_centers'))->flatten()->count() * $items->count()) > UniversalisCache::whereIn('item_id', $items->toArray())->count()) {
             $this->info('Queuing jobs to create Universalis cache records...');
-            $universalisRecordsBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count() * ($items->count() / 100));
+            $universalisRecordsBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count() * ceil($items->count() / 100));
             $universalisRecordsBar->start();
 
             foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
@@ -87,6 +87,6 @@ class UpdateUniversalisCache extends Command {
             $this->info('Pruned Universalis cache records...');
         }
 
-        $this->info('Done!');
+        $this->line('Done!');
     }
 }
