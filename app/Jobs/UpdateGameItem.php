@@ -41,8 +41,6 @@ class UpdateGameItem implements ShouldQueue {
      * Execute the job.
      */
     public function handle(): void {
-        foreach ($this->chunk as $item) {
-            (new GameItem)->recordItem($item);
-        }
+        (new GameItem)->recordItem($this->chunk);
     }
 }

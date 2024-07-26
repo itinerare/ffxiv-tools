@@ -58,50 +58,52 @@ class GameItem extends Model {
     **********************************************************************************************/
 
     /**
-     * Record an item by ID, fetching its name from XIVAPI.
+     * Record an items by ID, fetching names from XIVAPI.
      *
-     * @param int $id
+     * @param \Illuminate\Support\Collection $chunk
      *
      * @return bool
      */
-    public function recordItem($id) {
-        if (self::where('item_id', $id)->whereNotNull('name')->exists()) {
-            return true;
-        } elseif (self::where('item_id', $id)->whereNull('name')->exists()) {
-            $gameItem = self::where('item_id', $id)->whereNull('name')->first();
-        }
+    public function recordItem($chunk) {
+        // Format a comma-separated string of item IDs to make a request to XIVAPI
+        $idString = implode(',', $chunk->toArray());
 
-        // Make a request to XIVAPI for the item name
-        $response = Http::retry(3, 100, throw: false)->get('https://xivapi.com/item/'.$id);
+        $response = Http::retry(3, 100, throw: false)->get('https://xivapi.com/item?ids='.$idString);
 
         if ($response->successful()) {
             // The response is then returned as JSON
             $response = json_decode($response->getBody(), true);
+
             // Affirm that the response is an array for safety
-            if (is_array($response) && isset($response['Name'])) {
-                $name = $response['Name'];
+            if (is_array($response)) {
+                // Format the response for easy access to item info
+                $response = collect($response['Results'])->mapWithKeys(function ($value, $key) {
+                    return [$value['ID'] => $value];
+                });
+
+                foreach ($chunk as $item) {
+                    if (self::where('item_id', $item)->exists()) {
+                        if (self::where('item_id', $item)->whereNull('name')->exists()) {
+                            self::where('item_id', $item)->update([
+                                'name' => $response[$item]['Name'] ?? null,
+                            ]);
+                        }
+                    } else {
+                        self::create([
+                            'item_id' => $item,
+                            'name'    => $response[$item]['Name'] ?? null,
+                        ]);
+                    }
+                }
             }
-
-            // Clear the response after processing it
-            unset($response);
         } else {
-            flash('A request to XIVAPI failed; please try again later.')->error();
-        }
-
-        if (isset($gameItem) && $gameItem) {
-            $gameItem->update([
-                'name' => $name ?? null,
-            ]);
-        } else {
-            $gameItem = self::create([
-                'item_id' => $id,
-                'name'    => $name ?? null,
-            ]);
-
-            if (!$gameItem) {
-                flash('Failed to create game item.')->error();
-
-                return false;
+            foreach ($chunk as $item) {
+                if (!self::where('item_id', $item)->exists()) {
+                    self::create([
+                        'item_id' => $item,
+                        'name'    => null,
+                    ]);
+                }
             }
         }
 

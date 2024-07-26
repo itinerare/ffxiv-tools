@@ -27,7 +27,7 @@ class UniversalisTest extends TestCase {
      */
     public function testGameItemCreation(): void {
         // Process the job with a very small chunk for efficiency
-        $chunk = $this->items->chunk(3)->last();
+        $chunk = $this->items->chunk(10)->last();
         (new UpdateGameItem($chunk))->handle();
 
         foreach ($chunk as $item) {

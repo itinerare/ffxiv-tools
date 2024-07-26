@@ -26,12 +26,12 @@ class DiademTest extends TestCase {
 
         if ($initialized) {
             // Fake requests to XIVAPI to save time/requests
-            Http::fake(['xivapi.com/*' => Http::response()]);
+            Http::fake(['xivapi.com/*' => Http::response(['Results' => []])]);
 
             $items = collect(config('ffxiv.diadem_items.node_data'))->flatten();
 
             // Initialize game item and Universalis records, echoing the chunking usually used to do so
-            foreach ($items->chunk(20) as $chunk) {
+            foreach ($items->chunk(100) as $chunk) {
                 (new UpdateGameItem($chunk))->handle();
             }
             foreach ($items->chunk(100) as $chunk) {
