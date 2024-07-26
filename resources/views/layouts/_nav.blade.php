@@ -6,16 +6,29 @@
         <a class="nav-link {{ url()->current() == url('leveling') ? 'active' : '' }}" href="{{ url('leveling') }}">Leveling
             Calculator</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link {{ url()->current() == url('diadem') ? 'active' : '' }}" href="{{ url('diadem') }}">Diadem Gil
-            Optimization</a>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" data-bs-display="static">
+            <span id="economy-dropdown">Economy Tools</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="economy-dropdown">
+            <li>
+                <a class="dropdown-item {{ url()->current() == url('crafting/cul') ? 'active' : '' }}" href="{{ url('crafting/cul') }}">
+                    CUL Profit Calculator
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ url()->current() == url('diadem') ? 'active' : '' }}" href="{{ url('diadem') }}">
+                    Diadem Gil Optimization
+                </a>
+            </li>
+        </ul>
     </li>
     <li class="nav-item">
         <span class="nav-link disabled">・</span>
     </li>
     <li class="nav-item dropdown">
         <a id="bd-theme" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" data-bs-display="static" aria-label="Toggle theme (auto)">
-            <span id="bd-theme-text">Toggle theme</span>
+            <span id="bd-theme-text">Toggle Theme</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
             <li>
