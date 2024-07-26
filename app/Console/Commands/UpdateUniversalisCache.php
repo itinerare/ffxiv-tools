@@ -8,6 +8,7 @@ use App\Jobs\UpdateUnivsersalisCaches;
 use App\Models\GameItem;
 use App\Models\UniversalisCache;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
 
 class UpdateUniversalisCache extends Command {
     /**
@@ -67,15 +68,17 @@ class UpdateUniversalisCache extends Command {
             $this->line("\n");
         }
 
-        // Queue jobs to update cached data from Universalis
-        $this->info('Queuing jobs to update cached Universalis data...');
-        $universalisBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count());
-        foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
-            UpdateUnivsersalisCaches::dispatch(strtolower($world), $items);
-            $universalisBar->advance();
+        if (App::environment() == 'production') {
+            // Queue jobs to update cached data from Universalis
+            $this->info('Queuing jobs to update cached Universalis data...');
+            $universalisBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count());
+            foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
+                UpdateUnivsersalisCaches::dispatch(strtolower($world), $items);
+                $universalisBar->advance();
+            }
+            $universalisBar->finish();
+            $this->line("\n");
         }
-        $universalisBar->finish();
-        $this->line("\n");
 
         $this->line('Pruning old records as necessary...');
         if (GameItem::whereNotIn('item_id', $items->toArray())->count()) {
