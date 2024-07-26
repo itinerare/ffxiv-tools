@@ -22,15 +22,15 @@ class RecordRecipes implements ShouldQueue {
      * @param int $job
      */
     public function __construct(
-        public $job
+        public $jobId
     ) {
-        $this->job = $job;
+        $this->jobId = $jobId;
     }
 
     /**
      * Execute the job.
      */
     public function handle(): void {
-        (new GameRecipe)->retrieveRecipes($this->job);
+        (new GameRecipe)->retrieveRecipes($this->jobId);
     }
 }
