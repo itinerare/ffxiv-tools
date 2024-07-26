@@ -58,7 +58,7 @@ class GameItem extends Model {
     **********************************************************************************************/
 
     /**
-     * Record an items by ID, fetching names from XIVAPI.
+     * Record items by ID, fetching names from XIVAPI.
      *
      * @param \Illuminate\Support\Collection $chunk
      *

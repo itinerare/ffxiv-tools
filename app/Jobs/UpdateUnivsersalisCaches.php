@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\UniversalisCache;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\RateLimited;
@@ -20,11 +21,11 @@ class UpdateUnivsersalisCaches implements ShouldQueue {
      * Create a new job instance.
      *
      * @param string $world
-     * @param @param \Illuminate\Support\Collection $items
+     * @param @param \Illuminate\Support\Collection|null $items
      */
     public function __construct(
         public $world,
-        public $items
+        public $items = null
     ) {
         $this->world = $world;
         $this->items = $items;
@@ -43,6 +44,10 @@ class UpdateUnivsersalisCaches implements ShouldQueue {
      * Execute the job.
      */
     public function handle(): void {
+        if (!$this->items) {
+            $this->items = UniversalisCache::world($this->world)->pluck('item_id');
+        }
+
         foreach ($this->items->chunk(100) as $chunk) {
             UpdateUniversalisCacheChunk::dispatch($this->world, $chunk);
         }

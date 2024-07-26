@@ -30,7 +30,7 @@ class DiademController extends Controller {
 
             if ($isValid && $diademItems->count() == UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems->toArray())->count() && $diademItems->count() == GameItem::whereIn('item_id', $diademItems->toArray())->count()) {
                 // Check and, if necessary, update cached data
-                UpdateUnivsersalisCaches::dispatch($request->get('world'), $diademItems);
+                UpdateUnivsersalisCaches::dispatch($request->get('world'));
 
                 // Get cached item records
                 $items = UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems)->get();
