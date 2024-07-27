@@ -23,14 +23,8 @@
                         <ol>
                             @foreach ($rankedItems[$class] as $name => $item)
                                 <li>
-                                    <strong>{{ $name }}</strong> - {{ isset($item->min_price_nq) ? number_format($item->min_price_nq) : '???' }} Gil<br />
-                                    <small class="text-muted">
-                                        Sales per day: {{ isset($item->nq_sale_velocity) ? number_format($item->nq_sale_velocity) : '(No Data)' }} ・
-                                        @if ($item->uploadTime)
-                                            Last updated: {!! $item->uploadTime !!} ・
-                                        @endif
-                                        Last retrieved: {!! $item->updatedTime !!}
-                                    </small>
+                                    <strong>{{ $name }}</strong> -
+                                    @include('_item_price_display', ['priceData' => $item])
                                 </li>
                             @endforeach
                         </ol>
@@ -39,14 +33,8 @@
                                 <ul>
                                     @foreach ($node as $name => $item)
                                         <li>
-                                            <strong>{{ $name }}</strong> - {{ isset($item->min_price_nq) ? number_format($item->min_price_nq) : '???' }} Gil<br />
-                                            <small class="text-muted">
-                                                Sales per day: {{ isset($item->nq_sale_velocity) ? number_format($item->nq_sale_velocity) : '(No Data)' }} ・
-                                                @if ($item->uploadTime)
-                                                    Last updated: {!! $item->uploadTime !!} ・
-                                                @endif
-                                                Last retrieved: {!! $item->updatedTime !!}
-                                            </small>
+                                            <strong>{{ $name }}</strong> -
+                                            @include('_item_price_display', ['priceData' => $item])
                                         </li>
                                     @endforeach
                                 </ul>
