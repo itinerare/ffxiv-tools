@@ -19,7 +19,7 @@ class RecordRecipes implements ShouldQueue {
     /**
      * Create a new job instance.
      *
-     * @param int $job
+     * @param int $jobId
      */
     public function __construct(
         public $jobId

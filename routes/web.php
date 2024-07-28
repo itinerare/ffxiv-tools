@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CraftingController;
 use App\Http\Controllers\DiademController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LevelingController;
@@ -15,4 +16,8 @@ Route::controller(DiademController::class)->group(function () {
 
 Route::controller(LevelingController::class)->group(function () {
     Route::get('leveling', 'getLeveling');
+});
+
+Route::controller(CraftingController::class)->group(function () {
+    Route::get('crafting', 'getCalculator');
 });

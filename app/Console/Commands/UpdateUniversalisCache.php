@@ -70,7 +70,15 @@ class UpdateUniversalisCache extends Command {
         }
 
         $this->info('Queueing jobs to retrieve recipes and associated items...');
-        RecordRecipes::dispatch(15);
+        $craftingRecipesBar = $this->output->createProgressBar(count((array) config('ffxiv.crafting.jobs')));
+        $craftingRecipesBar->start();
+
+        foreach (array_keys((array) config('ffxiv.crafting.jobs')) as $jobId) {
+            RecordRecipes::dispatch($jobId);
+            $craftingRecipesBar->advance();
+        }
+        $craftingRecipesBar->finish();
+        $this->line("\n");
 
         if (App::environment() == 'production') {
             // Queue jobs to update cached data from Universalis
