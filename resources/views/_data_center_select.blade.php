@@ -15,12 +15,12 @@
     @foreach (config('ffxiv.data_centers') as $region => $dataCenters)
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button class="accordion-button {{ $world ? ($currentRegion == $region ? '' : 'collapsed') : ($loop->first ? '' : 'collapsed') }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ str_replace(' ', '_', $region) }}"
-                    aria-expanded="true" aria-controls="collapseOne">
+                <button class="accordion-button {{ $world ? 'collapsed' : ($loop->first ? '' : 'collapsed') }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ str_replace(' ', '_', $region) }}" aria-expanded="true"
+                    aria-controls="collapseOne">
                     {{ $region }}
                 </button>
             </h2>
-            <div id="{{ str_replace(' ', '_', $region) }}" class="accordion-collapse collapse {{ $world ? ($currentRegion == $region ? 'show' : '') : ($loop->first ? 'show' : '') }}" data-bs-parent="#dataCenterSelect">
+            <div id="{{ str_replace(' ', '_', $region) }}" class="accordion-collapse collapse {{ $world ? '' : ($loop->first ? 'show' : '') }}" data-bs-parent="#dataCenterSelect">
                 <div class="accordion-body">
                     @foreach ($dataCenters as $dataCenter => $servers)
                         <div class="mb-2">
