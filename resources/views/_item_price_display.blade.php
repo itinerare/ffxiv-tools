@@ -10,7 +10,7 @@ Gil<br />
     @if (isset($displayHQ) && $displayHQ)
         NQ / {{ isset($priceData->hq_sale_velocity) ? number_format($priceData->hq_sale_velocity) : '(No Data)' }} HQ
     @endif
-     ・
+    ・
     @if ($priceData->uploadTime)
         Last updated: {!! $priceData->uploadTime !!} ・
     @endif
