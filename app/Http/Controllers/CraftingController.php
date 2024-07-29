@@ -37,19 +37,21 @@ class CraftingController extends Controller {
                 }
             }
 
-            if ($isValid && request()->get('character_job') && in_array(request()->get('character_job'), array_keys((array) config('ffxiv.crafting.jobs')))) {
+            if ($isValid && $request->get('character_job') && in_array($request->get('character_job'), array_keys((array) config('ffxiv.crafting.jobs')))) {
                 // Check and, if necessary, update cached data
                 UpdateUnivsersalisCaches::dispatch($request->get('world'));
 
                 foreach (config('ffxiv.crafting.ranges') as $key => $range) {
-                    $recipes[$key] = GameRecipe::job(request()->get('character_job'))->orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $range['min']);
+                    $recipes[$key] = GameRecipe::job($request->get('character_job'))->orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $range['min']);
                     if (isset($range['max'])) {
                         $recipes[$key] = $recipes[$key]->where('rlvl', '<=', $range['max']);
                     }
                     $recipes[$key] = $recipes[$key]->get();
 
-                    $rankedRecipes[$key] = collect($recipes[$key])->sortByDesc(function ($recipe, $key) use ($settings) {
-                        return $recipe->calculateProfitPer(request()->get('world'), 1, $settings ?? null);
+                    $rankedRecipes[$key] = collect($recipes[$key])->sortByDesc(function ($recipe, $key) use ($request, $settings) {
+                        $weight = 1 + (($recipe->getPriceData($request->get('world'))->hq_sale_velocity ?? 0) / 100);
+
+                        return $recipe->calculateProfitPer($request->get('world'), 1, $settings ?? null) * $weight;
                     })->take(4);
                 }
             } elseif ($isValid) {
