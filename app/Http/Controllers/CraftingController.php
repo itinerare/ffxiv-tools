@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\UpdateUnivsersalisCaches;
+use App\Jobs\UpdateUniversalisCaches;
 use App\Models\GameRecipe;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -49,7 +49,7 @@ class CraftingController extends Controller {
 
             if ($isValid && $request->get('character_job') && in_array($request->get('character_job'), array_keys((array) config('ffxiv.crafting.jobs')))) {
                 // Check and, if necessary, update cached data
-                UpdateUnivsersalisCaches::dispatch($request->get('world'));
+                UpdateUniversalisCaches::dispatch($request->get('world'));
 
                 foreach (config('ffxiv.crafting.ranges') as $key => $range) {
                     $recipes[$key] = GameRecipe::job($request->get('character_job'))->orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $range['min']);

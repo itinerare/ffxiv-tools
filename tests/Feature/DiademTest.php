@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Jobs\CreateUniversalisRecords;
 use App\Jobs\UpdateGameItem;
-use App\Jobs\UpdateUnivsersalisCaches;
+use App\Jobs\UpdateUniversalisCaches;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
@@ -18,6 +18,7 @@ class DiademTest extends TestCase {
      * Test getting the Diadem tool.
      *
      * @param string $world
+     * @param bool   $initialized
      * @param bool   $expected
      */
     #[DataProvider('diademProvider')]
@@ -45,13 +46,13 @@ class DiademTest extends TestCase {
 
         if ($expected && $initialized) {
             $response->assertSee('Showing Results for '.ucfirst($world));
-            Queue::assertPushed(UpdateUnivsersalisCaches::class);
+            Queue::assertPushed(UpdateUniversalisCaches::class);
         } elseif ($expected) {
             $response->assertSee('Item data for '.ucfirst($world));
-            Queue::assertNotPushed(UpdateUnivsersalisCaches::class);
+            Queue::assertNotPushed(UpdateUniversalisCaches::class);
         } else {
             $response->assertSee('Please select a world!');
-            Queue::assertNotPushed(UpdateUnivsersalisCaches::class);
+            Queue::assertNotPushed(UpdateUniversalisCaches::class);
         }
     }
 

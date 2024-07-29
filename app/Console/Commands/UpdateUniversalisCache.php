@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\CreateUniversalisRecords;
 use App\Jobs\RecordRecipes;
 use App\Jobs\UpdateGameItem;
-use App\Jobs\UpdateUnivsersalisCaches;
+use App\Jobs\UpdateUniversalisCaches;
 use App\Models\GameItem;
 use App\Models\UniversalisCache;
 use Illuminate\Console\Command;
@@ -85,7 +85,7 @@ class UpdateUniversalisCache extends Command {
             $this->info('Queuing jobs to update cached Universalis data...');
             $universalisBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count());
             foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
-                UpdateUnivsersalisCaches::dispatch(strtolower($world));
+                UpdateUniversalisCaches::dispatch(strtolower($world));
                 $universalisBar->advance();
             }
             $universalisBar->finish();

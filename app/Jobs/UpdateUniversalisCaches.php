@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\RateLimited;
 
-class UpdateUnivsersalisCaches implements ShouldQueue {
+class UpdateUniversalisCaches implements ShouldQueue {
     use Queueable;
 
     /**

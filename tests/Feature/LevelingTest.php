@@ -88,7 +88,7 @@ class LevelingTest extends TestCase {
                 }
             }
 
-            if ($charId && ($charJob && in_array($charJob, array_keys(config('ffxiv.classjob'))))) {
+            if ($charId && ($charJob && in_array($charJob, array_keys((array) config('ffxiv.classjob'))))) {
                 $response->assertSeeText(config('ffxiv.classjob.'.$charJob));
             } elseif ($charJob || $charId) {
                 $response->assertSeeText('Please enter both a character ID and valid combat class/job to retrieve information from The Lodestone.');
