@@ -147,9 +147,11 @@ class GameRecipe extends Model {
         // Organize items and dispatch jobs to record them as necessary
         $items = collect($items)->unique()->chunk(100);
         foreach ($items as $chunk) {
-            if ($chunk->count()) {
+            if ($chunk->count() > GameItem::whereIn('item_id', $chunk->toArray())->count()) {
                 UpdateGameItem::dispatch($chunk);
+            }
 
+            if (($chunk->count() * collect(config('ffxiv.data_centers'))->flatten()->count()) > UniversalisCache::whereIn('item_id', $chunk->toArray())->count()) {
                 foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
                     CreateUniversalisRecords::dispatch(strtolower($world), $chunk);
                 }
@@ -170,9 +172,7 @@ class GameRecipe extends Model {
      */
     public function recordRecipe($recipe, $rawRecipes, $items = []) {
         // Add the result item to items to record
-        if (!GameItem::where('item_id', $recipe['result'])->exists() || UniversalisCache::where('item_id', $recipe['result'])->count() < collect(config('ffxiv.data_centers'))->flatten()->count()) {
-            $items[] = $recipe['result'];
-        }
+        $items[] = $recipe['result'];
 
         if (!self::where('recipe_id', $recipe['id'])->exists()) {
             self::create([
@@ -192,9 +192,7 @@ class GameRecipe extends Model {
                 // If the ingredient is a precraft, record the recipe for it
                 $items = $this->recordRecipe($rawRecipes->where('result', $ingredient['id'])->first(), $rawRecipes, $items);
             } else {
-                if (!GameItem::where('item_id', $ingredient['id'])->exists() || UniversalisCache::where('item_id', $ingredient['id'])->count() < collect(config('ffxiv.data_centers'))->flatten()->count()) {
-                    $items[] = $ingredient['id'];
-                }
+                $items[] = $ingredient['id'];
             }
         }
 
@@ -294,15 +292,19 @@ class GameRecipe extends Model {
      * @param array|null $settings
      * @param int        $quantity
      *
-     * @return int
+     * @return int|null
      */
     public function calculateProfitPer($world, $hq = false, $settings = null, $quantity = 1) {
-        $cost = ceil($this->calculateCostPer($world, $settings, $quantity) / $this->yield / $quantity);
+        if (!$this->getPriceData($world) || (!$hq && !$this->getPriceData($world)->min_price_nq) || ($hq && !$this->getPriceData($world)->min_price_hq)) {
+            return null;
+        }
+
+        $cost = ceil(($this->calculateCostPer($world, $settings, $quantity) / $this->yield) / $quantity);
 
         if ($hq) {
-            $price = $this->getPriceData($world)->min_price_hq ?? 0;
+            $price = $this->getPriceData($world)->min_price_hq;
         } else {
-            $price = $this->getPriceData($world)->min_price_nq ?? 0;
+            $price = $this->getPriceData($world)->min_price_nq;
         }
 
         return $price - $cost;

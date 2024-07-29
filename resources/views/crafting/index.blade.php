@@ -97,10 +97,7 @@
                                                 <a href="#recipe-{{ $recipe->item_id }}">{{ $recipe->gameItem?->name }}</a>
                                             </h5>
                                             Profit Per:
-                                            {{ number_format($recipe->calculateProfitPer(request()->get('world'), 1, $settings)) }}
-                                            <small>(HQ)</small> /
-                                            {{ number_format($recipe->calculateProfitPer(request()->get('world'), 0, $settings)) }}
-                                            <small>(NQ)</small> Gil
+                                            @include('crafting._profit_display')
                                         </div>
                                     @endforeach
                                 </div>
@@ -166,10 +163,7 @@
                                                                     @if ($recipe->yield > 1)
                                                                         x{{ $quantity }}:
                                                                     @endif
-                                                                    {{ number_format($recipe->calculateProfitPer(request()->get('world'), 1, $settings, $quantity)) }}
-                                                                    <small>(HQ)</small> /
-                                                                    {{ number_format($recipe->calculateProfitPer(request()->get('world'), 0, $settings, $quantity)) }}
-                                                                    <small>(NQ)</small> Gil
+                                                                    @include('crafting._profit_display')
                                                                 </li>
                                                             @endforeach
                                                         </ul>
