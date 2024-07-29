@@ -6,10 +6,11 @@
 @endif
 Gil<br />
 <small class="text-muted">
-    Sales per day: {{ isset($priceData->nq_sale_velocity) ? number_format($priceData->nq_sale_velocity) : '(No Data)' }}
+    Sales per day:
     @if (isset($displayHQ) && $displayHQ)
-        NQ / {{ isset($priceData->hq_sale_velocity) ? number_format($priceData->hq_sale_velocity) : '(No Data)' }} HQ
+        {{ isset($priceData->hq_sale_velocity) ? number_format($priceData->hq_sale_velocity) : '(No Data)' }} HQ /
     @endif
+    {{ isset($priceData->nq_sale_velocity) ? number_format($priceData->nq_sale_velocity) : '(No Data)' }}{{ isset($displayHQ) && $displayHQ ? ' NQ' : '' }}
     ・
     @if ($priceData?->uploadTime)
         Last updated: {!! $priceData->uploadTime !!} ・
