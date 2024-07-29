@@ -52,16 +52,26 @@ class CraftingController extends Controller {
                 UpdateUniversalisCaches::dispatch($request->get('world'));
 
                 foreach (config('ffxiv.crafting.ranges') as $key => $range) {
-                    $recipes[$key] = GameRecipe::job($request->get('character_job'))->orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $range['min']);
+                    $recipes[$key] = GameRecipe::job($request->get('character_job'))->with(['priceData' => function ($query) use ($request) {
+                        $query->where('world', $request->get('world'))->limit(1);
+                    }])->orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $range['min']);
                     if (isset($range['max'])) {
                         $recipes[$key] = $recipes[$key]->where('rlvl', '<=', $range['max']);
                     }
                     $recipes[$key] = $recipes[$key]->get();
 
-                    $rankedRecipes[$key] = collect($recipes[$key])->sortByDesc(function ($recipe, $key) use ($request, $settings) {
-                        $weight = 1 + (($recipe->getPriceData($request->get('world'))->hq_sale_velocity ?? 0) / 100);
+                    // Gather ingredients and assemble common info for them
+                    $ingredients[$key] = $recipes[$key]->pluck('ingredients')->transform(function ($ingredient, $key) {
+                        return collect($ingredient)->transform(function ($item, $key) {
+                            return $item['id'];
+                        });
+                    });
+                    $ingredients[$key] = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients[$key]);
 
-                        return $recipe->calculateProfitPer($request->get('world'), 1, $settings ?? null) * $weight;
+                    $rankedRecipes[$key] = collect($recipes[$key])->sortByDesc(function ($recipe) use ($settings, $ingredients, $key) {
+                        $weight = 1 + (($recipe->priceData->first()->hq_sale_velocity ?? 0) / 100);
+
+                        return ($recipe->calculateProfitPer($ingredients[$key], 1, $settings)['hq'] ?? 0) * $weight;
                     })->take(4);
                 }
             } elseif ($isValid) {
@@ -79,6 +89,7 @@ class CraftingController extends Controller {
             'settings'      => $settings ?? null,
             'rankedRecipes' => $rankedRecipes ?? null,
             'recipes'       => $recipes ?? null,
+            'ingredients'   => $ingredients ?? null,
         ]);
     }
 }

@@ -96,11 +96,11 @@
                                                 <small>{{ $loop->iteration }}.</small>
                                                 <a href="#recipe-{{ $recipe->item_id }}">{{ $recipe->gameItem?->name }}</a>
                                             </h5>
-                                            Profit Per: @include('crafting._profit_display') <br />
+                                            Profit Per: {!! $recipe->displayProfitPer($ingredients[$label], 1, $settings) !!}<br />
                                             <small>
                                                 Sales per day:
-                                                {{ isset($recipe->getPriceData(request()->get('world'))->hq_sale_velocity) ? number_format($recipe->getPriceData(request()->get('world'))->hq_sale_velocity) : '(No Data)' }} HQ /
-                                                {{ isset($recipe->getPriceData(request()->get('world'))->nq_sale_velocity) ? number_format($recipe->getPriceData(request()->get('world'))->nq_sale_velocity) : '(No Data)' }} NQ
+                                                {{ isset($recipe->priceData->first()->hq_sale_velocity) ? number_format($recipe->priceData->first()->hq_sale_velocity) : '(No Data)' }} HQ /
+                                                {{ isset($recipe->priceData->first()->nq_sale_velocity) ? number_format($recipe->priceData->first()->nq_sale_velocity) : '(No Data)' }} NQ
                                             </small>
                                         </div>
                                     @endforeach
@@ -121,7 +121,7 @@
                                         <div class="row">
                                             <div class="col-md-5">
                                                 <p>
-                                                    @include('_item_price_display', ['priceData' => $recipe->getPriceData(request()->get('world')), 'displayHQ' => true])
+                                                    @include('_item_price_display', ['priceData' => $recipe->priceData->first(), 'displayHQ' => true])
                                                 </p>
                                                 <div class="accordion" id="ingredients{{ $recipe->item_id }}">
                                                     <div class="accordion-item bg-light-subtle border-0">
@@ -134,7 +134,7 @@
                                                         <div id="ingredients-{{ $recipe->id }}" class="accordion-collapse collapse" data-bs-parent="#ingredients{{ $recipe->item_id }}">
                                                             <div class="accordion-body">
                                                                 <ul>
-                                                                    @foreach ($recipe->formatIngredients(request()->get('world')) as $ingredient)
+                                                                    @foreach ($recipe->formatIngredients($ingredients[$label]) as $ingredientId => $ingredient)
                                                                         @include('crafting._ingredient_display')
                                                                     @endforeach
                                                                 </ul>
@@ -152,9 +152,9 @@
                                                                 <li>
                                                                     @if ($recipe->yield > 1)
                                                                         x{{ $quantity }} <small>(Makes {{ $quantity * $recipe->yield }})</small>:
-                                                                        {{ number_format($recipe->calculateCostPer(request()->get('world'), $settings, $quantity)) }} total,
+                                                                        {{ number_format($recipe->calculateCostPer($ingredients[$label], $settings, $quantity)) }} total,
                                                                     @endif
-                                                                    {{ number_format(ceil($recipe->calculateCostPer(request()->get('world'), $settings, $quantity) / $recipe->yield / $quantity)) }} Gil per
+                                                                    {{ number_format(ceil($recipe->calculateCostPer($ingredients[$label], $settings, $quantity) / $recipe->yield / $quantity)) }} Gil per
                                                                 </li>
                                                             @endforeach
                                                         </ul>
@@ -167,7 +167,7 @@
                                                                     @if ($recipe->yield > 1)
                                                                         x{{ $quantity }}:
                                                                     @endif
-                                                                    @include('crafting._profit_display')
+                                                                    {!! $recipe->displayProfitPer($ingredients[$label], 1, $settings, $quantity) !!}
                                                                 </li>
                                                             @endforeach
                                                         </ul>

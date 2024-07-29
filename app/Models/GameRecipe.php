@@ -59,10 +59,17 @@ class GameRecipe extends Model {
     **********************************************************************************************/
 
     /**
-     * Get the game item associated with this record.
+     * Get the game item associated with this recipe.
      */
     public function gameItem() {
         return $this->belongsTo(GameItem::class, 'item_id', 'item_id');
+    }
+
+    /**
+     * Get the Universalis records associated with this recipe.
+     */
+    public function priceData() {
+        return $this->hasMany(UniversalisCache::class, 'item_id', 'item_id');
     }
 
     /**********************************************************************************************
@@ -208,51 +215,93 @@ class GameRecipe extends Model {
     }
 
     /**
-     * Get the Universalis record for a recipe's output, for a given world.
+     * Recursively collect all ingredients for a given set of recipes.
      *
-     * @param string $world
+     * @param string                         $world
+     * @param \Illuminate\Support\Collection $ingredients
+     * @param \Illuminate\Support\Collection $existing
      *
-     * @return UniversalisCache
+     * @return \Illuminate\Support\Collection
      */
-    public function getPriceData($world) {
-        return UniversalisCache::world($world)->where('item_id', $this->item_id)->first();
+    public function collectIngredients($world, $ingredients, $existing = null) {
+        $ingredients = $ingredients->flatten()->unique();
+
+        if ($existing) {
+            // Filter out ingredients already in the parent collection
+            $ingredients = $ingredients->filter(function ($value) use ($existing) {
+                return !$existing->has($value);
+            });
+        }
+
+        $ingredients = $ingredients->mapWithKeys(function ($item, $key) use ($world) {
+            $recipe = GameRecipe::where('item_id', $item)->with(['priceData' => function ($query) use ($world) {
+                $query->where('world', $world)->limit(1);
+            }])->first();
+
+            if ($recipe) {
+                // If the ingredient has a recipe, take price and game data loaded with it
+                return [$item => [
+                    'recipe'    => $recipe,
+                    'priceData' => $recipe->priceData->first(),
+                    'gameItem'  => $recipe->gameItem ?? null,
+                ]];
+            }
+
+            // Otherwise load the price and game data as one query
+            $priceData = UniversalisCache::world($world)->with('gameItem')->where('item_id', $item)->first();
+
+            return [$item => [
+                'recipe'    => $recipe,
+                'priceData' => $priceData,
+                'gameItem'  => $priceData->gameItem ?? null,
+            ]];
+        });
+
+        $precrafts = $ingredients->whereNotNull('recipe');
+        if ($precrafts->count()) {
+            $precraftIngredients = $precrafts->pluck('recipe.ingredients')->transform(function ($ingredient, $key) {
+                return collect($ingredient)->transform(function ($item, $key) {
+                    return $item['id'];
+                });
+            });
+
+            $precraftIngredients = $this->collectIngredients($world, $precraftIngredients, $existing ?? $ingredients);
+        }
+
+        return $ingredients->union($precraftIngredients ?? []);
     }
 
     /**
      * Format ingredient information and return as an array.
      *
-     * @param string $world
+     * @param array $ingredients
      *
      * @return array
      */
-    public function formatIngredients($world) {
-        $ingredients = [];
+    public function formatIngredients($ingredients) {
+        $ingredientList = [];
+
         foreach ($this->ingredients as $ingredient) {
-            $ingredients[$ingredient['id']] = [
-                'gameItem'  => GameItem::where('item_id', $ingredient['id'])->first(),
-                'priceData' => UniversalisCache::world($world)->where('item_id', $ingredient['id'])->first(),
-                'recipe'    => self::where('item_id', $ingredient['id'])->first(),
-                'amount'    => $ingredient['amount'],
-            ];
+            $ingredientList[$ingredient['id']] = ($ingredients[$ingredient['id']] ?? []) + ['amount' => $ingredient['amount']];
         }
 
-        return $ingredients;
+        return $ingredientList;
     }
 
     /**
      * Calculate cost to make a given recipe.
      *
-     * @param string     $world
-     * @param array|null $settings
-     * @param int        $quantity
+     * @param \Illuminate\Support\Collection $ingredients
+     * @param array|null                     $settings
+     * @param int                            $quantity
      *
      * @return int
      */
-    public function calculateCostPer($world, $settings = null, $quantity = 1) {
+    public function calculateCostPer($ingredients, $settings = null, $quantity = 1) {
         $cost = 0;
 
-        $ingredients = $this->formatIngredients($world);
-        foreach ($ingredients as $item => $ingredient) {
+        $ingredientList = $this->formatIngredients($ingredients);
+        foreach ($ingredientList as $item => $ingredient) {
             // Skip shard/crystal/clusters in recipes if not included in calculations
             if ((!isset($settings['include_crystals']) || !$settings['include_crystals']) && in_array($item, (array) config('ffxiv.crafting.crystals'))) {
                 continue;
@@ -281,7 +330,7 @@ class GameRecipe extends Model {
                     continue;
                 } elseif (!isset($settings['purchase_precrafts']) || !$settings['purchase_precrafts']) {
                     // If not purchasing precrafts, include material costs recursively
-                    $cost += $ingredient['recipe']->calculateCostPer($world, $settings, ceil(($ingredient['amount'] * $quantity) / $ingredient['recipe']->yield));
+                    $cost += $ingredient['recipe']->calculateCostPer($ingredients, $settings, ceil(($ingredient['amount'] * $quantity) / $ingredient['recipe']->yield));
                     continue;
                 }
             }
@@ -295,26 +344,40 @@ class GameRecipe extends Model {
     /**
      * Calculate profit from a given recipe.
      *
-     * @param string     $world
+     * @param array      $ingredients
      * @param bool       $hq
      * @param array|null $settings
      * @param int        $quantity
      *
-     * @return int|null
+     * @return array
      */
-    public function calculateProfitPer($world, $hq = false, $settings = null, $quantity = 1) {
-        if (!$this->getPriceData($world) || (!$hq && !$this->getPriceData($world)->min_price_nq) || ($hq && !$this->getPriceData($world)->min_price_hq)) {
+    public function calculateProfitPer($ingredients, $hq = false, $settings = null, $quantity = 1) {
+        $priceData = $this->priceData->first();
+        if (!$priceData) {
             return null;
         }
 
-        $cost = ceil(($this->calculateCostPer($world, $settings, $quantity) / $this->yield) / $quantity);
+        $cost = ceil(($this->calculateCostPer($ingredients, $settings, $quantity) / $this->yield) / $quantity);
 
-        if ($hq) {
-            $price = $this->getPriceData($world)->min_price_hq;
-        } else {
-            $price = $this->getPriceData($world)->min_price_nq;
-        }
+        return [
+            'nq' => $priceData->min_price_nq - $cost,
+            'hq' => $hq ? $priceData->min_price_hq - $cost : null,
+        ];
+    }
 
-        return $price - $cost;
+    /**
+     * Calculate profit from a given recipe; returns a formatted string.
+     *
+     * @param array      $ingredients
+     * @param bool       $hq
+     * @param array|null $settings
+     * @param int        $quantity
+     *
+     * @return string|null
+     */
+    public function displayProfitPer($ingredients, $hq = false, $settings = null, $quantity = 1) {
+        $profitsPer = $this->calculateProfitPer($ingredients, $hq, $settings, $quantity);
+
+        return ($hq ? number_format($profitsPer['hq']).' <small>(HQ)</small> ' : '').number_format($profitsPer['nq']).($hq ? ' <small>(NQ)</small>' : '').' Gil';
     }
 }
