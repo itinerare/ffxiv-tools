@@ -186,8 +186,6 @@
                 @endforeach
             </div>
         @endif
-    @elseif (request()->get('world'))
-        <h1 class="text-center">Item data for {{ ucfirst(request()->get('world')) }} is still being initialized.<br /> Please try again later.</h1>
     @else
         <h1 class="text-center">Please select a world!</h1>
     @endif
