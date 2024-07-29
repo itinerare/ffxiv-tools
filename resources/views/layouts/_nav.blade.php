@@ -12,8 +12,8 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="economy-dropdown">
             <li>
-                <a class="dropdown-item {{ url()->current() == url('crafting/cul') ? 'active' : '' }}" href="{{ url('crafting/cul') }}">
-                    CUL Profit Calculator
+                <a class="dropdown-item {{ url()->current() == url('crafting') ? 'active' : '' }}" href="{{ url('crafting') }}">
+                    Crafting Profit Calculator
                 </a>
             </li>
             <li>

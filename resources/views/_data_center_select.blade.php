@@ -9,6 +9,13 @@
             }
         }
     }
+
+    if (isset($settings)) {
+        $settingsString = '';
+        foreach ($settings as $key => $setting) {
+            $settingsString = $settingsString . '&' . $key . '=' . $setting;
+        }
+    }
 @endphp
 
 <div class="accordion mb-4" id="dataCenterSelect">
@@ -26,7 +33,7 @@
                         <div class="mb-2">
                             <span class="h5">{{ $dataCenter }}:</span>
                             @foreach ($servers as $server)
-                                <a href="?world={{ strtolower($server) }}" class="btn {{ $world == strtolower($server) ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">{{ $server }}</a>
+                                <a href="?world={{ strtolower($server) }}{{ $settingsString ?? '' }}" class="btn {{ $world == strtolower($server) ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">{{ $server }}</a>
                             @endforeach
                         </div>
                     @endforeach

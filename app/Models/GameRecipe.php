@@ -45,6 +45,37 @@ class GameRecipe extends Model {
 
     /**********************************************************************************************
 
+        RELATIONS
+
+    **********************************************************************************************/
+
+    /**
+     * Get the game item associated with this record.
+     */
+    public function gameItem() {
+        return $this->belongsTo(GameItem::class, 'item_id', 'item_id');
+    }
+
+    /**********************************************************************************************
+
+        SCOPES
+
+    **********************************************************************************************/
+
+    /**
+     * Scope a query to include recipes for a given job.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int                                   $job
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeJob($query, $job) {
+        return $query->where('job', $job);
+    }
+
+    /**********************************************************************************************
+
         OTHER FUNCTIONS
 
     **********************************************************************************************/
@@ -153,5 +184,112 @@ class GameRecipe extends Model {
         }
 
         return $items;
+    }
+
+    /**
+     * Get the Universalis record for a recipe's output, for a given world.
+     *
+     * @param string $world
+     *
+     * @return UniversalisCache
+     */
+    public function getPriceData($world) {
+        return UniversalisCache::world($world)->where('item_id', $this->item_id)->first();
+    }
+
+    /**
+     * Format ingredient information and return as an array.
+     *
+     * @param string $world
+     *
+     * @return array
+     */
+    public function formatIngredients($world) {
+        $ingredients = [];
+        foreach ($this->ingredients as $ingredient) {
+            $ingredients[$ingredient['id']] = [
+                'gameItem'  => GameItem::where('item_id', $ingredient['id'])->first(),
+                'priceData' => UniversalisCache::world($world)->where('item_id', $ingredient['id'])->first(),
+                'recipe'    => self::where('item_id', $ingredient['id'])->first(),
+                'amount'    => $ingredient['amount'],
+            ];
+        }
+
+        return $ingredients;
+    }
+
+    /**
+     * Calculate cost to make a given recipe.
+     *
+     * @param string     $world
+     * @param array|null $settings
+     * @param int        $quantity
+     *
+     * @return int
+     */
+    public function calculateCostPer($world, $settings = null, $quantity = 1) {
+        $cost = 0;
+
+        $ingredients = $this->formatIngredients($world);
+        foreach ($ingredients as $item => $ingredient) {
+            // Skip shard/crystal/clusters in recipes if not included in calculations
+            if ((!isset($settings['include_crystals']) || !$settings['include_crystals']) && in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+                continue;
+            }
+
+            // Skip mob drops if not purchasing them
+            if ((!isset($settings['purchase_drops']) || !$settings['purchase_drops']) && $ingredient['gameItem']?->is_mob_drop) {
+                continue;
+            }
+
+            if (isset($settings['gatherable_preference']) && $settings['gatherable_preference'] > 0 && (isset($ingredient['gameItem']->gather_data) && $ingredient['gameItem']->gather_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+                if ($settings['gatherable_preference'] == 1 && !$ingredient['gameItem']->gather_data['perceptionReq']) {
+                    // Skip special gatherables if gathering only unrestricted mats
+                    continue;
+                } elseif ($settings['gatherable_preference'] == 2) {
+                    // Skip all gatherables if gathering everything
+                    continue;
+                }
+            }
+
+            // Handle precraft-related calculations
+            if ($ingredient['recipe']) {
+                if (isset($settings['purchase_precrafts']) && $settings['purchase_precrafts'] && $settings['prefer_hq']) {
+                    // If both purchasing precrafts and prefering HQ materials, include HQ precraft price instead
+                    $cost += $ingredient['priceData']?->min_price_hq * $ingredient['amount'];
+                    continue;
+                } elseif (!isset($settings['purchase_precrafts']) || !$settings['purchase_precrafts']) {
+                    // If not purchasing precrafts, include material costs recursively
+                    $cost += $ingredient['recipe']->calculateCostPer($world, $settings, ceil(($ingredient['amount'] * $quantity) / $ingredient['recipe']->yield));
+                    continue;
+                }
+            }
+
+            $cost += $ingredient['priceData']?->min_price_nq * ($ingredient['amount'] * $quantity);
+        }
+
+        return $cost;
+    }
+
+    /**
+     * Calculate profit from a given recipe.
+     *
+     * @param string     $world
+     * @param bool       $hq
+     * @param array|null $settings
+     * @param int        $quantity
+     *
+     * @return int
+     */
+    public function calculateProfitPer($world, $hq = false, $settings = null, $quantity = 1) {
+        $cost = ceil($this->calculateCostPer($world, $settings, $quantity) / $this->yield / $quantity);
+
+        if ($hq) {
+            $price = $this->getPriceData($world)->min_price_hq ?? 0;
+        } else {
+            $price = $this->getPriceData($world)->min_price_nq ?? 0;
+        }
+
+        return $price - $cost;
     }
 }

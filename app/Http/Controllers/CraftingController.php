@@ -13,6 +13,18 @@ class CraftingController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getCalculator(Request $request) {
+        if ($request->all()) {
+            // Assemble selected settings into an array for easy passing to price calculator function
+            $settings = [
+                'character_job'         => $request->get('character_job') ?? null,
+                'purchase_precrafts'    => $request->get('purchase_precrafts') ?? 0,
+                'prefer_hq'             => $request->get('prefer_hq') ?? 0,
+                'include_crystals'      => $request->get('include_crystals') ?? 0,
+                'purchase_drops'        => $request->get('purchase_drops') ?? 0,
+                'gatherable_preference' => $request->get('gatherable_preference') ?? 0,
+            ];
+        }
+
         if ($request->get('world')) {
             // Validate that the world exists
             $isValid = false;
@@ -35,6 +47,10 @@ class CraftingController extends Controller {
                         $recipes[$key] = $recipes[$key]->where('rlvl', '<=', $range['max']);
                     }
                     $recipes[$key] = $recipes[$key]->get();
+
+                    $rankedRecipes[$key] = collect($recipes[$key])->sortByDesc(function ($recipe, $key) use ($settings) {
+                        return $recipe->calculateProfitPer(request()->get('world'), 1, $settings ?? null);
+                    })->take(4);
                 }
             } elseif ($isValid) {
                 // Do nothing, and do not unset the selected world
@@ -46,9 +62,11 @@ class CraftingController extends Controller {
         }
 
         return view('crafting.index', [
-            'dataCenters' => config('ffxiv.data_centers'),
-            'world'       => $request->get('world') ?? null,
-            'recipes'     => $recipes ?? null,
+            'dataCenters'   => config('ffxiv.data_centers'),
+            'world'         => $request->get('world') ?? null,
+            'settings'      => $settings ?? null,
+            'rankedRecipes' => $rankedRecipes ?? null,
+            'recipes'       => $recipes ?? null,
         ]);
     }
 }
