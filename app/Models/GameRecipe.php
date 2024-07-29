@@ -168,7 +168,9 @@ class GameRecipe extends Model {
      */
     public function recordRecipe($recipe, $rawRecipes, $items = []) {
         // Add the result item to items to record
-        $items[] = $recipe['result'];
+        if (!GameItem::where('item_id', $recipe['result'])->exists() || UniversalisCache::where('item_id', $recipe['result'])->count() < collect(config('ffxiv.data_centers'))->flatten()->count()) {
+            $items[] = $recipe['result'];
+        }
 
         if (!self::where('recipe_id', $recipe['id'])->exists()) {
             self::create([
@@ -188,7 +190,9 @@ class GameRecipe extends Model {
                 // If the ingredient is a precraft, record the recipe for it
                 $items = $this->recordRecipe($rawRecipes->where('result', $ingredient['id'])->first(), $rawRecipes, $items);
             } else {
-                $items[] = $ingredient['id'];
+                if (!GameItem::where('item_id', $ingredient['id'])->exists() || UniversalisCache::where('item_id', $ingredient['id'])->count() < collect(config('ffxiv.data_centers'))->flatten()->count()) {
+                    $items[] = $ingredient['id'];
+                }
             }
         }
 
