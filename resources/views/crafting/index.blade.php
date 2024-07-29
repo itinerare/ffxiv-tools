@@ -96,8 +96,12 @@
                                                 <small>{{ $loop->iteration }}.</small>
                                                 <a href="#recipe-{{ $recipe->item_id }}">{{ $recipe->gameItem?->name }}</a>
                                             </h5>
-                                            Profit Per:
-                                            @include('crafting._profit_display')
+                                            Profit Per: @include('crafting._profit_display') <br />
+                                            <small>
+                                                Sales per day:
+                                                {{ isset($recipe->getPriceData(request()->get('world'))->hq_sale_velocity) ? number_format($recipe->getPriceData(request()->get('world'))->hq_sale_velocity) : '(No Data)' }} HQ /
+                                                {{ isset($recipe->getPriceData(request()->get('world'))->nq_sale_velocity) ? number_format($recipe->getPriceData(request()->get('world'))->nq_sale_velocity) : '(No Data)' }} NQ
+                                            </small>
                                         </div>
                                     @endforeach
                                 </div>
