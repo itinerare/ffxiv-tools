@@ -147,10 +147,12 @@ class GameRecipe extends Model {
         // Organize items and dispatch jobs to record them as necessary
         $items = collect($items)->unique()->chunk(100);
         foreach ($items as $chunk) {
-            UpdateGameItem::dispatch($chunk);
+            if ($chunk->count()) {
+                UpdateGameItem::dispatch($chunk);
 
-            foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
-                CreateUniversalisRecords::dispatch(strtolower($world), $chunk);
+                foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
+                    CreateUniversalisRecords::dispatch(strtolower($world), $chunk);
+                }
             }
         }
 
