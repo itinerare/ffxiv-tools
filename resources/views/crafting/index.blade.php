@@ -190,5 +190,8 @@
 @endsection
 
 @section('credit')
-    <p>Data from <a href="https://universalis.app">Universalis</a></p>
+    <p class="text-end">
+        Market data from <a href="https://universalis.app">Universalis</a><br />
+        Game data from <a href="https://xivapi.com">XIVAPI</a> and <a href="https://github.com/ffxiv-teamcraft/ffxiv-teamcraft">Teamcraft</a>
+    </p>
 @endsection

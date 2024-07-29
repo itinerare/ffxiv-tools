@@ -52,5 +52,7 @@
 @endsection
 
 @section('credit')
-    <p>Data from <a href="https://universalis.app">Universalis</a></p>
+    <p class="text-end">
+        Market data from <a href="https://universalis.app">Universalis</a> ・ Game data from <a href="https://xivapi.com">XIVAPI</a>
+    </p>
 @endsection
