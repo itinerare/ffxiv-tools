@@ -3,8 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Jobs\CreateUniversalisRecords;
+use App\Jobs\RecordRecipes;
 use App\Jobs\UpdateGameItem;
-use App\Jobs\UpdateUnivsersalisCaches;
+use App\Jobs\UpdateUniversalisCaches;
 use App\Models\GameItem;
 use App\Models\UniversalisCache;
 use Illuminate\Console\Command;
@@ -68,12 +69,23 @@ class UpdateUniversalisCache extends Command {
             $this->line("\n");
         }
 
+        $this->info('Queueing jobs to retrieve recipes and associated items...');
+        $craftingRecipesBar = $this->output->createProgressBar(count((array) config('ffxiv.crafting.jobs')));
+        $craftingRecipesBar->start();
+
+        foreach (array_keys((array) config('ffxiv.crafting.jobs')) as $jobId) {
+            RecordRecipes::dispatch($jobId);
+            $craftingRecipesBar->advance();
+        }
+        $craftingRecipesBar->finish();
+        $this->line("\n");
+
         if (App::environment() == 'production') {
             // Queue jobs to update cached data from Universalis
             $this->info('Queuing jobs to update cached Universalis data...');
             $universalisBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count());
             foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
-                UpdateUnivsersalisCaches::dispatch(strtolower($world), $items);
+                UpdateUniversalisCaches::dispatch(strtolower($world));
                 $universalisBar->advance();
             }
             $universalisBar->finish();
@@ -81,12 +93,8 @@ class UpdateUniversalisCache extends Command {
         }
 
         $this->line('Pruning old records as necessary...');
-        if (GameItem::whereNotIn('item_id', $items->toArray())->count()) {
-            GameItem::whereNotIn('item_id', $items->toArray())->delete();
-            $this->info('Pruned game item records...');
-        }
-        if (UniversalisCache::whereNotIn('item_id', $items->toArray())->count()) {
-            UniversalisCache::whereNotIn('item_id', $items->toArray())->delete();
+        if (UniversalisCache::whereNotIn('item_id', GameItem::pluck('item_id')->toArray())->count()) {
+            UniversalisCache::whereNotIn('item_id', GameItem::pluck('item_id')->toArray())->delete();
             $this->info('Pruned Universalis cache records...');
         }
 

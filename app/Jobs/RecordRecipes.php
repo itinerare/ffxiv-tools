@@ -2,11 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Models\GameItem;
+use App\Models\GameRecipe;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
-class UpdateGameItem implements ShouldQueue {
+class RecordRecipes implements ShouldQueue {
     use Queueable;
 
     /**
@@ -19,18 +19,18 @@ class UpdateGameItem implements ShouldQueue {
     /**
      * Create a new job instance.
      *
-     * @param \Illuminate\Support\Collection $chunk
+     * @param int $jobId
      */
     public function __construct(
-        public $chunk
+        public $jobId
     ) {
-        $this->chunk = $chunk;
+        $this->jobId = $jobId;
     }
 
     /**
      * Execute the job.
      */
     public function handle(): void {
-        (new GameItem)->recordItem($this->chunk);
+        (new GameRecipe)->retrieveRecipes($this->jobId);
     }
 }

@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Jobs\CreateUniversalisRecords;
 use App\Jobs\UpdateGameItem;
 use App\Jobs\UpdateUniversalisCacheChunk;
-use App\Jobs\UpdateUnivsersalisCaches;
+use App\Jobs\UpdateUniversalisCaches;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -46,7 +46,7 @@ class UniversalisTest extends TestCase {
      * Tests the main Universalis update job queueing "chunk" jobs.
      */
     public function testDispatchUniversalisUpdate(): void {
-        $job = new UpdateUnivsersalisCaches('zalera', $this->items);
+        $job = new UpdateUniversalisCaches('zalera', $this->items);
         $job->handle();
 
         // Universalis accepts up to 100 item IDs per request,

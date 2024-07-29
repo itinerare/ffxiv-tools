@@ -29,6 +29,15 @@ class UniversalisCache extends Model {
     protected $table = 'universalis_cache';
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'gameItem',
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
