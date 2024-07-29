@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\GameItem;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
 
 class UpdateGameItem implements ShouldQueue {
     use Queueable;
