@@ -15,7 +15,7 @@ class GameItem extends Model {
      * @var array
      */
     protected $fillable = [
-        'item_id', 'name',
+        'item_id', 'name', 'gather_data', 'is_mob_drop',
     ];
 
     /**
@@ -24,6 +24,15 @@ class GameItem extends Model {
      * @var string
      */
     protected $table = 'game_items';
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'gather_data' => 'array',
+    ];
 
     /**
      * Whether the model contains timestamps to be saved and updated.
@@ -70,6 +79,18 @@ class GameItem extends Model {
 
         $response = Http::retry(3, 100, throw: false)->get('https://xivapi.com/item?ids='.$idString);
 
+        // Fetch Teamcraft's monster drop data and gathering data
+        $dropData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/drop-sources.json');
+        if ($dropData->successful()) {
+            $dropData = json_decode($dropData->getBody(), true);
+        }
+        $gatheringData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/gathering-items.json');
+        if ($gatheringData->successful()) {
+            $gatheringData = json_decode($gatheringData->getBody(), true);
+            $gatheringData = collect($gatheringData);
+        }
+
+        // Start processing the XIVAPI response
         if ($response->successful()) {
             // The response is then returned as JSON
             $response = json_decode($response->getBody(), true);
@@ -85,13 +106,23 @@ class GameItem extends Model {
                     if (self::where('item_id', $item)->exists()) {
                         if (self::where('item_id', $item)->whereNull('name')->exists()) {
                             self::where('item_id', $item)->update([
-                                'name' => $response[$item]['Name'] ?? null,
+                                'name'        => $response[$item]['Name'] ?? null,
+                                'is_mob_drop' => in_array($item, array_keys($dropData)),
+                                'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
+                                    'stars'         => $gatheringData->where('itemId', $item)->first()['stars'],
+                                    'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'],
+                                ] : null,
                             ]);
                         }
                     } else {
                         self::create([
-                            'item_id' => $item,
-                            'name'    => $response[$item]['Name'] ?? null,
+                            'item_id'     => $item,
+                            'name'        => $response[$item]['Name'] ?? null,
+                            'is_mob_drop' => in_array($item, array_keys($dropData)),
+                            'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
+                                'stars'         => $gatheringData->where('itemId', $item)->first()['stars'],
+                                'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'],
+                            ] : null,
                         ]);
                     }
                 }
