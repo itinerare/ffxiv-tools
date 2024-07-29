@@ -33,7 +33,7 @@ class DiademController extends Controller {
                 UpdateUniversalisCaches::dispatch($request->get('world'));
 
                 // Get cached item records
-                $items = UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems)->get();
+                $items = UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems)->with('gameItem')->get();
 
                 // Collect individual node data
                 $availableItems = [];
