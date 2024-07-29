@@ -16,6 +16,9 @@
                 </h2>
                 <div id="craftingSettings" class="accordion-collapse collapse {{ $recipes ? '' : 'show' }}" data-bs-parent="#craftingSettingsContainer">
                     <div class="accordion-body">
+                        <p>Please note that no data is saved to the server or your computer; if you wish to save your settings
+                            for later, instead save the URL after submitting them!</p>
+
                         {{ html()->form('GET')->open() }}
                         {{ html()->hidden('world', request()->get('world') ?? null) }}
 
