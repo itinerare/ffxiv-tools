@@ -30,6 +30,15 @@ class GameRecipe extends Model {
     ];
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'gameItem',
+    ];
+
+    /**
      * The table associated with the model.
      *
      * @var string
