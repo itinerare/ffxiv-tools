@@ -14,5 +14,5 @@ Gil<br />
     @if ($priceData?->uploadTime)
         Last updated: {!! $priceData->uploadTime !!} ・
     @endif
-    Last retrieved: {!! $priceData?->updatedTime !!}
+    Last retrieved: {!! $priceData->updatedTime ?? 'Never' !!}
 </small>
