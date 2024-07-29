@@ -145,13 +145,21 @@ class GameRecipe extends Model {
         }
 
         // Organize items and dispatch jobs to record them as necessary
-        $items = collect($items)->unique()->chunk(100);
-        foreach ($items as $chunk) {
-            if ($chunk->count() > GameItem::whereIn('item_id', $chunk->toArray())->count()) {
-                UpdateGameItem::dispatch($chunk);
-            }
+        $items = collect($items)->unique();
+        $gameItems = $items->filter(function ($item, $key) {
+            return !GameItem::where('item_id', $item)->exists();
+        })->chunk(100);
+        foreach ($gameItems as $chunk) {
+            UpdateGameItem::dispatch($chunk);
+        }
 
-            if (($chunk->count() * collect(config('ffxiv.data_centers'))->flatten()->count()) > UniversalisCache::whereIn('item_id', $chunk->toArray())->count()) {
+        $universalisItems = $items->filter(function ($item, $key) {
+            return UniversalisCache::where('item_id', $item)->count() < collect(config('ffxiv.data_centers'))->flatten()->count();
+        })->chunk(100);
+        foreach ($universalisItems as $chunk) {
+            // Any theoretical number of jobs, when multiplied by the number of supported worlds,
+            // is large enough that it's worth only dispatching jobs if necessary
+            if ($chunk->count()) {
                 foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
                     CreateUniversalisRecords::dispatch(strtolower($world), $chunk);
                 }
