@@ -83,11 +83,18 @@ class GameItem extends Model {
         $dropData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/drop-sources.json');
         if ($dropData->successful()) {
             $dropData = json_decode($dropData->getBody(), true);
+            if (!is_array($dropData)) {
+                unset($dropData);
+            }
         }
         $gatheringData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/gathering-items.json');
         if ($gatheringData->successful()) {
             $gatheringData = json_decode($gatheringData->getBody(), true);
-            $gatheringData = collect($gatheringData);
+            if (is_array($gatheringData)) {
+                $gatheringData = collect($gatheringData);
+            } else {
+                unset($gatheringData);
+            }
         }
 
         // Start processing the XIVAPI response
@@ -107,10 +114,10 @@ class GameItem extends Model {
                         if (self::where('item_id', $item)->whereNull('name')->exists()) {
                             self::where('item_id', $item)->update([
                                 'name'        => $response[$item]['Name'] ?? null,
-                                'is_mob_drop' => in_array($item, array_keys($dropData)),
+                                'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
                                 'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
-                                    'stars'         => $gatheringData->where('itemId', $item)->first()['stars'],
-                                    'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'],
+                                    'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
+                                    'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
                                 ] : null,
                             ]);
                         }
@@ -118,10 +125,10 @@ class GameItem extends Model {
                         self::create([
                             'item_id'     => $item,
                             'name'        => $response[$item]['Name'] ?? null,
-                            'is_mob_drop' => in_array($item, array_keys($dropData)),
+                            'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
                             'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
-                                'stars'         => $gatheringData->where('itemId', $item)->first()['stars'],
-                                'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'],
+                                'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
+                                'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
                             ] : null,
                         ]);
                     }
