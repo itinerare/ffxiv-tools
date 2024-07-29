@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\UpdateUnivsersalisCaches;
 use App\Models\GameRecipe;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CraftingController extends Controller {
     /**
@@ -13,6 +14,15 @@ class CraftingController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getCalculator(Request $request) {
+        $request->validate([
+            'character_job'         => ['nullable', Rule::in(array_keys((array) config('ffxiv.crafting.jobs')))],
+            'purchase_precrafts'    => 'nullable|boolean',
+            'prefer_hq'             => 'nullable|boolean',
+            'include_crystals'      => 'nullable|boolean',
+            'purchase_drops'        => 'nullable|boolean',
+            'gatherable_preference' => 'nullable|in:0,1,2',
+        ]);
+
         if ($request->all()) {
             // Assemble selected settings into an array for easy passing to price calculator function
             $settings = [
