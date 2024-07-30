@@ -381,6 +381,9 @@ class GameRecipe extends Model {
      */
     public function displayProfitPer($ingredients, $settings = null, $quantity = 1) {
         $profitsPer = $this->calculateProfitPer($ingredients, $this->can_hq, $settings, $quantity);
+        if (!$profitsPer) {
+            return '(No Data)';
+        }
 
         return ($this->can_hq ? number_format($profitsPer['hq']).' <small>(HQ)</small> / ' : '').number_format($profitsPer['nq']).($this->can_hq ? ' <small>(NQ)</small>' : '').' Gil';
     }
