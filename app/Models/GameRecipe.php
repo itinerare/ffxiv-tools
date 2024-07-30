@@ -316,7 +316,7 @@ class GameRecipe extends Model {
         $ingredientList = $this->formatIngredients($ingredients);
         foreach ($ingredientList as $item => $ingredient) {
             if (!$ingredient['priceData'] || (!$ingredient['priceData']->min_price_nq && !$ingredient['priceData']->min_price_hq)) {
-                return null;
+                return -1;
             }
 
             // Skip shard/crystal/clusters in recipes if not included in calculations
@@ -335,6 +335,17 @@ class GameRecipe extends Model {
                     continue;
                 } elseif ($settings['gatherable_preference'] == 2) {
                     // Skip all gatherables if gathering everything
+                    continue;
+                }
+            }
+
+            if (isset($settings['shop_preference']) && $settings['shop_preference'] > 0 && (isset($ingredient['gameItem']->shop_data) && $ingredient['gameItem']->shop_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+                if ($ingredient['gameItem']->shop_data['currency'] == 1) {
+                    // If available for Gil, add the vendor cost
+                    $cost += $ingredient['gameItem']->shop_data['cost'] * ($ingredient['amount'] * $quantity);
+                    continue;
+                } elseif ($settings['shop_preference'] == 2) {
+                    // If purchasing all items, skip
                     continue;
                 }
             }
@@ -373,7 +384,7 @@ class GameRecipe extends Model {
         if (!$priceData || (!$priceData->min_price_nq && !$priceData->min_price_hq)) {
             return null;
         }
-        if (!$this->calculateCostPer($ingredients, $settings, $quantity)) {
+        if ($this->calculateCostPer($ingredients, $settings, $quantity) < 0) {
             return null;
         }
 

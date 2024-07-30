@@ -22,6 +22,7 @@ class CraftingController extends Controller {
             'include_crystals'      => 'nullable|boolean',
             'purchase_drops'        => 'nullable|boolean',
             'gatherable_preference' => 'nullable|in:0,1,2',
+            'shop_preference'       => 'nullable|in:0,1,2',
         ]);
 
         if ($request->all()) {
@@ -33,6 +34,7 @@ class CraftingController extends Controller {
                 'include_crystals'      => $request->get('include_crystals') ?? 0,
                 'purchase_drops'        => $request->get('purchase_drops') ?? 0,
                 'gatherable_preference' => $request->get('gatherable_preference') ?? 0,
+                'shop_preference'       => $request->get('shop_preference') ?? 0,
             ];
         }
 

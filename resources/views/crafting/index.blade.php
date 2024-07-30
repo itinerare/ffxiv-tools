@@ -61,6 +61,13 @@
                                         {{ html()->label('Gatherable Preference', 'gatherable_preference')->class('form-label') }}
                                         {{ html()->select('gatherable_preference', [0 => 'Gather nothing/purchase all gatherables', 1 => 'Gather unrestricted (no perception requirement) materials', 2 => 'Gather all materials'], request()->get('gatherable_preference') ?? 0)->class('form-select') }}
                                     </div>
+
+                                    <div class="mw-100"></div>
+
+                                    <div class="col-md mb-3">
+                                        {{ html()->label('Vendor Item Preference', 'shop_preference')->class('form-label') }}
+                                        {{ html()->select('shop_preference', [0 => 'Purchase all items from marketboard', 1 => 'Purchase items from vendors for Gil', 2 => 'Purchase all possible materials from vendors'], request()->get('shop_preference') ?? 0)->class('form-select') }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +162,7 @@
                                                         @if ($recipe->yield > 1)
                                                             x{{ $quantity }} <small>(Makes {{ $quantity * $recipe->yield }})</small>:
                                                         @endif
-                                                        @if ($recipe->calculateCostPer($ingredients, $settings, $quantity) > 0)
+                                                        @if ($recipe->calculateCostPer($ingredients, $settings, $quantity) >= 0)
                                                             @if ($recipe->yield > 1)
                                                                 {{ number_format($recipe->calculateCostPer($ingredients, $settings, $quantity)) }} total,
                                                             @endif
