@@ -116,7 +116,7 @@ class GameRecipe extends Model {
                 $rawRecipes = collect();
                 foreach ($response as $chunk) {
                     foreach ($chunk as $recipe) {
-                        if ($recipe['job'] == $job && $recipe['expert'] == false && $recipe['qs'] == true) {
+                        if ($recipe['job'] == $job && $recipe['expert'] == false && ($recipe['qs'] == true || $recipe['hq'] == false || ($recipe['stars'] ?? null) > 0)) {
                             $rawRecipes->push($recipe);
                         }
                     }
@@ -124,7 +124,11 @@ class GameRecipe extends Model {
 
                 // Filter recipes down further to those within per-xpac ranges
                 foreach (config('ffxiv.crafting.ranges') as $key => $range) {
-                    $recipes[$key] = isset($range['max']) ? $rawRecipes->where('rlvl', '>=', $range['min'])->where('rlvl', '<=', $range['max']) : $rawRecipes->where('rlvl', '>=', $range['min']);
+                    if (isset($range['max'])) {
+                        $recipes[$key] = $rawRecipes->where('rlvl', '>=', $range['min'])->where('rlvl', '<=', $range['max']);
+                    } else {
+                        $recipes[$key] = $rawRecipes->where('rlvl', '>=', $range['min']);
+                    }
 
                     $this->processRecipes($recipes[$key], $rawRecipes);
                 }
