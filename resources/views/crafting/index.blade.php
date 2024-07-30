@@ -119,7 +119,7 @@
                                 </div>
                             </h4>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <p>
                                         @include('_item_price_display', ['priceData' => $recipe->priceData->first(), 'displayHQ' => $recipe->can_hq])
                                     </p>
