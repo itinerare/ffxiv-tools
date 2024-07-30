@@ -143,7 +143,7 @@
                                             <div id="ingredients-{{ $recipe->id }}" class="accordion-collapse collapse" data-bs-parent="#ingredients{{ $recipe->item_id }}">
                                                 <div class="accordion-body">
                                                     <ul>
-                                                        @foreach ($recipe->formatIngredients($ingredients) as $ingredientId => $ingredient)
+                                                        @foreach ($recipe->formatIngredients($ingredients, $settings) as $ingredientId => $ingredient)
                                                             @include('crafting._ingredient_display')
                                                         @endforeach
                                                     </ul>

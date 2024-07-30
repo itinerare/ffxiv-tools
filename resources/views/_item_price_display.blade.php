@@ -4,7 +4,11 @@
 @else
     {{ isset($priceData->min_price_nq) ? number_format($priceData->min_price_nq) : '???' }}
 @endif
-Gil<br />
+Gil
+@if (isset($effectiveCost) && $effectiveCost >= 0 && $effectiveCost != ($priceData->min_price_nq ?? 0))
+    <small>({{ number_format($effectiveCost) }} Gil effective)</small>
+@endif
+<br />
 <small class="text-muted">
     Sales per day:
     @if (isset($displayHQ) && $displayHQ)

@@ -287,15 +287,20 @@ class GameRecipe extends Model {
     /**
      * Format ingredient information and return as an array.
      *
-     * @param array $ingredients
+     * @param array      $ingredients
+     * @param array|null $settings
      *
      * @return array
      */
-    public function formatIngredients($ingredients) {
+    public function formatIngredients($ingredients, $settings = null) {
         $ingredientList = [];
 
         foreach ($this->ingredients as $ingredient) {
-            $ingredientList[$ingredient['id']] = ($ingredients[$ingredient['id']] ?? []) + ['amount' => $ingredient['amount']];
+            $ingredientList[$ingredient['id']] = $ingredients[$ingredient['id']];
+            $ingredientList[$ingredient['id']]['amount'] = $ingredient['amount'];
+            if ($settings) {
+                $ingredientList[$ingredient['id']]['effective_cost'] = $this->calculateIngredientCost($ingredient['id'], $ingredientList[$ingredient['id']], $ingredients, $settings ?? null) / $ingredientList[$ingredient['id']]['amount'];
+            }
         }
 
         return $ingredientList;
@@ -313,58 +318,83 @@ class GameRecipe extends Model {
     public function calculateCostPer($ingredients, $settings = null, $quantity = 1) {
         $cost = 0;
 
-        $ingredientList = $this->formatIngredients($ingredients);
+        $ingredientList = $this->formatIngredients($ingredients, $settings);
         foreach ($ingredientList as $item => $ingredient) {
-            if (!$ingredient['priceData'] || (!$ingredient['priceData']->min_price_nq && !$ingredient['priceData']->min_price_hq)) {
+            $ingredientCost = $cost += $this->calculateIngredientCost($item, $ingredient, $ingredients, $settings, $quantity);
+            if ($ingredientCost == -1) {
                 return -1;
             }
-
-            // Skip shard/crystal/clusters in recipes if not included in calculations
-            if ((!isset($settings['include_crystals']) || !$settings['include_crystals']) && in_array($item, (array) config('ffxiv.crafting.crystals'))) {
-                continue;
-            }
-
-            // Skip mob drops if not purchasing them
-            if ((!isset($settings['purchase_drops']) || !$settings['purchase_drops']) && $ingredient['gameItem']?->is_mob_drop) {
-                continue;
-            }
-
-            if (isset($settings['gatherable_preference']) && $settings['gatherable_preference'] > 0 && (isset($ingredient['gameItem']->gather_data) && $ingredient['gameItem']->gather_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
-                if ($settings['gatherable_preference'] == 1 && !$ingredient['gameItem']->gather_data['perceptionReq']) {
-                    // Skip special gatherables if gathering only unrestricted mats
-                    continue;
-                } elseif ($settings['gatherable_preference'] == 2) {
-                    // Skip all gatherables if gathering everything
-                    continue;
-                }
-            }
-
-            if (isset($settings['shop_preference']) && $settings['shop_preference'] > 0 && (isset($ingredient['gameItem']->shop_data) && $ingredient['gameItem']->shop_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
-                if ($ingredient['gameItem']->shop_data['currency'] == 1) {
-                    // If available for gil, add the vendor cost
-                    $cost += $ingredient['gameItem']->shop_data['cost'] * ($ingredient['amount'] * $quantity);
-                    continue;
-                } elseif ($settings['shop_preference'] == 2) {
-                    // If purchasing all items, skip
-                    continue;
-                }
-            }
-
-            // Handle precraft-related calculations
-            if ($ingredient['recipe']) {
-                if (isset($settings['purchase_precrafts']) && $settings['purchase_precrafts'] && $settings['prefer_hq']) {
-                    // If both purchasing precrafts and prefering HQ materials, include HQ precraft price instead
-                    $cost += $ingredient['priceData']?->min_price_hq * $ingredient['amount'];
-                    continue;
-                } elseif (!isset($settings['purchase_precrafts']) || !$settings['purchase_precrafts']) {
-                    // If not purchasing precrafts, include material costs recursively
-                    $cost += $ingredient['recipe']->calculateCostPer($ingredients, $settings, ceil(($ingredient['amount'] * $quantity) / $ingredient['recipe']->yield));
-                    continue;
-                }
-            }
-
-            $cost += $ingredient['priceData']?->min_price_nq * ($ingredient['amount'] * $quantity);
         }
+
+        return $cost;
+    }
+
+    /**
+     * Calculate effective cost of a given ingredient.
+     *
+     * @param int                            $item
+     * @param array                          $ingredient
+     * @param \Illuminate\Support\Collection $ingredients
+     * @param array|null                     $settings
+     * @param int                            $quantity
+     *
+     * @return int
+     */
+    public function calculateIngredientCost($item, $ingredient, $ingredients, $settings = null, $quantity = 1) {
+        $cost = 0;
+
+        // Skip shard/crystal/clusters in recipes if not included in calculations
+        if ((!isset($settings['include_crystals']) || !$settings['include_crystals']) && in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+            return $cost;
+        }
+
+        // Skip mob drops if not purchasing them
+        if ((!isset($settings['purchase_drops']) || !$settings['purchase_drops']) && $ingredient['gameItem']?->is_mob_drop) {
+            return $cost;
+        }
+
+        if (isset($settings['gatherable_preference']) && $settings['gatherable_preference'] > 0 && (isset($ingredient['gameItem']->gather_data) && $ingredient['gameItem']->gather_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+            if ($settings['gatherable_preference'] == 1 && !$ingredient['gameItem']->gather_data['perceptionReq']) {
+                // Skip special gatherables if gathering only unrestricted mats
+                return $cost;
+            } elseif ($settings['gatherable_preference'] == 2) {
+                // Skip all gatherables if gathering everything
+                return $cost;
+            }
+        }
+
+        if (isset($settings['shop_preference']) && $settings['shop_preference'] > 0 && (isset($ingredient['gameItem']->shop_data) && $ingredient['gameItem']->shop_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+            if ($ingredient['gameItem']->shop_data['currency'] == 1) {
+                // If available for gil, add the vendor cost
+                $cost += $ingredient['gameItem']->shop_data['cost'] * ($ingredient['amount'] * $quantity);
+
+                return $cost;
+            } elseif ($settings['shop_preference'] == 2) {
+                // If purchasing all items, skip
+                return $cost;
+            }
+        }
+
+        // Handle precraft-related calculations
+        if ($ingredient['recipe']) {
+            if (isset($settings['purchase_precrafts']) && $settings['purchase_precrafts'] && $settings['prefer_hq']) {
+                // If both purchasing precrafts and prefering HQ materials, include HQ precraft price instead
+                $cost += $ingredient['priceData']?->min_price_hq * $ingredient['amount'];
+
+                return $cost;
+            } elseif (!isset($settings['purchase_precrafts']) || !$settings['purchase_precrafts']) {
+                // If not purchasing precrafts, include material costs recursively
+                $cost += $ingredient['recipe']->calculateCostPer($ingredients, $settings, ceil(($ingredient['amount'] * $quantity) / $ingredient['recipe']->yield));
+
+                return $cost;
+            }
+        }
+
+        if (!$ingredient['priceData'] || (!$ingredient['priceData']->min_price_nq && !$ingredient['priceData']->min_price_hq)) {
+            return -1;
+        }
+
+        $cost += $ingredient['priceData']?->min_price_nq * ($ingredient['amount'] * $quantity);
 
         return $cost;
     }
