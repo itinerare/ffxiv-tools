@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\UpdateUniversalisCaches;
 use App\Models\GameRecipe;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\Rule;
 
 class CraftingController extends Controller {
@@ -51,7 +52,10 @@ class CraftingController extends Controller {
                 // Check and, if necessary, update cached data
                 UpdateUniversalisCaches::dispatch($request->get('world'));
 
-                foreach (config('ffxiv.crafting.ranges') as $key => $range) {
+                $ranges = collect(config('ffxiv.crafting.ranges'));
+                $currentRange = $ranges->forPage($request->get('page') ?? 1, 1);
+
+                foreach ($currentRange as $key => $range) {
                     $recipes[$key] = GameRecipe::job($request->get('character_job'))->with(['priceData' => function ($query) use ($request) {
                         $query->where('world', $request->get('world'))->limit(1);
                     }])->orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $range['min']);
@@ -88,6 +92,7 @@ class CraftingController extends Controller {
             'world'         => $request->get('world') ?? null,
             'settings'      => $settings ?? null,
             'rankedRecipes' => $rankedRecipes ?? null,
+            'paginator'     => isset($recipes) ? (new LengthAwarePaginator($recipes, $ranges->count(), 1))->withPath('/crafting')->appends($request->query()) : null,
             'recipes'       => $recipes ?? null,
             'ingredients'   => $ingredients ?? null,
         ]);

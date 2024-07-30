@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,6 +19,8 @@ class AppServiceProvider extends ServiceProvider {
      * Bootstrap any application services.
      */
     public function boot(): void {
+        Paginator::useBootstrapFive();
+
         RateLimiter::for('universalis-cache-updates', function (object $job) {
             return Limit::perHour(1)->by($job->world);
         });
