@@ -34,6 +34,9 @@
                     {!! __('of') !!}
                     <span class="fw-semibold">{{ $paginator->total() }}</span>
                     {!! __('pages') !!}
+                    {!! __('and') !!}
+                    <span class="fw-semibold">{{ $paginator->count() }}</span>
+                    {!! __('recipes') !!}
                 </p>
             </div>
 
