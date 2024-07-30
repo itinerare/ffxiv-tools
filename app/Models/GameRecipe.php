@@ -154,7 +154,7 @@ class GameRecipe extends Model {
         // Organize items and dispatch jobs to record them as necessary
         $items = collect($items)->unique();
         $gameItems = $items->filter(function ($item, $key) {
-            return !GameItem::where('item_id', $item)->exists();
+            return !GameItem::where('item_id', $item)->whereNotNull('name')->exists();
         })->chunk(100);
         foreach ($gameItems as $chunk) {
             UpdateGameItem::dispatch($chunk);
