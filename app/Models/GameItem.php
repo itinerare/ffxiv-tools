@@ -32,6 +32,7 @@ class GameItem extends Model {
      */
     protected $casts = [
         'gather_data' => 'array',
+        'shop_data'   => 'array',
     ];
 
     /**
