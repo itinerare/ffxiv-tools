@@ -1,5 +1,5 @@
 <li>
-    <strong>{{ $ingredient['amount'] }} {{ $ingredient['gameItem']->name ?? $ingredientId }}</strong> -
+    <strong>{{ $ingredient['amount'] }} {{ $ingredient['gameItem']->name ?? 'Unknown Item' }}</strong> -
     @include('_item_price_display', ['priceData' => $ingredient['priceData'], 'displayHQ' => $ingredient['recipe'] ? $recipe->can_hq : false])
     @if ($ingredient['recipe'])
         <br />

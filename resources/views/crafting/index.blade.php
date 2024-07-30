@@ -112,7 +112,7 @@
                     <div class="card-body">
                         <div id="recipe-{{ $recipe->item_id }}" class="recipe-body mb-2">
                             <h4 class="mb-3">
-                                {{ $recipe->gameItem?->name }}
+                                {{ $recipe->gameItem->name ?? 'Unknown Item' }}
                                 <small class="text-muted">
                                     ・ @include('crafting._recipe_info_display')
                                 </small>
