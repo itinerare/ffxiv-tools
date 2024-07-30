@@ -104,8 +104,16 @@ class GameRecipe extends Model {
      * @return bool
      */
     public function retrieveRecipes($job) {
-        // Fetch Teamcraft's recipe dump from GitHub
+        // Fetch Teamcraft's recipe and market items dumps from GitHub
         $response = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/recipes-per-item.json');
+        $marketItems = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/market-items.json');
+        if ($marketItems->successful()) {
+            $marketItems = json_decode($marketItems->getBody(), true);
+
+            if (!is_array($marketItems)) {
+                return false;
+            }
+        }
 
         if ($response->successful()) {
             $response = json_decode($response->getBody(), true);
@@ -116,7 +124,7 @@ class GameRecipe extends Model {
                 $rawRecipes = collect();
                 foreach ($response as $chunk) {
                     foreach ($chunk as $recipe) {
-                        if ($recipe['job'] == $job && $recipe['expert'] == false && ($recipe['qs'] == true || $recipe['hq'] == false || ($recipe['stars'] ?? null) > 0)) {
+                        if ($recipe['job'] == $job && !$recipe['expert'] && in_array($recipe['result'], $marketItems)) {
                             $rawRecipes->push($recipe);
                         }
                     }
