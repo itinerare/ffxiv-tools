@@ -17,7 +17,7 @@ class GameRecipe extends Model {
      * @var array
      */
     protected $fillable = [
-        'recipe_id', 'item_id', 'job', 'level', 'rlvl', 'stars', 'yield', 'ingredients',
+        'recipe_id', 'item_id', 'job', 'level', 'rlvl', 'stars', 'yield', 'ingredients', 'can_hq',
     ];
 
     /**
@@ -198,6 +198,7 @@ class GameRecipe extends Model {
                 'rlvl'        => $recipe['rlvl'],
                 'stars'       => $recipe['stars'],
                 'yield'       => $recipe['yields'],
+                'can_hq'      => $recipe['hq'],
                 'ingredients' => $recipe['ingredients'],
             ]);
         }
@@ -369,15 +370,14 @@ class GameRecipe extends Model {
      * Calculate profit from a given recipe; returns a formatted string.
      *
      * @param array      $ingredients
-     * @param bool       $hq
      * @param array|null $settings
      * @param int        $quantity
      *
      * @return string|null
      */
-    public function displayProfitPer($ingredients, $hq = false, $settings = null, $quantity = 1) {
-        $profitsPer = $this->calculateProfitPer($ingredients, $hq, $settings, $quantity);
+    public function displayProfitPer($ingredients, $settings = null, $quantity = 1) {
+        $profitsPer = $this->calculateProfitPer($ingredients, $this->can_hq, $settings, $quantity);
 
-        return ($hq ? number_format($profitsPer['hq']).' <small>(HQ)</small> / ' : '').number_format($profitsPer['nq']).($hq ? ' <small>(NQ)</small>' : '').' Gil';
+        return ($this->can_hq ? number_format($profitsPer['hq']).' <small>(HQ)</small> / ' : '').number_format($profitsPer['nq']).($this->can_hq ? ' <small>(NQ)</small>' : '').' Gil';
     }
 }

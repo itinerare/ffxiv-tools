@@ -9,3 +9,4 @@ Lvl {{ $recipe->level }}
 @endif
 ・ Rarity Level {{ $recipe->rlvl }}
 ・ Yields {{ $recipe->yield }}
+・ {{ $recipe->can_hq ? 'Can' : 'No' }} HQ

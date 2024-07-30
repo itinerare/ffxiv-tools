@@ -93,7 +93,7 @@
                                     <small>{{ $loop->iteration }}.</small>
                                     <a href="#recipe-{{ $recipe->item_id }}">{{ $recipe->gameItem?->name }}</a>
                                 </h5>
-                                Profit Per: {!! $recipe->displayProfitPer($ingredients, 1, $settings) !!}<br />
+                                Profit Per: {!! $recipe->displayProfitPer($ingredients, $settings) !!}<br />
                                 <small>
                                     Sales per day:
                                     {{ isset($recipe->priceData->first()->hq_sale_velocity) ? number_format($recipe->priceData->first()->hq_sale_velocity) : '(No Data)' }} HQ /
@@ -119,9 +119,9 @@
                                 </div>
                             </h4>
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-md-6">
                                     <p>
-                                        @include('_item_price_display', ['priceData' => $recipe->priceData->first(), 'displayHQ' => true])
+                                        @include('_item_price_display', ['priceData' => $recipe->priceData->first(), 'displayHQ' => $recipe->can_hq])
                                     </p>
                                     <div class="accordion" id="ingredients{{ $recipe->item_id }}">
                                         <div class="accordion-item bg-light-subtle border-0">
@@ -167,7 +167,7 @@
                                                         @if ($recipe->yield > 1)
                                                             x{{ $quantity }}:
                                                         @endif
-                                                        {!! $recipe->displayProfitPer($ingredients, 1, $settings, $quantity) !!}
+                                                        {!! $recipe->displayProfitPer($ingredients, $settings, $quantity) !!}
                                                     </li>
                                                 @endforeach
                                             </ul>
