@@ -5,7 +5,7 @@
         <br />
         Recipe: @include('crafting._recipe_info_display', ['recipe' => $ingredient['recipe'], 'job' => request()->get('character_job')])
         <ul>
-            @foreach ($ingredient['recipe']->formatIngredients($ingredients[$label]) as $ingredient)
+            @foreach ($ingredient['recipe']->formatIngredients($ingredients) as $ingredient)
                 @include('crafting._ingredient_display')
             @endforeach
         </ul>

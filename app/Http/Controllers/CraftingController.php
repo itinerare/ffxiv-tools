@@ -53,31 +53,29 @@ class CraftingController extends Controller {
                 UpdateUniversalisCaches::dispatch($request->get('world'));
 
                 $ranges = collect(config('ffxiv.crafting.ranges'));
-                $currentRange = $ranges->forPage($request->get('page') ?? 1, 1);
+                $currentRange = $ranges->forPage($request->get('page') ?? 1, 1)->first();
 
-                foreach ($currentRange as $key => $range) {
-                    $recipes[$key] = GameRecipe::job($request->get('character_job'))->with(['priceData' => function ($query) use ($request) {
-                        $query->where('world', $request->get('world'))->limit(1);
-                    }])->orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $range['min']);
-                    if (isset($range['max'])) {
-                        $recipes[$key] = $recipes[$key]->where('rlvl', '<=', $range['max']);
-                    }
-                    $recipes[$key] = $recipes[$key]->get();
-
-                    // Gather ingredients and assemble common info for them
-                    $ingredients[$key] = $recipes[$key]->pluck('ingredients')->transform(function ($ingredient, $key) {
-                        return collect($ingredient)->transform(function ($item, $key) {
-                            return $item['id'];
-                        });
-                    });
-                    $ingredients[$key] = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients[$key]);
-
-                    $rankedRecipes[$key] = collect($recipes[$key])->sortByDesc(function ($recipe) use ($settings, $ingredients, $key) {
-                        $weight = 1 + (($recipe->priceData->first()->hq_sale_velocity ?? 0) / 100);
-
-                        return ($recipe->calculateProfitPer($ingredients[$key], 1, $settings)['hq'] ?? 0) * $weight;
-                    })->take(4);
+                $recipes = GameRecipe::job($request->get('character_job'))->with(['priceData' => function ($query) use ($request) {
+                    $query->where('world', $request->get('world'))->limit(1);
+                }])->orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $currentRange['min']);
+                if (isset($currentRange['max'])) {
+                    $recipes = $recipes->where('rlvl', '<=', $currentRange['max']);
                 }
+                $recipes = $recipes->get();
+
+                // Gather ingredients and assemble common info for them
+                $ingredients = $recipes->pluck('ingredients')->transform(function ($ingredient, $key) {
+                    return collect($ingredient)->transform(function ($item, $key) {
+                        return $item['id'];
+                    });
+                });
+                $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients);
+
+                $rankedRecipes = collect($recipes)->sortByDesc(function ($recipe) use ($settings, $ingredients) {
+                    $weight = 1 + (($recipe->priceData->first()->hq_sale_velocity ?? 0) / 100);
+
+                    return ($recipe->calculateProfitPer($ingredients, 1, $settings)['hq'] ?? 0) * $weight;
+                })->take(4);
             } elseif ($isValid) {
                 // Do nothing, and do not unset the selected world
             } else {
@@ -91,9 +89,8 @@ class CraftingController extends Controller {
             'dataCenters'   => config('ffxiv.data_centers'),
             'world'         => $request->get('world') ?? null,
             'settings'      => $settings ?? null,
-            'rankedRecipes' => $rankedRecipes ?? null,
             'paginator'     => isset($recipes) ? (new LengthAwarePaginator($recipes, $ranges->count(), 1))->withPath('/crafting')->appends($request->query()) : null,
-            'recipes'       => $recipes ?? null,
+            'rankedRecipes' => $rankedRecipes ?? null,
             'ingredients'   => $ingredients ?? null,
         ]);
     }
