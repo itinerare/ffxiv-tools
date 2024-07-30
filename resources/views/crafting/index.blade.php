@@ -96,8 +96,10 @@
                                 Profit Per: {!! $recipe->displayProfitPer($ingredients, $settings) !!}<br />
                                 <small>
                                     Sales per day:
-                                    {{ isset($recipe->priceData->first()->hq_sale_velocity) ? number_format($recipe->priceData->first()->hq_sale_velocity) : '(No Data)' }} HQ /
-                                    {{ isset($recipe->priceData->first()->nq_sale_velocity) ? number_format($recipe->priceData->first()->nq_sale_velocity) : '(No Data)' }} NQ
+                                    @if ($recipe->can_hq)
+                                        {{ isset($recipe->priceData->first()->hq_sale_velocity) ? number_format($recipe->priceData->first()->hq_sale_velocity) : '(No Data)' }} HQ /
+                                    @endif
+                                    {{ isset($recipe->priceData->first()->nq_sale_velocity) ? number_format($recipe->priceData->first()->nq_sale_velocity) : '(No Data)' }}{{ $recipe->can_hq ? ' NQ' : '' }}
                                 </small>
                             </div>
                         @endforeach
