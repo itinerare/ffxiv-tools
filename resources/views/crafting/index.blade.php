@@ -85,7 +85,7 @@
 
             <div class="card bg-light-subtle border-0 mb-4">
                 <div class="card-body">
-                    <h4>Top Recipes:</h4>
+                    <h4>Recommended Recipes:</h4>
                     <div class="row">
                         @foreach ($rankedRecipes as $recipe)
                             <div class="col-md-3 text-center">
