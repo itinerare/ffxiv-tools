@@ -72,9 +72,17 @@ class CraftingController extends Controller {
                 $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients);
 
                 $rankedRecipes = collect($recipes)->sortByDesc(function ($recipe) use ($settings, $ingredients) {
-                    $weight = 1 + (($recipe->priceData->first()->hq_sale_velocity ?? 0) / 100);
+                    $weight = 1;
 
-                    return ($recipe->calculateProfitPer($ingredients, 1, $settings)['hq'] ?? 0) * $weight;
+                    if ($recipe->can_hq) {
+                        $weight += (($recipe->priceData->first()->hq_sale_velocity ?? 0) / 100);
+
+                        return ($recipe->calculateProfitPer($ingredients, 1, $settings)['hq'] ?? 0) * $weight;
+                    }
+
+                    $weight += (($recipe->priceData->first()->nq_sale_velocity ?? 0) / 100);
+
+                    return ($recipe->calculateProfitPer($ingredients, 1, $settings)['nq'] ?? 0) * $weight;
                 })->take(4);
             } elseif ($isValid) {
                 // Do nothing, and do not unset the selected world
