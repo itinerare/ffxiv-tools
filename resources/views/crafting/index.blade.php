@@ -154,9 +154,15 @@
                                                     <li>
                                                         @if ($recipe->yield > 1)
                                                             x{{ $quantity }} <small>(Makes {{ $quantity * $recipe->yield }})</small>:
-                                                            {{ number_format($recipe->calculateCostPer($ingredients, $settings, $quantity)) }} total,
                                                         @endif
-                                                        {{ number_format(ceil($recipe->calculateCostPer($ingredients, $settings, $quantity) / $recipe->yield / $quantity)) }} Gil per
+                                                        @if ($recipe->calculateCostPer($ingredients, $settings, $quantity) > 0)
+                                                            @if ($recipe->yield > 1)
+                                                                {{ number_format($recipe->calculateCostPer($ingredients, $settings, $quantity)) }} total,
+                                                            @endif
+                                                            {{ number_format(ceil($recipe->calculateCostPer($ingredients, $settings, $quantity) / $recipe->yield / $quantity)) }} Gil per
+                                                        @else
+                                                            (No Data)
+                                                        @endif
                                                     </li>
                                                 @endforeach
                                             </ul>

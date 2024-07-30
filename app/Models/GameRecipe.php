@@ -315,6 +315,10 @@ class GameRecipe extends Model {
 
         $ingredientList = $this->formatIngredients($ingredients);
         foreach ($ingredientList as $item => $ingredient) {
+            if (!$ingredient['priceData'] || (!$ingredient['priceData']->min_price_nq && !$ingredient['priceData']->min_price_hq)) {
+                return null;
+            }
+
             // Skip shard/crystal/clusters in recipes if not included in calculations
             if ((!isset($settings['include_crystals']) || !$settings['include_crystals']) && in_array($item, (array) config('ffxiv.crafting.crystals'))) {
                 continue;
@@ -366,7 +370,10 @@ class GameRecipe extends Model {
      */
     public function calculateProfitPer($ingredients, $hq = false, $settings = null, $quantity = 1) {
         $priceData = $this->priceData->first();
-        if (!$priceData) {
+        if (!$priceData || (!$priceData->min_price_nq && !$priceData->min_price_hq)) {
+            return null;
+        }
+        if (!$this->calculateCostPer($ingredients, $settings, $quantity)) {
             return null;
         }
 
