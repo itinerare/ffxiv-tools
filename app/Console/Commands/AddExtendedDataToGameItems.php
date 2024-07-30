@@ -26,11 +26,11 @@ class AddExtendedDataToGameItems extends Command {
      */
     public function handle() {
         // Filter down to game items that do not have any extended flag set
-        $gameItems = GameItem::where('is_mob_drop', 0)->whereNull('gather_data');
+        $gameItems = GameItem::where('is_mob_drop', 0)->whereNull('gather_data')->orWhereNull('shop_data');
 
         $this->info('Processing '.$gameItems->count().' item'.($gameItems->count() != 1 ? 's' : '').'...');
         if ($gameItems->count()) {
-            // Fetch Teamcraft's monster drop data and gathering data
+            // Fetch Teamcraft's monster drop data, gathering data, and shop data
             $dropData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/drop-sources.json');
             if ($dropData->successful()) {
                 $dropData = json_decode($dropData->getBody(), true);
@@ -39,6 +39,20 @@ class AddExtendedDataToGameItems extends Command {
             if ($gatheringData->successful()) {
                 $gatheringData = json_decode($gatheringData->getBody(), true);
                 $gatheringData = collect($gatheringData);
+            }
+            $shopData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/72867c936b7d46a52c176d374b0969d6f24e3877/libs/data/src/lib/json/shops.json');
+            if ($shopData->successful()) {
+                $shopData = json_decode($shopData->getBody(), true);
+
+                $shopItems = collect($shopData)->transform(function ($shop) {
+                    return collect($shop['trades'])->transform(function ($trade) {
+                        return collect($trade['items'])->mapWithKeys(function ($item) use ($trade) {
+                            return [$item['id'] => $trade['currencies'][0]];
+                        });
+                    });
+                })->flatten(1)->mapWithKeys(function ($trade) {
+                    return $trade;
+                });
             }
 
             $progressBar = $this->output->createProgressBar($gameItems->count());
@@ -51,6 +65,10 @@ class AddExtendedDataToGameItems extends Command {
                     'gather_data' => $gatheringData->where('itemId', $gameItem->item_id)->first() ? [
                         'stars'         => $gatheringData->where('itemId', $gameItem->item_id)->first()['stars'],
                         'perceptionReq' => $gatheringData->where('itemId', $gameItem->item_id)->first()['perceptionReq'],
+                    ] : null,
+                    'shop_data' => isset($shopItems[$gameItem->item_id]) ? [
+                        'currency' => $shopItems[$gameItem->item_id]['id'] ?? null,
+                        'cost'     => $shopItems[$gameItem->item_id]['amount'] ?? null,
                     ] : null,
                 ]);
                 $progressBar->advance();

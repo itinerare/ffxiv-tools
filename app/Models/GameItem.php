@@ -15,7 +15,7 @@ class GameItem extends Model {
      * @var array
      */
     protected $fillable = [
-        'item_id', 'name', 'gather_data', 'is_mob_drop',
+        'item_id', 'name', 'gather_data', 'is_mob_drop', 'shop_data',
     ];
 
     /**
@@ -96,6 +96,20 @@ class GameItem extends Model {
                 unset($gatheringData);
             }
         }
+        $shopData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/72867c936b7d46a52c176d374b0969d6f24e3877/libs/data/src/lib/json/shops.json');
+        if ($shopData->successful()) {
+            $shopData = json_decode($shopData->getBody(), true);
+
+            $shopItems = collect($shopData)->transform(function ($shop) {
+                return collect($shop['trades'])->transform(function ($trade) {
+                    return collect($trade['items'])->mapWithKeys(function ($item) use ($trade) {
+                        return [$item['id'] => $trade['currencies'][0]];
+                    });
+                });
+            })->flatten(1)->mapWithKeys(function ($trade) {
+                return $trade;
+            });
+        }
 
         // Start processing the XIVAPI response
         if ($response->successful()) {
@@ -119,6 +133,10 @@ class GameItem extends Model {
                                     'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
                                     'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
                                 ] : null,
+                                'shop_data' => isset($shopItems[$item]) ? [
+                                    'currency' => $shopItems[$item]['id'] ?? null,
+                                    'cost'     => $shopItems[$item]['amount'] ?? null,
+                                ] : null,
                             ]);
                         }
                     } else {
@@ -129,6 +147,10 @@ class GameItem extends Model {
                             'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
                                 'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
                                 'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
+                            ] : null,
+                            'shop_data' => isset($shopItems[$item]) ? [
+                                'currency' => $shopItems[$item]['id'] ?? null,
+                                'cost'     => $shopItems[$item]['amount'] ?? null,
                             ] : null,
                         ]);
                     }
