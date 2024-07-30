@@ -341,7 +341,7 @@ class GameRecipe extends Model {
 
             if (isset($settings['shop_preference']) && $settings['shop_preference'] > 0 && (isset($ingredient['gameItem']->shop_data) && $ingredient['gameItem']->shop_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
                 if ($ingredient['gameItem']->shop_data['currency'] == 1) {
-                    // If available for Gil, add the vendor cost
+                    // If available for gil, add the vendor cost
                     $cost += $ingredient['gameItem']->shop_data['cost'] * ($ingredient['amount'] * $quantity);
                     continue;
                 } elseif ($settings['shop_preference'] == 2) {

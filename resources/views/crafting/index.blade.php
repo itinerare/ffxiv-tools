@@ -66,7 +66,7 @@
 
                                     <div class="col-md mb-3">
                                         {{ html()->label('Vendor Item Preference', 'shop_preference')->class('form-label') }}
-                                        {{ html()->select('shop_preference', [0 => 'Purchase all items from marketboard', 1 => 'Purchase items from vendors for Gil', 2 => 'Purchase all possible materials from vendors'], request()->get('shop_preference') ?? 0)->class('form-select') }}
+                                        {{ html()->select('shop_preference', [0 => 'Purchase all items from marketboard', 1 => 'Purchase items from vendors for gil', 2 => 'Purchase all possible materials from vendors'], request()->get('shop_preference') ?? 0)->class('form-select') }}
                                     </div>
                                 </div>
                             </div>
