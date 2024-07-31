@@ -50,6 +50,11 @@
                                         </div>
 
                                         <div class="mb-3">
+                                            {{ html()->checkbox('include_aethersands', request()->get('include_aethersands') ?? 0)->class('form-check-input') }}
+                                            {{ html()->label('Purchase aethersands', 'include_aethersands')->class('form-check-label') }}
+                                        </div>
+
+                                        <div class="mb-3">
                                             {{ html()->checkbox('purchase_drops', request()->get('purchase_drops') ?? 0)->class('form-check-input') }}
                                             {{ html()->label('Purchase monster drops', 'purchase_drops')->class('form-check-label') }}
                                         </div>

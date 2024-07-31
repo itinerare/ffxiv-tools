@@ -348,6 +348,11 @@ class GameRecipe extends Model {
             return $cost;
         }
 
+        // Skip aethersands in recipes if not included in calculations
+        if ((!isset($settings['include_aethersands']) || !$settings['include_aethersands']) && preg_match('/[a-zA-Z]+ Aethersand/', $ingredient['gameItem']?->name)) {
+            return $cost;
+        }
+
         // Skip mob drops if not purchasing them
         if ((!isset($settings['purchase_drops']) || !$settings['purchase_drops']) && $ingredient['gameItem']?->is_mob_drop) {
             return $cost;
