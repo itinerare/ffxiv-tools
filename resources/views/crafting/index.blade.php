@@ -28,6 +28,11 @@
                                     {{ html()->label('Job', 'character_job')->class('form-label') }}
                                     {{ html()->select('character_job', config('ffxiv.crafting.jobs'), request()->get('character_job') ?? null)->class('form-select')->placeholder('Select Job') }}
                                 </div>
+
+                                <div class="col-md mt-0 mt-md-4 mb-3">
+                                    {{ html()->checkbox('no_master', request()->get('no_master') ?? 0)->class('form-check-input') }}
+                                    {{ html()->label('Don\'t include master recipes', 'no_master')->class('form-check-label') }}
+                                </div>
                             </div>
                             <div class="col-md">
                                 <div class="row">

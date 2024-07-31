@@ -17,6 +17,7 @@ class CraftingController extends Controller {
     public function getCalculator(Request $request) {
         $request->validate([
             'character_job'         => ['nullable', Rule::in(array_keys((array) config('ffxiv.crafting.jobs')))],
+            'no_master'             => 'nullable|boolean',
             'purchase_precrafts'    => 'nullable|boolean',
             'prefer_hq'             => 'nullable|boolean',
             'include_crystals'      => 'nullable|boolean',
@@ -30,6 +31,7 @@ class CraftingController extends Controller {
             // Assemble selected settings into an array for easy passing to price calculator function
             $settings = [
                 'character_job'         => $request->get('character_job') ?? null,
+                'no_master'             => $request->get('no_master') ?? 0,
                 'purchase_precrafts'    => $request->get('purchase_precrafts') ?? 0,
                 'prefer_hq'             => $request->get('prefer_hq') ?? 0,
                 'include_crystals'      => $request->get('include_crystals') ?? 0,
@@ -65,6 +67,10 @@ class CraftingController extends Controller {
                 if (isset($currentRange['max'])) {
                     $recipes = $recipes->where('rlvl', '<=', $currentRange['max']);
                 }
+                if ($request->get('no_master')) {
+                    $recipes = $recipes->where('stars', 0);
+                }
+
                 $recipes = $recipes->get();
 
                 // Gather ingredients and assemble common info for them
