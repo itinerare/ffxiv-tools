@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -24,6 +27,7 @@
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
+        "marcocesarato/php-conventional-changelog": "^1.17",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
         "phpunit/phpunit": "^11.0",
@@ -61,6 +65,9 @@
         ],
         "lint": [
             "./vendor/bin/pint"
+        ],
+        "changelog": [
+            "./vendor/marcocesarato/php-conventional-changelog/conventional-changelog"
         ]
     },
     "extra": {
@@ -77,5 +84,6 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "version": "2.10.1"
 }
