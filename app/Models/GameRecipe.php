@@ -426,8 +426,8 @@ class GameRecipe extends Model {
         $cost = ceil(($this->calculateCostPer($ingredients, $settings, $quantity) / $this->yield) / $quantity);
 
         return [
-            'nq' => $priceData->min_price_nq - $cost,
-            'hq' => $hq ? $priceData->min_price_hq - $cost : null,
+            'nq' => $priceData->min_price_nq > 0 ? $priceData->min_price_nq - $cost : null,
+            'hq' => $hq && $priceData->min_price_hq > 0 ? $priceData->min_price_hq - $cost : null,
         ];
     }
 
@@ -446,6 +446,6 @@ class GameRecipe extends Model {
             return '(No Data)';
         }
 
-        return ($this->can_hq ? number_format($profitsPer['hq']).' <small>(HQ)</small> / ' : '').number_format($profitsPer['nq']).($this->can_hq ? ' <small>(NQ)</small>' : '').' Gil';
+        return ($this->can_hq ? ($profitsPer['hq'] ? number_format($profitsPer['hq']) : '???').' <small>(HQ)</small> / ' : '').($profitsPer['nq'] ? number_format($profitsPer['nq']) : '???').($this->can_hq ? ' <small>(NQ)</small>' : '').' Gil';
     }
 }
