@@ -76,6 +76,11 @@ class CraftingController extends Controller {
                 $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients);
 
                 $rankedRecipes = collect($recipes)->sortByDesc(function ($recipe) use ($settings, $ingredients) {
+                    // Do not recommend recipes that have no sale velocity
+                    if (($recipe->priceData->first()->hq_sale_velocity ?? 0) == 0 && ($recipe->priceData->first()->nq_sale_velocity ?? 0) == 0) {
+                        return 0;
+                    }
+
                     $weight = 1;
 
                     if ($recipe->can_hq) {
