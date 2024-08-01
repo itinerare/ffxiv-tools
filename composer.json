@@ -70,7 +70,7 @@
             "./vendor/marcocesarato/php-conventional-changelog/conventional-changelog"
         ],
         "release": [
-            "./vendor/marcocesarato/php-conventional-changelog/conventional-changelog --commit"
+            "./vendor/marcocesarato/php-conventional-changelog/conventional-changelog --commit --no-tag"
         ]
     },
     "extra": {
