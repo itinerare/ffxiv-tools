@@ -175,7 +175,7 @@ class CraftingController extends Controller {
 
                 // Filter down to only unrestricted mats
                 if (!$request->get('include_limited')) {
-                    $items = $items->whereNull('gameData.gather_data.perceptionReq');
+                    $items = $items->where('gameItem.gather_data.perceptionReq', 0);
                 }
 
                 $rankedItems = $items->sortByDesc(function ($item, $itemId) {
