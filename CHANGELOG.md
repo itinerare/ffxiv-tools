@@ -4,6 +4,28 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.11.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.10.0...v2.11.0) (2024-08-01)
+
+### Features
+
+* Add changelog to footer ([0d4e60](https://code.itinerare.net/itinerare/ffxiv-tools/commit/0d4e609d7b398fdadd0e2db2609cbfe0e33f9da2))
+
+##### Crafting
+
+* Add option to ignore master recipes ([76529b](https://code.itinerare.net/itinerare/ffxiv-tools/commit/76529b175dbc2ea4184615fb6a647f754ad56954))
+* Add setting to include/ignore aethersand costs ([6a2bb7](https://code.itinerare.net/itinerare/ffxiv-tools/commit/6a2bb706f464f0b863931fe672e0f5ae506b6f20))
+* Do not recommend recipes with no sale velocity ([915a5c](https://code.itinerare.net/itinerare/ffxiv-tools/commit/915a5c5664eb8aabf3952518e9cc51bc3823b893))
+
+### Bug Fixes
+
+
+##### Crafting
+
+* Only return profit number(s) if there's non-zero price data ([189371](https://code.itinerare.net/itinerare/ffxiv-tools/commit/189371163d1b2e9cbe4a98c8991c4d573ed32a32))
+
+
+---
+
 ## [2.10.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.9.0...v2.10.0) (2024-07-30)
 
 ### Features
