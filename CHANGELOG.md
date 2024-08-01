@@ -4,6 +4,27 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.12.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.11.0...v2.12.0) (2024-08-01)
+
+### Features
+
+
+##### Gathering
+
+* Add basic gathering profit calculator ([f399f8](https://code.itinerare.net/itinerare/ffxiv-tools/commit/f399f81c7f040f0cb8434fbf24dd6483074acd3a))
+
+### Bug Fixes
+
+
+##### Gathering
+
+* Fix unrestricted material filter ([fa9aaf](https://code.itinerare.net/itinerare/ffxiv-tools/commit/fa9aaf8b84182896f178ef84990ebb35fb87a505))
+* Format recommended item price numbers ([889ceb](https://code.itinerare.net/itinerare/ffxiv-tools/commit/889ceb098a44f0405286bdce0a4c156cbb079743))
+* Tweak list division to try to be more even ([ae758c](https://code.itinerare.net/itinerare/ffxiv-tools/commit/ae758ca18049091750fcd19febcc3673433f5a8b))
+
+
+---
+
 ## [2.11.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.10.0...v2.11.0) (2024-08-01)
 
 ### Features
