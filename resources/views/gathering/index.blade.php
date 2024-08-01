@@ -77,14 +77,14 @@
                 <div class="card-body">
                     <div class="row">
                         @foreach ($paginator->items() as $itemId => $item)
-                            {!! $loop->first || $loop->iteration == round($paginator->count() / 2) + 1 ? '<div class="col-md"><ol start="' . $loop->iteration . '">' : '' !!}
+                            {!! $loop->first || $loop->iteration == ceil($paginator->count() / 2) + 1 ? '<div class="col-md"><ol start="' . $loop->iteration . '">' : '' !!}
                             <li id="item-{{ $itemId }}">
                                 <span class="float-end text-end">
                                     <a href="https://ffxivteamcraft.com/db/en/item/{{ $itemId }}" class="btn btn-secondary btn-sm">Teamcraft</a>
                                 </span>
                                 {{ $item['gameItem']?->name ?? 'Unknown Item' }} - @include('_item_price_display', ['priceData' => $item['priceData']])
                             </li>
-                            {!! $loop->last || $loop->iteration == round($paginator->count() / 2) ? '</ol></div>' : '' !!}
+                            {!! $loop->last || $loop->iteration == ceil($paginator->count() / 2) ? '</ol></div>' : '' !!}
                         @endforeach
                     </div>
                 </div>
