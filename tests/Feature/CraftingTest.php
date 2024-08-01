@@ -97,4 +97,56 @@ class CraftingTest extends TestCase {
             'invalid world'            => ['fake', 0, 0],
         ];
     }
+
+    /**
+     * Test getting the gathering profit calculator.
+     *
+     * @param string $world
+     * @param bool   $expected
+     */
+    #[DataProvider('gatheringProfitProvider')]
+    public function testGetGatheringCalc($world, $expected): void {
+        Queue::fake();
+
+        if ($world) {
+            // Fake requests to XIVAPI to save time/requests
+            Http::fake(['xivapi.com/*' => Http::response(['Results' => []])]);
+
+            // Initialize recipe, game item, and Universalis records, echoing the chunking usually used to do so
+            (new GameRecipe)->retrieveRecipes(15);
+
+            $items = GameRecipe::where('job', 15)->pluck('item_id');
+
+            foreach ($items->chunk(100) as $chunk) {
+                (new UpdateGameItem($chunk))->handle();
+            }
+            foreach ($items->chunk(100) as $chunk) {
+                (new CreateUniversalisRecords($world, $chunk))->handle();
+            }
+        }
+
+        $response = $this->get('gathering'.($world ? '?world='.$world : ''));
+
+        if ($expected) {
+            $response->assertStatus(200);
+            $response->assertSessionHasNoErrors();
+
+            $response->assertSee('Showing results for '.ucfirst($world));
+
+            Queue::assertPushed(UpdateUniversalisCaches::class);
+        } else {
+            $response->assertStatus(200);
+
+            $response->assertSee('Please select a world!');
+            Queue::assertNotPushed(UpdateUniversalisCaches::class);
+        }
+    }
+
+    public static function gatheringProfitProvider() {
+        return [
+            'no world'      => [null, 0],
+            'valid world'   => ['zalera', 1],
+            'invalid world' => ['fake', 0],
+        ];
+    }
 }

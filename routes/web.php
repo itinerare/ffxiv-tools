@@ -19,5 +19,6 @@ Route::controller(LevelingController::class)->group(function () {
 });
 
 Route::controller(CraftingController::class)->group(function () {
-    Route::get('crafting', 'getCalculator');
+    Route::get('gathering', 'getGatheringCalculator');
+    Route::get('crafting', 'getCraftingCalculator');
 });

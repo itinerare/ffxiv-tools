@@ -14,7 +14,7 @@ class CraftingController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCalculator(Request $request) {
+    public function getCraftingCalculator(Request $request) {
         $request->validate([
             'character_job'         => ['nullable', Rule::in(array_keys((array) config('ffxiv.crafting.jobs')))],
             'no_master'             => 'nullable|boolean',
@@ -115,6 +115,97 @@ class CraftingController extends Controller {
             'paginator'     => isset($recipes) ? (new LengthAwarePaginator($recipes, $ranges->count(), 1))->withPath('/crafting')->appends($request->query()) : null,
             'rankedRecipes' => $rankedRecipes ?? null,
             'ingredients'   => $ingredients ?? null,
+        ]);
+    }
+
+    /**
+     * Show the gathering profit calculator page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getGatheringCalculator(Request $request) {
+        $request->validate([
+            'character_job'   => ['nullable', Rule::in(array_keys((array) config('ffxiv.gathering.jobs')))],
+            'include_limited' => 'nullable|in:0,1,2',
+        ]);
+
+        if ($request->all()) {
+            // Assemble selected settings into an array for easy passing to price calculator function
+            $settings = [
+                'character_job'   => $request->get('character_job') ?? null,
+                'include_limited' => $request->get('include_limited') ?? 0,
+            ];
+        }
+
+        if ($request->get('world')) {
+            // Validate that the world exists
+            $isValid = false;
+            foreach (config('ffxiv.data_centers') as $dataCenters) {
+                foreach ($dataCenters as $dataCenter) {
+                    if (in_array(ucfirst($request->get('world')), $dataCenter)) {
+                        $isValid = true;
+                        break;
+                    }
+                }
+            }
+
+            $ranges = collect(config('ffxiv.crafting.ranges'));
+            $currentRange = $ranges->forPage($request->get('page') ?? 1, 1)->first();
+
+            if ($isValid) {
+                // Check and, if necessary, update cached data
+                UpdateUniversalisCaches::dispatch($request->get('world'));
+
+                // Collect recipes so as to collect their ingredients
+                $recipes = GameRecipe::orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $currentRange['min']);
+                if (isset($currentRange['max'])) {
+                    $recipes = $recipes->where('rlvl', '<=', $currentRange['max']);
+                }
+                $recipes = $recipes->get();
+
+                // Gather ingredients and assemble common info for them
+                $ingredients = $recipes->pluck('ingredients')->transform(function ($ingredient, $key) {
+                    return collect($ingredient)->transform(function ($item, $key) {
+                        return $item['id'];
+                    });
+                });
+                $items = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients)
+                    ->whereNotNull('gameItem.gather_data')
+                    ->whereNotNull('priceData')->sortByDesc('priceData.min_price_nq');
+
+                // Filter down to only unrestricted mats
+                if (!$request->get('include_limited')) {
+                    $items = $items->whereNull('gameData.gather_data.perceptionReq');
+                }
+
+                $rankedItems = $items->sortByDesc(function ($item, $itemId) {
+                    // Do not recommend items that have no sale velocity
+                    if (($item['priceData']->nq_sale_velocity ?? 0) == 0) {
+                        return 0;
+                    }
+
+                    // Do not recommend crystals
+                    if (in_array($itemId, (array) config('ffxiv.crafting.crystals'))) {
+                        return 0;
+                    }
+
+                    $weight = 1;
+                    $weight += (($item['priceData']->nq_sale_velocity ?? 0) / 100);
+
+                    return $item['priceData']->min_price_nq * $weight;
+                })->take(8);
+            } else {
+                // If the world name is invalid, unset it
+                // so that the frontend treats it as not having selected anything
+                $request->offsetUnset('world');
+            }
+        }
+
+        return view('gathering.index', [
+            'dataCenters'   => config('ffxiv.data_centers'),
+            'world'         => $request->get('world') ?? null,
+            'paginator'     => isset($items) ? (new LengthAwarePaginator($items ?? [], $ranges->count(), 1))->withPath('/gathering')->appends($request->query()) : null,
+            'rankedItems'   => $rankedItems ?? null,
         ]);
     }
 }

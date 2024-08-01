@@ -8,10 +8,8 @@
     @include('_data_center_select', ['world' => request()->get('world') ?? null])
     @if (request()->get('world') && $items)
         <h3 class="text-center">Showing Results for {{ ucfirst(request()->get('world')) }}</h3>
-        <p class="text-center">
-            Local data may be updated from Universalis every 6 hours at most. Both update (last upload to Universalis) and retrieval (local data last updated) times are shown, as available.<br />
-            Updates are queued on viewing data for a world and may take a minute or two to be fetched (provided Universalis is currently healthy).
-        </p>
+        @include('_universalis_note')
+
         <div class="card-group">
             @foreach ($items as $class => $chunk)
                 <div class="card">

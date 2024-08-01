@@ -36,7 +36,7 @@
                     {!! __('pages') !!}
                     {!! __('and') !!}
                     <span class="fw-semibold">{{ $paginator->count() }}</span>
-                    {!! __('recipes') !!}
+                    {!! __($itemName . 's') !!}
                 </p>
             </div>
 

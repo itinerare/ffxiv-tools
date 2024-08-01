@@ -17,6 +17,11 @@
                 </a>
             </li>
             <li>
+                <a class="dropdown-item {{ url()->current() == url('gathering') ? 'active' : '' }}" href="{{ url('gathering') }}">
+                    Gathering Profit Calculator
+                </a>
+            </li>
+            <li>
                 <a class="dropdown-item {{ url()->current() == url('diadem') ? 'active' : '' }}" href="{{ url('diadem') }}">
                     Diadem Gil Optimization
                 </a>

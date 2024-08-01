@@ -93,12 +93,9 @@
 
         @if ($paginator)
             <h3 class="text-center">Showing {{ config('ffxiv.crafting.jobs')[request()->get('character_job')] }} results for {{ ucfirst(request()->get('world')) }}</h3>
-            <p class="text-center">
-                Local data may be updated from Universalis every 6 hours at most. Both update (last upload to Universalis) and retrieval (local data last updated) times are shown, as available.<br />
-                Updates are queued on viewing data for a world and may take a minute or two to be fetched (provided Universalis is currently healthy).
-            </p>
+            @include('_universalis_note')
 
-            {{ $paginator->links('crafting.pagination') }}
+            {{ $paginator->links('crafting.pagination', ['itemName' => 'recipe']) }}
 
             <div class="card bg-light-subtle border-0 mb-4">
                 <div class="card-body">
@@ -205,7 +202,7 @@
                 </div>
             @endforeach
 
-            {{ $paginator->links('crafting.pagination') }}
+            {{ $paginator->links('crafting.pagination', ['itemName' => 'recipe']) }}
         @endif
     @else
         <h1 class="text-center">Please select a world!</h1>
