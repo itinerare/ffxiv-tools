@@ -63,7 +63,7 @@
                                     <a href="#item-{{ $itemId }}">{{ $item['gameItem']?->name }}</a>
                                 </h6>
                                 <small>
-                                    {{ $item['priceData']?->min_price_nq }} Gil per ・
+                                    {{ number_format($item['priceData']?->min_price_nq) }} Gil per ・
                                     Sales per day:
                                     {{ isset($item['priceData']?->nq_sale_velocity) ? number_format($item['priceData']?->nq_sale_velocity) : '(No Data)' }}
                                 </small>
