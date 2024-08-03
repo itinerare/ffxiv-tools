@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\UpdateUniversalisCaches;
 use App\Models\GameRecipe;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\Rule;
@@ -82,8 +83,12 @@ class CraftingController extends Controller {
                 $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients);
 
                 $rankedRecipes = collect($recipes)->sortByDesc(function ($recipe) use ($settings, $ingredients) {
-                    // Do not recommend recipes that have no sale velocity
+                    // Don't recommend recipes that have no sale velocity
                     if (($recipe->priceData->first()->hq_sale_velocity ?? 0) == 0 && ($recipe->priceData->first()->nq_sale_velocity ?? 0) == 0) {
+                        return 0;
+                    }
+                    // Don't recommend recipes with a last upload older 12 hours
+                    if ($recipe->priceData->first()->last_upload_time < Carbon::now()->subHours(12)) {
                         return 0;
                     }
 
