@@ -95,14 +95,14 @@ class CraftingController extends Controller {
                     $weight = 1;
 
                     if ($recipe->can_hq) {
-                        $weight += (($recipe->priceData->first()->hq_sale_velocity ?? 0) / 100);
+                        $weight += (($recipe->calculateProfitPer($ingredients, 1, $settings)['hq'] ?? 0) / 1000);
 
-                        return ($recipe->calculateProfitPer($ingredients, 1, $settings)['hq'] ?? 0) * $weight;
+                        return ($recipe->priceData->first()->hq_sale_velocity ?? 0) * $weight;
                     }
 
-                    $weight += (($recipe->priceData->first()->nq_sale_velocity ?? 0) / 100);
+                    $weight += (($recipe->calculateProfitPer($ingredients, 1, $settings)['nq'] ?? 0) / 1000);
 
-                    return ($recipe->calculateProfitPer($ingredients, 1, $settings)['nq'] ?? 0) * $weight;
+                    return ($recipe->priceData->first()->nq_sale_velocity ?? 0) * $weight;
                 })->take(4);
             } elseif ($isValid) {
                 // Do nothing, and do not unset the selected world
