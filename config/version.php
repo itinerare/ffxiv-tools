@@ -13,4 +13,5 @@ return [
     'date'   => $date ?? 'unknown',
     'hash'   => $hash ?? 'unknown',
     'string' => $string ?? 'v??.??-unknown',
+    'tag'    => Composer\InstalledVersions::getRootPackage()['pretty_version'],
 ];
