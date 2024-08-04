@@ -4,6 +4,25 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.13.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.12.0...v2.13.0) (2024-08-04)
+
+### Features
+
+
+##### Crafting
+
+* Rank recipes by sale velocity weighted by price (rather than the reverse) ([0d39d7](https://code.itinerare.net/itinerare/ffxiv-tools/commit/0d39d75a78bc144d2b30ec65af6786bfabff4e47))
+
+### Bug Fixes
+
+
+##### Crafting
+
+* Don't recommend recipes with data older than 12 hours ([e2c087](https://code.itinerare.net/itinerare/ffxiv-tools/commit/e2c08715a2fcc6a85d6dc6f20b776f49e8ee35f1))
+
+
+---
+
 ## [2.12.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.11.0...v2.12.0) (2024-08-01)
 
 ### Features
