@@ -184,8 +184,12 @@ class CraftingController extends Controller {
                 }
 
                 $rankedItems = $items->sortByDesc(function ($item, $itemId) {
-                    // Do not recommend items that have no sale velocity
+                    // Don't recommend items that have no sale velocity
                     if (($item['priceData']->nq_sale_velocity ?? 0) == 0) {
+                        return 0;
+                    }
+                    // Don't recommend items with a last upload older 12 hours
+                    if ($item['priceData']->last_upload_time < Carbon::now()->subHours(12)) {
                         return 0;
                     }
 
