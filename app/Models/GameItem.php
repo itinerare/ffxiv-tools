@@ -61,6 +61,24 @@ class GameItem extends Model {
         return 'Item ID '.$this->item_id;
     }
 
+    /**
+     * Get URL of the item's Universalis page.
+     *
+     * @return string
+     */
+    public function getUniversalisUrlAttribute() {
+        return 'https://universalis.app/market/'.$this->item_id;
+    }
+
+    /**
+     * Get URL of the item's Teamcraft page.
+     *
+     * @return string
+     */
+    public function getTeamcraftUrlAttribute() {
+        return 'https://ffxivteamcraft.com/db/en/item/'.$this->item_id;
+    }
+
     /**********************************************************************************************
 
         OTHER FUNCTIONS
