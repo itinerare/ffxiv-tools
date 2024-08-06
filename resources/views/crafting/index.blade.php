@@ -131,7 +131,8 @@
                                     ・ @include('crafting._recipe_info_display')
                                 </small>
                                 <div class="float-end text-end">
-                                    <a href="https://ffxivteamcraft.com/db/en/item/{{ $recipe->item_id }}" class="btn btn-secondary btn-sm">Teamcraft</a>
+                                    <a href="{{ $recipe->gameItem->universalisUrl }}" class="btn btn-secondary btn-sm">Universalis</a>
+                                    <a href="{{ $recipe->gameItem->teamcraftUrl }}" class="btn btn-secondary btn-sm">Teamcraft</a>
                                 </div>
                             </h4>
                             <div class="row">
