@@ -198,7 +198,7 @@ class CraftingController extends Controller {
                         return 0;
                     }
 
-                    $weight = 1;
+                    $weight = 1 - ($item['priceData']->last_upload_time->diffInHours(Carbon::now()) / 100);
                     $weight += (($item['priceData']->nq_sale_velocity ?? 0) / 100);
 
                     return $item['priceData']->min_price_nq * $weight;
