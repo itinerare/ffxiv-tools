@@ -4,6 +4,31 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.14.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.13.0...v2.14.0) (2024-08-07)
+
+### Features
+
+* Add Universalis, Teamcraft URL accessors to game item model ([f25021](https://code.itinerare.net/itinerare/ffxiv-tools/commit/f250212bead311edbd8fe9a754a14d851a7a7179))
+
+##### Crafting
+
+* Add Universalis links to recipes ([95fedf](https://code.itinerare.net/itinerare/ffxiv-tools/commit/95fedf4a31d3836fbf1a75a337cc8438f21fd7f1))
+
+##### Gathering
+
+* Add Universalis links to items ([821022](https://code.itinerare.net/itinerare/ffxiv-tools/commit/821022e0f1fb42b738244fce5067b46b4ce737ab))
+
+### Bug Fixes
+
+* Link to changelog as of tagged version ([857068](https://code.itinerare.net/itinerare/ffxiv-tools/commit/8570687e8908dd857346a7d7186287d6a6d0559f))
+
+##### Gathering
+
+* Don't recommend items with data older than 12 hours ([3efdd5](https://code.itinerare.net/itinerare/ffxiv-tools/commit/3efdd588320ac7cea071049422118ff15575f2ef))
+
+
+---
+
 ## [2.13.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.12.0...v2.13.0) (2024-08-04)
 
 ### Features
