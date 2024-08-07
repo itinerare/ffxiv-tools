@@ -6,6 +6,7 @@ use App\Jobs\CreateUniversalisRecords;
 use App\Jobs\UpdateGameItem;
 use App\Jobs\UpdateUniversalisCacheChunk;
 use App\Jobs\UpdateUniversalisCaches;
+use App\Models\UniversalisCache;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -46,6 +47,9 @@ class UniversalisTest extends TestCase {
      * Tests the main Universalis update job queueing "chunk" jobs.
      */
     public function testDispatchUniversalisUpdate(): void {
+        // Set up records for the world and items
+        (new CreateUniversalisRecords('zalera', $this->items))->handle();
+
         $job = new UpdateUniversalisCaches('zalera', $this->items);
         $job->handle();
 
@@ -90,8 +94,10 @@ class UniversalisTest extends TestCase {
             ]);
         }
 
+        // Perform the filtering usually done in the overarching update job
+        $items = UniversalisCache::world('zalera')->whereIn('item_id', $chunk)->needsUpdate()->get();
         // Handle the update job itself
-        (new UpdateUniversalisCacheChunk('zalera', $chunk))->handle();
+        (new UpdateUniversalisCacheChunk('zalera', $items))->handle();
 
         // Assert that records have been updated with the data from the fake response body
         foreach ($chunk as $item) {

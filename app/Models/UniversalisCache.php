@@ -68,6 +68,20 @@ class UniversalisCache extends Model {
         return $query->where('world', $world);
     }
 
+    /**
+     * Scope a query to include records that need updating.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNeedsUpdate($query) {
+        return $query->where(function ($query) {
+            $query->where('updated_at', '<', Carbon::now()->subMinutes(config('ffxiv.universalis.cache_lifetime')))
+                ->orWhereNull('min_price_nq');
+        });
+    }
+
     /**********************************************************************************************
 
         ACCESSORS
@@ -125,42 +139,32 @@ class UniversalisCache extends Model {
 
     /**
      * Updates stored data from Universalis.
-     * Attempts to make as few requests as possible.
      *
-     * @param string $world
-     * @param mixed  $chunk
+     * @param string                         $world
+     * @param \Illuminate\Support\Collection $items
      *
-     * @return \Illuminate\Support\Collection
+     * @return bool
      */
-    public function updateCaches($world, $chunk) {
-        // Filter down to only items that have not been updated recently, or without price data
-        $items = self::world($world)->whereIn('item_id', $chunk)->where(function ($query) {
-            $query->where('updated_at', '<', Carbon::now()->subMinutes(config('ffxiv.universalis.cache_lifetime')))
-                ->orWhereNull('min_price_nq');
-        })->get();
+    public function updateCaches($world, $items) {
+        // Format a comma-separated string of item IDs to make a request to Universalis
+        $idString = implode(',', $items->pluck('item_id')->toArray());
 
-        // Only make a request to Universalis if there are items to update
-        if ($items->count()) {
-            // Format a comma-separated string of item IDs to make a request to Universalis
-            $idString = implode(',', $items->pluck('item_id')->toArray());
+        $response = Http::retry(3, 100, throw: false)->get('https://universalis.app/api/v2/'.$world.'/'.$idString.'?fields=items.lastUploadTime,items.minPriceNQ%2Citems.minPriceHQ%2Citems.nqSaleVelocity%2Citems.hqSaleVelocity');
 
-            $response = Http::retry(3, 100, throw: false)->get('https://universalis.app/api/v2/'.$world.'/'.$idString.'?fields=items.lastUploadTime,items.minPriceNQ%2Citems.minPriceHQ%2Citems.nqSaleVelocity%2Citems.hqSaleVelocity');
-
-            if ($response->successful()) {
-                // The response is then returned as JSON
-                $response = json_decode($response->getBody(), true);
-                // Affirm that the response is an array for safety
-                if (is_array($response)) {
-                    // Assemble a list of items with prices, ignoring any for which no price data exists
-                    foreach ($items as $item) {
-                        $item->update([
-                            'min_price_nq'     => $response['items'][$item->item_id]['minPriceNQ'] ?? null,
-                            'min_price_hq'     => $response['items'][$item->item_id]['minPriceHQ'] ?? null,
-                            'nq_sale_velocity' => $response['items'][$item->item_id]['nqSaleVelocity'] ?? null,
-                            'hq_sale_velocity' => $response['items'][$item->item_id]['hqSaleVelocity'] ?? null,
-                            'last_upload_time' => isset($response['items'][$item->item_id]['lastUploadTime']) ? Carbon::createFromTimestampMs($response['items'][$item->item_id]['lastUploadTime']) : null,
-                        ]);
-                    }
+        if ($response->successful()) {
+            // The response is then returned as JSON
+            $response = json_decode($response->getBody(), true);
+            // Affirm that the response is an array for safety
+            if (is_array($response)) {
+                // Assemble a list of items with prices, ignoring any for which no price data exists
+                foreach ($items as $item) {
+                    $item->update([
+                        'min_price_nq'     => $response['items'][$item->item_id]['minPriceNQ'] ?? null,
+                        'min_price_hq'     => $response['items'][$item->item_id]['minPriceHQ'] ?? null,
+                        'nq_sale_velocity' => $response['items'][$item->item_id]['nqSaleVelocity'] ?? null,
+                        'hq_sale_velocity' => $response['items'][$item->item_id]['hqSaleVelocity'] ?? null,
+                        'last_upload_time' => isset($response['items'][$item->item_id]['lastUploadTime']) ? Carbon::createFromTimestampMs($response['items'][$item->item_id]['lastUploadTime']) : null,
+                    ]);
                 }
             }
         }

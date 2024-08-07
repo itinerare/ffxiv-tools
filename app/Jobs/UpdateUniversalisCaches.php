@@ -48,8 +48,14 @@ class UpdateUniversalisCaches implements ShouldQueue {
             $this->items = UniversalisCache::world($this->world)->pluck('item_id');
         }
 
-        foreach ($this->items->chunk(100) as $chunk) {
-            UpdateUniversalisCacheChunk::dispatch($this->world, $chunk);
+        // Filter down to only items that have not been updated recently, or without price data
+        $this->items = UniversalisCache::world($this->world)->whereIn('item_id', $this->items)->needsUpdate()->get();
+
+        // Only make make request(s) to Universalis if there are items to update
+        if ($this->items->count()) {
+            foreach ($this->items->chunk(100) as $chunk) {
+                UpdateUniversalisCacheChunk::dispatch($this->world, $chunk);
+            }
         }
     }
 }
