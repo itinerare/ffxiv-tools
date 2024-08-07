@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider {
         Paginator::useBootstrapFive();
 
         RateLimiter::for('universalis-cache-updates', function (object $job) {
-            return Limit::perHour(1)->by($job->world);
+            return Limit::perMinutes(config('ffxiv.universalis.rate_limit_lifetime'), 1)->by($job->world);
         });
     }
 }

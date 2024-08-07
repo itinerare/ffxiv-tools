@@ -135,8 +135,8 @@ class UniversalisCache extends Model {
     public function updateCaches($world, $chunk) {
         // Filter down to only items that have not been updated recently, or without price data
         $items = self::world($world)->whereIn('item_id', $chunk)->where(function ($query) {
-            $query->where('updated_at', '<', Carbon::now()->subHours(6))
-                ->orWhereNull('min_price_nq')->orWhere('min_price_nq', 0);
+            $query->where('updated_at', '<', Carbon::now()->subMinutes(config('ffxiv.universalis.cache_lifetime')))
+                ->orWhereNull('min_price_nq');
         })->get();
 
         // Only make a request to Universalis if there are items to update
