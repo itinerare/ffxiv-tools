@@ -94,6 +94,9 @@
         @if ($paginator)
             <h3 class="text-center">Showing {{ config('ffxiv.crafting.jobs')[request()->get('character_job')] }} results for {{ ucfirst(request()->get('world')) }}</h3>
             @include('_universalis_note')
+            <p class="text-center">
+                Recommendations are made on the basis of trade velocity, profit margin (given the currently selected settings), and data recency.
+            </p>
 
             {{ $paginator->links('crafting.pagination', ['itemName' => 'recipe']) }}
 

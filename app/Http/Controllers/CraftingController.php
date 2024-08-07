@@ -82,25 +82,37 @@ class CraftingController extends Controller {
                 });
                 $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients);
 
-                $rankedRecipes = collect($recipes)->sortByDesc(function ($recipe) use ($settings, $ingredients) {
-                    // Don't recommend recipes that have no sale velocity
+                $rankedRecipes = collect($recipes)->filter(function ($recipe) use ($settings, $ingredients) {
                     if (($recipe->priceData->first()->hq_sale_velocity ?? 0) == 0 && ($recipe->priceData->first()->nq_sale_velocity ?? 0) == 0) {
-                        return 0;
+                        return false;
                     }
-                    // Don't recommend recipes with a last upload older 12 hours
                     if ($recipe->priceData->first()->last_upload_time < Carbon::now()->subHours(12)) {
-                        return 0;
+                        return false;
                     }
 
-                    $weight = 1 - ($recipe->priceData->first()->last_upload_time->diffInHours(Carbon::now()) / 100);
+                    $profit = $recipe->calculateProfitPer($ingredients, 1, $settings);
+                    if ($recipe->can_hq) {
+                        if (($profit['hq'] ?? 0) <= 0) {
+                            return false;
+                        }
+                    } else {
+                        if (($profit['nq'] ?? 0) <= 0) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                })->sortByDesc(function ($recipe) use ($settings, $ingredients) {
+                    $weight = 1 - ($recipe->priceData->first()->last_upload_time->diffInMinutes(Carbon::now()) / 100);
+                    $profit = $recipe->calculateProfitPer($ingredients, 1, $settings);
 
                     if ($recipe->can_hq) {
-                        $weight += (($recipe->calculateProfitPer($ingredients, 1, $settings)['hq'] ?? 0) / 1000);
+                        $weight += (($profit['hq'] ?? 0) / 1000);
 
                         return ($recipe->priceData->first()->hq_sale_velocity ?? 0) * $weight;
                     }
 
-                    $weight += (($recipe->calculateProfitPer($ingredients, 1, $settings)['nq'] ?? 0) / 1000);
+                    $weight += (($profit['nq'] ?? 0) / 1000);
 
                     return ($recipe->priceData->first()->nq_sale_velocity ?? 0) * $weight;
                 })->take(4);
@@ -184,20 +196,6 @@ class CraftingController extends Controller {
                 }
 
                 $rankedItems = $items->sortByDesc(function ($item, $itemId) {
-                    // Don't recommend items that have no sale velocity
-                    if (($item['priceData']->nq_sale_velocity ?? 0) == 0) {
-                        return 0;
-                    }
-                    // Don't recommend items with a last upload older 12 hours
-                    if ($item['priceData']->last_upload_time < Carbon::now()->subHours(12)) {
-                        return 0;
-                    }
-
-                    // Do not recommend crystals
-                    if (in_array($itemId, (array) config('ffxiv.crafting.crystals'))) {
-                        return 0;
-                    }
-
                     $weight = 1 - ($item['priceData']->last_upload_time->diffInHours(Carbon::now()) / 100);
                     $weight += (($item['priceData']->nq_sale_velocity ?? 0) / 100);
 
