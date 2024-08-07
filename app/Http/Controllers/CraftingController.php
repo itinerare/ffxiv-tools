@@ -92,7 +92,7 @@ class CraftingController extends Controller {
                         return 0;
                     }
 
-                    $weight = 1;
+                    $weight = 1 - ($recipe->priceData->first()->last_upload_time->diffInHours(Carbon::now()) / 100);
 
                     if ($recipe->can_hq) {
                         $weight += (($recipe->calculateProfitPer($ingredients, 1, $settings)['hq'] ?? 0) / 1000);
