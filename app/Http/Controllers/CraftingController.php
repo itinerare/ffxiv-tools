@@ -195,7 +195,20 @@ class CraftingController extends Controller {
                     $items = $items->where('gameItem.gather_data.perceptionReq', 0);
                 }
 
-                $rankedItems = $items->sortByDesc(function ($item, $itemId) {
+                $rankedItems = $items->filter(function ($item, $itemId) {
+                    if (($item['priceData']->hq_sale_velocity ?? 0) == 0 && ($item['priceData']->nq_sale_velocity ?? 0) == 0) {
+                        return false;
+                    }
+                    if ($item['priceData']->last_upload_time < Carbon::now()->subHours(12)) {
+                        return false;
+                    }
+
+                    if (in_array($itemId, (array) config('ffxiv.crafting.crystals'))) {
+                        return false;
+                    }
+
+                    return true;
+                })->sortByDesc(function ($item, $itemId) {
                     $weight = 1 - ($item['priceData']->last_upload_time->diffInHours(Carbon::now()) / 100);
                     $weight += (($item['priceData']->nq_sale_velocity ?? 0) / 100);
 

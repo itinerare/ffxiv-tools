@@ -46,8 +46,8 @@
             <h3 class="text-center">Showing results for {{ ucfirst(request()->get('world')) }}</h3>
             @include('_universalis_note')
             <p class="text-center">
-                The items listed here correspond to items presently used in the corresponding level range's crafting recipes, and which are consequently liable to be in demand. Recommendations are made on the basis of both price and trade velocity, while
-                the complete list is ordered by price alone.
+                The items listed here correspond to items presently used in the corresponding level range's crafting recipes, and which are consequently liable to be in demand. Recommendations are made on the basis of price, trade velocity, and data
+                recency, while the complete list is ordered by price alone.
             </p>
 
             {{ $paginator->links('crafting.pagination', ['itemName' => 'item']) }}
