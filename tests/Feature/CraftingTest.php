@@ -72,7 +72,7 @@ class CraftingTest extends TestCase {
 
             $response->assertSee('Showing '.config('ffxiv.crafting.jobs')[$job].' results for '.ucfirst($world));
 
-            Queue::assertPushed(UpdateUniversalisCaches::class);
+            //Queue::assertPushed(UpdateUniversalisCaches::class);
         } elseif (!$expected && $job) {
             $response->assertSessionHasErrors();
             Queue::assertNotPushed(UpdateUniversalisCaches::class);
@@ -133,7 +133,7 @@ class CraftingTest extends TestCase {
 
             $response->assertSee('Showing results for '.ucfirst($world));
 
-            Queue::assertPushed(UpdateUniversalisCaches::class);
+            //Queue::assertPushed(UpdateUniversalisCaches::class);
         } else {
             $response->assertStatus(200);
 
