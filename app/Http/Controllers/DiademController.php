@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\UpdateUniversalisCaches;
 use App\Models\GameItem;
 use App\Models\UniversalisCache;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DiademController extends Controller {
@@ -31,6 +32,12 @@ class DiademController extends Controller {
             if ($isValid && $diademItems->count() == UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems->toArray())->count() && $diademItems->count() == GameItem::whereIn('item_id', $diademItems->toArray())->count()) {
                 // Check and, if necessary, update cached data
                 UpdateUniversalisCaches::dispatch($request->get('world'));
+
+                // If the job will not be rate-limited, inform the user that the update has been queued and set the page to reload
+                if (!UniversalisCache::where('updated_at', '>', Carbon::now()->subMinutes(config('ffxiv.universalis.rate_limit_lifetime')))->exists()) {
+                    flash('An update has been queued to fetch the latest price data from Universalis. This page will refresh in two minutes to load the new data.')->success();
+                    $updateRefresh = true;
+                }
 
                 // Get cached item records
                 $items = UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems)->with('gameItem')->get();
@@ -82,8 +89,9 @@ class DiademController extends Controller {
         }
 
         return view('diadem.index', [
-            'items'       => $availableItems ?? [],
-            'rankedItems' => $rankedItems ?? [],
+            'items'         => $availableItems ?? [],
+            'rankedItems'   => $rankedItems ?? [],
+            'updateRefresh' => $updateRefresh ?? null,
         ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\UpdateUniversalisCaches;
 use App\Models\GameRecipe;
+use App\Models\UniversalisCache;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -58,6 +59,12 @@ class CraftingController extends Controller {
             if ($isValid && $request->get('character_job') && in_array($request->get('character_job'), array_keys((array) config('ffxiv.crafting.jobs')))) {
                 // Check and, if necessary, update cached data
                 UpdateUniversalisCaches::dispatch($request->get('world'));
+
+                // If the job will not be rate-limited, inform the user that the update has been queued and set the page to reload
+                if (!UniversalisCache::where('updated_at', '>', Carbon::now()->subMinutes(config('ffxiv.universalis.rate_limit_lifetime')))->exists()) {
+                    flash('An update has been queued to fetch the latest price data from Universalis. This page will refresh in two minutes to load the new data.')->success();
+                    $updateRefresh = true;
+                }
 
                 $ranges = collect(config('ffxiv.crafting.ranges'));
                 $currentRange = $ranges->forPage($request->get('page') ?? 1, 1)->first();
@@ -132,6 +139,7 @@ class CraftingController extends Controller {
             'paginator'     => isset($recipes) ? (new LengthAwarePaginator($recipes, $ranges->count(), 1))->withPath('/crafting')->appends($request->query()) : null,
             'rankedRecipes' => $rankedRecipes ?? null,
             'ingredients'   => $ingredients ?? null,
+            'updateRefresh' => $updateRefresh ?? null,
         ]);
     }
 
@@ -172,6 +180,12 @@ class CraftingController extends Controller {
             if ($isValid) {
                 // Check and, if necessary, update cached data
                 UpdateUniversalisCaches::dispatch($request->get('world'));
+
+                // If the job will not be rate-limited, inform the user that the update has been queued and set the page to reload
+                if (!UniversalisCache::where('updated_at', '>', Carbon::now()->subMinutes(config('ffxiv.universalis.rate_limit_lifetime')))->exists()) {
+                    flash('An update has been queued to fetch the latest price data from Universalis. This page will refresh in two minutes to load the new data.')->success();
+                    $updateRefresh = true;
+                }
 
                 // Collect recipes so as to collect their ingredients
                 $recipes = GameRecipe::orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $currentRange['min']);
@@ -226,6 +240,7 @@ class CraftingController extends Controller {
             'world'         => $request->get('world') ?? null,
             'paginator'     => isset($items) ? (new LengthAwarePaginator($items ?? [], $ranges->count(), 1))->withPath('/gathering')->appends($request->query()) : null,
             'rankedItems'   => $rankedItems ?? null,
+            'updateRefresh' => $updateRefresh ?? null,
         ]);
     }
 }
