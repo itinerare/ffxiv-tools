@@ -24,14 +24,19 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="col-md mb-3">
+                                <div class="mb-3">
                                     {{ html()->label('Job', 'character_job')->class('form-label') }}
                                     {{ html()->select('character_job', config('ffxiv.crafting.jobs'), request()->get('character_job') ?? null)->class('form-select')->placeholder('Select Job') }}
                                 </div>
 
-                                <div class="col-md mt-0 mt-md-4 mb-3">
+                                <div class="mt-0 mt-md-4 mb-3">
                                     {{ html()->checkbox('no_master', request()->get('no_master') ?? 0)->class('form-check-input') }}
                                     {{ html()->label('Don\'t include master recipes', 'no_master')->class('form-check-label') }}
+                                </div>
+
+                                <div class="mb-3">
+                                    {{ html()->label('Minimum profit per (impacts recommendations)', 'min_profit')->class('form-label') }}
+                                    {{ html()->number('min_profit', request()->get('min_profit') ?? null)->class('form-control') }}
                                 </div>
                             </div>
                             <div class="col-md">
@@ -103,24 +108,28 @@
             <div class="card bg-light-subtle border-0 mb-4">
                 <div class="card-body">
                     <h4>Recommended Recipes:</h4>
-                    <div class="row">
-                        @foreach ($rankedRecipes as $recipe)
-                            <div class="col-md-3 text-center">
-                                <h5>
-                                    <small>{{ $loop->iteration }}.</small>
-                                    <a href="#recipe-{{ $recipe->item_id }}">{{ $recipe->gameItem?->name }}</a>
-                                </h5>
-                                Profit Per: {!! $recipe->displayProfitPer($ingredients, $settings) !!}<br />
-                                <small>
-                                    Sales per day:
-                                    @if ($recipe->can_hq)
-                                        {{ isset($recipe->priceData->first()->hq_sale_velocity) ? number_format($recipe->priceData->first()->hq_sale_velocity) : '(No Data)' }} HQ /
-                                    @endif
-                                    {{ isset($recipe->priceData->first()->nq_sale_velocity) ? number_format($recipe->priceData->first()->nq_sale_velocity) : '(No Data)' }}{{ $recipe->can_hq ? ' NQ' : '' }}
-                                </small>
-                            </div>
-                        @endforeach
-                    </div>
+                    @if ($rankedRecipes->count())
+                        <div class="row">
+                            @foreach ($rankedRecipes as $recipe)
+                                <div class="col-md-3 text-center">
+                                    <h5>
+                                        <small>{{ $loop->iteration }}.</small>
+                                        <a href="#recipe-{{ $recipe->item_id }}">{{ $recipe->gameItem?->name }}</a>
+                                    </h5>
+                                    Profit Per: {!! $recipe->displayProfitPer($ingredients, $settings) !!}<br />
+                                    <small>
+                                        Sales per day:
+                                        @if ($recipe->can_hq)
+                                            {{ isset($recipe->priceData->first()->hq_sale_velocity) ? number_format($recipe->priceData->first()->hq_sale_velocity) : '(No Data)' }} HQ /
+                                        @endif
+                                        {{ isset($recipe->priceData->first()->nq_sale_velocity) ? number_format($recipe->priceData->first()->nq_sale_velocity) : '(No Data)' }}{{ $recipe->can_hq ? ' NQ' : '' }}
+                                    </small>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-center">None!{{ request()->get('min_profit') && request()->get('min_profit') > 0 ? ' Consider adjusting your settings.' : '' }}</p>
+                    @endif
                 </div>
             </div>
 

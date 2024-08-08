@@ -18,6 +18,7 @@ class CraftingController extends Controller {
         $request->validate([
             'character_job'         => ['nullable', Rule::in(array_keys((array) config('ffxiv.crafting.jobs')))],
             'no_master'             => 'nullable|boolean',
+            'min_profit'            => 'nullable|numeric',
             'purchase_precrafts'    => 'nullable|boolean',
             'prefer_hq'             => 'nullable|boolean',
             'include_crystals'      => 'nullable|boolean',
@@ -81,7 +82,7 @@ class CraftingController extends Controller {
                 });
                 $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients);
 
-                $rankedRecipes = collect($recipes)->filter(function ($recipe) use ($settings, $ingredients) {
+                $rankedRecipes = collect($recipes)->filter(function ($recipe) use ($request, $settings, $ingredients) {
                     if (($recipe->priceData->first()->hq_sale_velocity ?? 0) == 0 && ($recipe->priceData->first()->nq_sale_velocity ?? 0) == 0) {
                         return false;
                     }
@@ -91,11 +92,11 @@ class CraftingController extends Controller {
 
                     $profit = $recipe->calculateProfitPer($ingredients, 1, $settings);
                     if ($recipe->can_hq) {
-                        if (($profit['hq'] ?? 0) <= 0) {
+                        if (($profit['hq'] ?? 0) <= 0 || ($request->get('min_profit') && ($profit['hq'] ?? 0) < $request->get('min_profit'))) {
                             return false;
                         }
                     } else {
-                        if (($profit['nq'] ?? 0) <= 0) {
+                        if (($profit['nq'] ?? 0) <= 0 || ($request->get('min_profit') && ($profit['nq'] ?? 0) < $request->get('min_profit'))) {
                             return false;
                         }
                     }
