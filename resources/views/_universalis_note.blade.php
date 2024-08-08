@@ -3,6 +3,6 @@
     Updates are queued on viewing data for a world and may take a minute or two to be fetched (provided Universalis is currently healthy).
 </p>
 
-@if (isset($updateRefresh) and $updateRefresh)
+@if (isset($universalisUpdate) and $universalisUpdate)
     <meta http-equiv="refresh" content="120">
 @endif
