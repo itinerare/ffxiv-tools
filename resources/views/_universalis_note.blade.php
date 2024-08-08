@@ -4,5 +4,5 @@
 </p>
 
 @if (isset($universalisUpdate) and $universalisUpdate)
-    <meta http-equiv="refresh" content="120">
+    <meta http-equiv="refresh" content="60">
 @endif
