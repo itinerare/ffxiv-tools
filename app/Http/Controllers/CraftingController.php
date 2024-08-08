@@ -32,6 +32,7 @@ class CraftingController extends Controller {
             // Assemble selected settings into an array for easy passing to price calculator function
             $settings = [
                 'character_job'         => $request->get('character_job') ?? null,
+                'min_profit'            => $request->get('min_profit') ?? null,
                 'no_master'             => $request->get('no_master') ?? 0,
                 'purchase_precrafts'    => $request->get('purchase_precrafts') ?? 0,
                 'prefer_hq'             => $request->get('prefer_hq') ?? 0,
