@@ -4,6 +4,41 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.15.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.14.0...v2.15.0) (2024-08-09)
+
+### Features
+
+* Add flash messages, automatic page refresh when queueing universalis cache update job ([264500](https://code.itinerare.net/itinerare/ffxiv-tools/commit/2645001d1c9f3a0574096d99b7bfe9220862d376))
+* Make universalis data cache lifetime/rate limit configurable ([ea0d10](https://code.itinerare.net/itinerare/ffxiv-tools/commit/ea0d10fa61bdd6aa5d80829d5f37c9955c790dae))
+* Move record filtering to Universalis update dispatch job ([f91055](https://code.itinerare.net/itinerare/ffxiv-tools/commit/f91055bfa6f8b54a6f32e5252cd20bf92fa0d11c))
+* Move universalis cache update, flash to own function; only dispatch job if necessary ([010fb8](https://code.itinerare.net/itinerare/ffxiv-tools/commit/010fb8962149073debda1dbd8de08f4c3ee6f7fc))
+* Reduce default Universalis rate limit lifetime to 45 minutes ([31ddeb](https://code.itinerare.net/itinerare/ffxiv-tools/commit/31ddebf36d010c919bc72a82d1d2befae0f2930f))
+
+##### Crafting
+
+* Add "min profit per" setting ([8c38d5](https://code.itinerare.net/itinerare/ffxiv-tools/commit/8c38d59f98c7cb57732e0090c66704b8ef84841c))
+* Filter out recipes disqualified from recommended before ordering ([4ed682](https://code.itinerare.net/itinerare/ffxiv-tools/commit/4ed682eb94175af418caa85224c013415b4dfc95))
+* Weight recommended recipes by data age ([205077](https://code.itinerare.net/itinerare/ffxiv-tools/commit/205077d89bde1bfdd52ccf65b939e3e484317e05))
+
+##### Gathering
+
+* Filter out items disqualified from recommended before ordering ([d49f54](https://code.itinerare.net/itinerare/ffxiv-tools/commit/d49f5499a3c25e40df003b30b23fce19901a8c04))
+* Weight recommended items by data age ([5d2964](https://code.itinerare.net/itinerare/ffxiv-tools/commit/5d29640904353496618afdd2cbfeff41d75b3a76))
+
+### Bug Fixes
+
+
+##### Crafting
+
+* Persist min profit setting across world changes ([571e8f](https://code.itinerare.net/itinerare/ffxiv-tools/commit/571e8f35c84c7bfcd0dc72fd60879ca21bc52488))
+
+##### Tests
+
+* Don't check for universalis cache update job ([b368b7](https://code.itinerare.net/itinerare/ffxiv-tools/commit/b368b704bfc86b0c537bd5c72c69aa3e065e940c))
+
+
+---
+
 ## [2.14.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.13.0...v2.14.0) (2024-08-07)
 
 ### Features
