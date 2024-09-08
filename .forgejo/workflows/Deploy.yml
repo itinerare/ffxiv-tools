@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: https://code.itinerare.net/internal/checkout@v4
 
       - name: Set up SSH key
         run: |
