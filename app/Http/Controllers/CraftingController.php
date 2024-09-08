@@ -28,21 +28,22 @@ class CraftingController extends Controller {
             'shop_preference'       => 'nullable|in:0,1,2',
         ]);
 
-        if ($request->all()) {
-            // Assemble selected settings into an array for easy passing to price calculator function
-            $settings = [
-                'character_job'         => $request->get('character_job') ?? null,
-                'min_profit'            => $request->get('min_profit') ?? null,
-                'no_master'             => $request->get('no_master') ?? 0,
-                'purchase_precrafts'    => $request->get('purchase_precrafts') ?? 0,
-                'prefer_hq'             => $request->get('prefer_hq') ?? 0,
-                'include_crystals'      => $request->get('include_crystals') ?? 0,
-                'include_aethersands'   => $request->get('include_aethersands') ?? 0,
-                'purchase_drops'        => $request->get('purchase_drops') ?? 0,
-                'gatherable_preference' => $request->get('gatherable_preference') ?? 0,
-                'shop_preference'       => $request->get('shop_preference') ?? 0,
-            ];
-        }
+        // Assemble selected settings into an array for easy passing to price calculator function
+        $settings = [
+            'world'                 => $request->get('world') ?? null,
+            'character_job'         => $request->get('character_job') ?? null,
+            'min_profit'            => $request->get('min_profit') ?? null,
+            'no_master'             => $request->get('no_master') ?? 0,
+            'purchase_precrafts'    => $request->get('purchase_precrafts') ?? 0,
+            'prefer_hq'             => $request->get('prefer_hq') ?? 0,
+            'include_crystals'      => $request->get('include_crystals') ?? 0,
+            'include_aethersands'   => $request->get('include_aethersands') ?? 0,
+            'purchase_drops'        => $request->get('purchase_drops') ?? 0,
+            'gatherable_preference' => $request->get('gatherable_preference') ?? 0,
+            'shop_preference'       => $request->get('shop_preference') ?? 0,
+        ];
+
+        $request = $this->handleSettingsCookie($request, 'craftingSettings', $settings);
 
         if ($request->get('world')) {
             // Validate that the world exists
@@ -143,18 +144,14 @@ class CraftingController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getGatheringCalculator(Request $request) {
-        $request->validate([
+        $inputs = [
+            'world'           => 'nullable|string',
             'character_job'   => ['nullable', Rule::in(array_keys((array) config('ffxiv.gathering.jobs')))],
             'include_limited' => 'nullable|in:0,1,2',
-        ]);
+        ];
+        $request->validate($inputs);
 
-        if ($request->all()) {
-            // Assemble selected settings into an array for easy passing to price calculator function
-            $settings = [
-                'character_job'   => $request->get('character_job') ?? null,
-                'include_limited' => $request->get('include_limited') ?? 0,
-            ];
-        }
+        $request = $this->handleSettingsCookie($request, 'gatheringSettings', $inputs);
 
         if ($request->get('world')) {
             // Validate that the world exists

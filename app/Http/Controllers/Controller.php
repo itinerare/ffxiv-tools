@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Jobs\UpdateUniversalisCaches;
 use App\Models\UniversalisCache;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 abstract class Controller {
@@ -37,5 +39,39 @@ abstract class Controller {
         }
 
         return false;
+    }
+
+    /**
+     * Handles cookie handling/information retrieval for a given request.
+     *
+     * @param string $name
+     * @param array  $inputs
+     *
+     * @return Request $request
+     */
+    public function handleSettingsCookie(Request $request, $name, $inputs) {
+        // If there's an extant cookie, fetch and decode settings stored on it
+        if (Cookie::get($name)) {
+            $cookieInputs = json_decode(Cookie::get($name), true);
+        }
+
+        foreach (array_keys($inputs) as $value) {
+            if ($request->get($value)) {
+                // If set in the incoming request, just set the input from the request to be stored
+                $inputs[$value] = $request->get($value);
+            } elseif ($cookieInputs[$value] ?? null) {
+                // Otherwise retrieve prior input from cookie and both store it for later and add it to the request
+                $inputs[$value] = $cookieInputs[$value];
+                $request->merge([$value => $cookieInputs[$value]]);
+            } else {
+                // Otherwise, unset the value entirely so that only relevant information is saved to the cookie
+                unset($inputs[$value]);
+            }
+        }
+
+        // Queue the cookie itself with the assembled data
+        Cookie::queue($name, json_encode($inputs), 2592000);
+
+        return $request;
     }
 }
