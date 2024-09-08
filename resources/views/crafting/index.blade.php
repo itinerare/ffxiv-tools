@@ -16,7 +16,7 @@
                 </h2>
                 <div id="craftingSettings" class="accordion-collapse collapse {{ $paginator ? '' : 'show' }}" data-bs-parent="#craftingSettingsContainer">
                     <div class="accordion-body">
-                        <p>Note that data is saved to your device as a cookie for ease of retrieval. Alternately, you can save the URL after submitting your settings.</p>
+                        <p>Note that data is saved to your device as a cookie for convenience. Alternately, you can save the URL after submitting your settings.</p>
 
                         {{ html()->form('GET')->open() }}
                         {{ html()->hidden('world', request()->get('world') ?? null) }}

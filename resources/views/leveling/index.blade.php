@@ -26,7 +26,7 @@
             </h2>
             <div id="Settings" class="accordion-collapse collapse {{ request()->all() ? '' : 'show' }}" data-bs-parent="#SettingsSelect">
                 <div class="accordion-body">
-                    <p>Note that data is saved to your device as a cookie for ease of retrieval. Alternately, you can save the URL after submitting your settings.</p>
+                    <p>Note that data is saved to your device as a cookie for convenience. Alternately, you can save the URL after submitting your settings.</p>
                     {{ html()->form('GET')->open() }}
                     <h5>Character</h5>
                     <div class="mb-3">
