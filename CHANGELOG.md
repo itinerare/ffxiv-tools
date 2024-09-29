@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.16.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.15.0...v2.16.0) (2024-09-29)
+
+### Features
+
+* Add cookie storage for settings; closes #14 ([1049f1](https://code.itinerare.net/itinerare/ffxiv-tools/commit/1049f1a6e76f742d38333d69ef300d9ceb29476b))
+
+
+---
+
 ## [2.15.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.14.0...v2.15.0) (2024-08-09)
 
 ### Features
