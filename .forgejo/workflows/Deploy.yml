@@ -23,7 +23,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<'ENDSSH'
           cd "${{ vars.DEPLOY_APP_PATH }}"
-          php artisan down --render="errors::503"
+          php artisan down --render="errors::503" --refresh=30
           git pull
           composer install -no --no-dev
           php artisan migrate --force
