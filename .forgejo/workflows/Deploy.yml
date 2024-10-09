@@ -10,9 +10,6 @@ jobs:
     runs-on: docker
 
     steps:
-      - name: Checkout code
-        uses: https://code.itinerare.net/internal/checkout@v4
-
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
