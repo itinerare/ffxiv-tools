@@ -25,7 +25,7 @@
                             @foreach ($rankedItems[$class] as $name => $item)
                                 <li>
                                     <div class="float-end text-end">
-                                        <a href="{{ $item->gameItem->universalisUrl }}" class="btn btn-secondary btn-sm">Universalis</a>
+                                        <a href="{{ $item->gameItem->universalisUrl }}" class="btn btn-secondary btn-sm py-0">Universalis</a>
                                     </div>
                                     <strong>{{ $name }}</strong> -
                                     @include('_item_price_display', ['priceData' => $item])
@@ -38,7 +38,7 @@
                                     @foreach ($node as $name => $item)
                                         <li>
                                             <div class="float-end text-end">
-                                                <a href="{{ $item->gameItem->universalisUrl }}" class="btn btn-secondary btn-sm">Universalis</a>
+                                                <a href="{{ $item->gameItem->universalisUrl }}" class="btn btn-secondary btn-sm py-0">Universalis</a>
                                             </div>
                                             <strong>{{ $name }}</strong> -
                                             @include('_item_price_display', ['priceData' => $item])
