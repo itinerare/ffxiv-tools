@@ -13,6 +13,13 @@ class DiademController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getDiadem(Request $request) {
+        $inputs = [
+            'world' => 'nullable|string',
+        ];
+        $request->validate($inputs);
+
+        $request = $this->handleSettingsCookie($request, 'diademSettings', $inputs);
+
         if ($request->get('world')) {
             // Validate that the world exists
             $isValid = false;
