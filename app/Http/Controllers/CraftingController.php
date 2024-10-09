@@ -15,7 +15,8 @@ class CraftingController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getCraftingCalculator(Request $request) {
-        $request->validate([
+        $inputs = [
+            'world'                 => 'nullable|string',
             'character_job'         => ['nullable', Rule::in(array_keys((array) config('ffxiv.crafting.jobs')))],
             'no_master'             => 'nullable|boolean',
             'min_profit'            => 'nullable|numeric',
@@ -26,11 +27,13 @@ class CraftingController extends Controller {
             'purchase_drops'        => 'nullable|boolean',
             'gatherable_preference' => 'nullable|in:0,1,2',
             'shop_preference'       => 'nullable|in:0,1,2',
-        ]);
+        ];
+        $request->validate($inputs);
+
+        $request = $this->handleSettingsCookie($request, 'craftingSettings', $inputs);
 
         // Assemble selected settings into an array for easy passing to price calculator function
         $settings = [
-            'world'                 => $request->get('world') ?? null,
             'character_job'         => $request->get('character_job') ?? null,
             'min_profit'            => $request->get('min_profit') ?? null,
             'no_master'             => $request->get('no_master') ?? 0,
@@ -42,8 +45,6 @@ class CraftingController extends Controller {
             'gatherable_preference' => $request->get('gatherable_preference') ?? 0,
             'shop_preference'       => $request->get('shop_preference') ?? 0,
         ];
-
-        $request = $this->handleSettingsCookie($request, 'craftingSettings', $settings);
 
         if ($request->get('world')) {
             // Validate that the world exists
