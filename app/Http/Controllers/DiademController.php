@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GameItem;
 use App\Models\UniversalisCache;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DiademController extends Controller {
@@ -65,7 +66,25 @@ class DiademController extends Controller {
                         $itemCache = $items->where('item_id', $id)->first();
 
                         return [$itemCache->gameItem->name => $itemCache];
-                    })->sortByDesc('min_price_nq')->take(5);
+                    })->filter(function ($item, $itemId) {
+                        if (($item->hq_sale_velocity ?? 0) == 0 && ($item->nq_sale_velocity ?? 0) == 0) {
+                            return false;
+                        }
+                        if ($item->last_upload_time < Carbon::now()->subHours(12)) {
+                            return false;
+                        }
+                        // Filter out items priced higher than 250,000 gil, as these in all likelihood do not reflect actual prices
+                        if ($item->min_price_nq > 250000) {
+                            return false;
+                        }
+
+                        return true;
+                    })->sortByDesc(function ($item) {
+                        $weight = 1 - ($item->last_upload_time->diffInHours(Carbon::now()) / 100);
+                        $weight += (($item->nq_sale_velocity ?? 0) / 100);
+
+                        return $item->min_price_nq * $weight;
+                    })->take(5);
                 });
 
                 // Update the list organized by node with price information

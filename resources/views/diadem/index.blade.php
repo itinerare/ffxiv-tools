@@ -9,6 +9,9 @@
     @if (request()->get('world') && $items)
         <h3 class="text-center">Showing Results for {{ ucfirst(request()->get('world')) }}</h3>
         @include('_universalis_note')
+        <p class="text-center">
+            "Top Five" items are listed on the basis of price, trade velocity, and data recency.
+        </p>
 
         <div class="card-group">
             @foreach ($items as $class => $chunk)
@@ -21,6 +24,9 @@
                         <ol>
                             @foreach ($rankedItems[$class] as $name => $item)
                                 <li>
+                                    <div class="float-end text-end">
+                                        <a href="{{ $item->gameItem->universalisUrl }}" class="btn btn-secondary btn-sm">Universalis</a>
+                                    </div>
                                     <strong>{{ $name }}</strong> -
                                     @include('_item_price_display', ['priceData' => $item])
                                 </li>
@@ -31,6 +37,9 @@
                                 <ul>
                                     @foreach ($node as $name => $item)
                                         <li>
+                                            <div class="float-end text-end">
+                                                <a href="{{ $item->gameItem->universalisUrl }}" class="btn btn-secondary btn-sm">Universalis</a>
+                                            </div>
                                             <strong>{{ $name }}</strong> -
                                             @include('_item_price_display', ['priceData' => $item])
                                         </li>
