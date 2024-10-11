@@ -4,6 +4,28 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.17.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.16.0...v2.17.0) (2024-10-11)
+
+### Features
+
+* Add maintenance view ([a3ba94](https://code.itinerare.net/itinerare/ffxiv-tools/commit/a3ba949fd9307584178722cf6ee185e95067fd2c))
+
+##### Diadem
+
+* Improve recommendation logic ([dbd21e](https://code.itinerare.net/itinerare/ffxiv-tools/commit/dbd21ecca8b04e83c69f526997d57adf816b751f))
+* Store world setting via cookie ([e5a18f](https://code.itinerare.net/itinerare/ffxiv-tools/commit/e5a18fb713ba4b765b43711b763d6bae4c7e1fa4))
+
+### Bug Fixes
+
+* Don't use layout for 503 view ([905053](https://code.itinerare.net/itinerare/ffxiv-tools/commit/9050535ed59c409f4241f9c117d7b2aad0620294))
+
+##### Crafting
+
+* Use validation rule array for cookie construction ([bc2252](https://code.itinerare.net/itinerare/ffxiv-tools/commit/bc225209e5e56aa60631bec2e780ba6c85bb1c54))
+
+
+---
+
 ## [2.16.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.15.0...v2.16.0) (2024-09-29)
 
 ### Features

@@ -70,7 +70,7 @@
             "./vendor/marcocesarato/php-conventional-changelog/conventional-changelog"
         ],
         "release": [
-            "./vendor/marcocesarato/php-conventional-changelog/conventional-changelog --commit"
+            "./vendor/marcocesarato/php-conventional-changelog/conventional-changelog --commit --no-tag"
         ]
     },
     "extra": {
@@ -88,5 +88,5 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "version": "2.16.0"
+    "version": "2.17.0"
 }
