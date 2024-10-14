@@ -84,7 +84,7 @@ class CraftingController extends Controller {
                         return $item['id'];
                     });
                 });
-                $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients);
+                $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients)->toArray();
 
                 $rankedRecipes = collect($recipes)->filter(function ($recipe) use ($settings, $ingredients) {
                     if (($recipe->priceData->first()->hq_sale_velocity ?? 0) == 0 && ($recipe->priceData->first()->nq_sale_velocity ?? 0) == 0) {
@@ -94,7 +94,7 @@ class CraftingController extends Controller {
                         return false;
                     }
 
-                    $profit = $recipe->calculateProfitPer($ingredients, 1, $settings);
+                    $profit = $recipe->calculateProfitPer($ingredients, true, $settings);
                     if ($recipe->can_hq) {
                         if ($profit['hq'] <= 0 || ($settings['min_profit'] && $profit['hq'] < $settings['min_profit'])) {
                             return false;
@@ -108,7 +108,7 @@ class CraftingController extends Controller {
                     return true;
                 })->sortByDesc(function ($recipe) use ($settings, $ingredients) {
                     $weight = 1 - ($recipe->priceData->first()->last_upload_time->diffInMinutes(Carbon::now()) / 100);
-                    $profit = $recipe->calculateProfitPer($ingredients, 1, $settings);
+                    $profit = $recipe->calculateProfitPer($ingredients, true, $settings);
 
                     if ($recipe->can_hq) {
                         $weight += (($profit['hq'] ?? 0) / 1000);

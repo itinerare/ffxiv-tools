@@ -311,9 +311,9 @@ class GameRecipe extends Model {
     /**
      * Calculate cost to make a given recipe.
      *
-     * @param \Illuminate\Support\Collection $ingredients
-     * @param array|null                     $settings
-     * @param int                            $quantity
+     * @param array      $ingredients
+     * @param array|null $settings
+     * @param int        $quantity
      *
      * @return int
      */
@@ -334,11 +334,11 @@ class GameRecipe extends Model {
     /**
      * Calculate effective cost of a given ingredient.
      *
-     * @param int                            $item
-     * @param array                          $ingredient
-     * @param \Illuminate\Support\Collection $ingredients
-     * @param array|null                     $settings
-     * @param int                            $quantity
+     * @param int        $item
+     * @param array      $ingredient
+     * @param array      $ingredients
+     * @param array|null $settings
+     * @param int        $quantity
      *
      * @return int
      */
