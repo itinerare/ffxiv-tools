@@ -143,7 +143,7 @@ class LevelingController extends Controller {
                         $dungeon[$level]['runs'] = max(0, ceil($dungeon[$level]['remaining_exp'] / $dungeon[$level]['exp']));
 
                         // Calculate rested EXP use
-                        if ($request->get('temp_rested') && $restedRemaining > 0 && $dungeon[$level]['remaining_exp'] > 0) {
+                        if ($request->get('temp_rested') && ($restedRemaining ?? 0) > 0 && $dungeon[$level]['remaining_exp'] > 0) {
                             // Rested EXP gained from all intended runs of the dungeon, limited by how much remains in the pool (approximately)
                             $dungeon[$level]['rested'] = round(min(min(1, $restedRemaining) * (int) config('ffxiv.leveling_data.level_data.level_exp.'.$level), ((int) $dungeonSearch->last() * .5) * $dungeon[$level]['runs']));
 

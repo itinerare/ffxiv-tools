@@ -51,6 +51,7 @@ class DiademController extends Controller {
                     $availableItems['MIN'][] = collect($node);
                 }
                 $availableItems = collect($availableItems);
+                $rankedItems = [];
 
                 // Assemble a list of available items ranked by price for each class
                 // This provides a very simple overview
