@@ -148,7 +148,7 @@ class GameItem extends Model {
                     self::where('item_id', $item)->update([
                         'name'        => $itemData[$item] ?? null,
                         'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
-                        'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
+                        'gather_data' => isset($gatheringData) && $gatheringData->where('itemId', $item)->first() ? [
                             'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
                             'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
                         ] : null,
@@ -163,7 +163,7 @@ class GameItem extends Model {
                     'item_id'     => $item,
                     'name'        => $itemData[$item] ?? null,
                     'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
-                    'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
+                    'gather_data' => isset($gatheringData) && $gatheringData->where('itemId', $item)->first() ? [
                         'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
                         'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
                     ] : null,

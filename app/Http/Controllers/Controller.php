@@ -59,7 +59,7 @@ abstract class Controller {
             if ($request->get($value)) {
                 // If set in the incoming request, just set the input from the request to be stored
                 $inputs[$value] = $request->get($value);
-            } elseif ($cookieInputs[$value] ?? null) {
+            } elseif (isset($cookieInputs[$value])) {
                 // Otherwise retrieve prior input from cookie and both store it for later and add it to the request
                 $inputs[$value] = $cookieInputs[$value];
                 $request->merge([$value => $cookieInputs[$value]]);
