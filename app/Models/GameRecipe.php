@@ -14,7 +14,7 @@ class GameRecipe extends Model {
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'recipe_id', 'item_id', 'job', 'level', 'rlvl', 'stars', 'yield', 'ingredients', 'can_hq',
@@ -32,7 +32,7 @@ class GameRecipe extends Model {
     /**
      * The relationships that should always be loaded.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $with = [
         'gameItem',
@@ -48,7 +48,7 @@ class GameRecipe extends Model {
     /**
      * Whether the model contains timestamps to be saved and updated.
      *
-     * @var string
+     * @var bool
      */
     public $timestamps = false;
 
@@ -414,7 +414,7 @@ class GameRecipe extends Model {
      * @param array|null $settings
      * @param int        $quantity
      *
-     * @return array
+     * @return array|null
      */
     public function calculateProfitPer($ingredients, $hq = false, $settings = null, $quantity = 1) {
         $priceData = $this->priceData->first();

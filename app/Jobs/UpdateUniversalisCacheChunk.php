@@ -19,7 +19,7 @@ class UpdateUniversalisCacheChunk implements ShouldQueue {
     /**
      * The number of seconds to wait before retrying the job.
      *
-     * @var int
+     * @var array
      */
     public $backoff = [5, 10];
 

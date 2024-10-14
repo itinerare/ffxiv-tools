@@ -12,7 +12,7 @@ class GameItem extends Model {
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'item_id', 'name', 'gather_data', 'is_mob_drop', 'shop_data',
@@ -38,7 +38,7 @@ class GameItem extends Model {
     /**
      * Whether the model contains timestamps to be saved and updated.
      *
-     * @var string
+     * @var bool
      */
     public $timestamps = false;
 

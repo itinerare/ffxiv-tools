@@ -13,7 +13,7 @@ class UniversalisCache extends Model {
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'item_id', 'world',
@@ -100,7 +100,7 @@ class UniversalisCache extends Model {
     /**
      * Get the time of last update on Universalis, formatted for display.
      *
-     * @return string
+     * @return string|null
      */
     public function getUploadTimeAttribute() {
         if (!isset($this->attributes['last_upload_time'])) {
