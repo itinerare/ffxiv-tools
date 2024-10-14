@@ -24,7 +24,7 @@ class AddHqToRecipes extends Command {
     /**
      * Execute the console command.
      */
-    public function handle() {
+    public function handle(): int {
         // Get recipes where HQ is set to 1; this may be correct, or it may be due to absent information
         $recipes = GameRecipe::where('can_hq', 1);
 
@@ -56,5 +56,7 @@ class AddHqToRecipes extends Command {
         } else {
             $this->line('No recipes to process!');
         }
+
+        return 0;
     }
 }

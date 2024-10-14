@@ -29,9 +29,9 @@ class UpdateUniversalisCache extends Command {
     /**
      * Execute the console command.
      */
-    public function handle() {
+    public function handle(): int {
         // Gather all relevant game item IDs
-        $items = collect(config('ffxiv.diadem_items.node_data'))->flatten();
+        $items = collect((array) config('ffxiv.diadem_items.node_data'))->flatten();
 
         $this->line('Initializing records as necessary...');
         if ($items->count() > GameItem::whereIn('item_id', $items->toArray())->whereNotNull('name')->count()) {
@@ -48,12 +48,12 @@ class UpdateUniversalisCache extends Command {
             $this->line("\n");
         }
 
-        if ((collect(config('ffxiv.data_centers'))->flatten()->count() * $items->count()) > UniversalisCache::whereIn('item_id', $items->toArray())->count()) {
+        if ((collect((array) config('ffxiv.data_centers'))->flatten()->count() * $items->count()) > UniversalisCache::whereIn('item_id', $items->toArray())->count()) {
             $this->info('Queuing jobs to create Universalis cache records...');
-            $universalisRecordsBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count() * (int) ceil($items->count() / 100));
+            $universalisRecordsBar = $this->output->createProgressBar(collect((array) config('ffxiv.data_centers'))->flatten()->count() * (int) ceil($items->count() / 100));
             $universalisRecordsBar->start();
 
-            foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
+            foreach (collect((array) config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
                 if ($items->count() > UniversalisCache::world(strtolower($world))->whereIn('item_id', $items->toArray())->count()) {
                     foreach ($items->chunk(100) as $chunk) {
                         CreateUniversalisRecords::dispatch(strtolower($world), $chunk);
@@ -83,8 +83,8 @@ class UpdateUniversalisCache extends Command {
         if (App::environment() == 'production') {
             // Queue jobs to update cached data from Universalis
             $this->info('Queuing jobs to update cached Universalis data...');
-            $universalisBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count());
-            foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
+            $universalisBar = $this->output->createProgressBar(collect((array) config('ffxiv.data_centers'))->flatten()->count());
+            foreach (collect((array) config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
                 UpdateUniversalisCaches::dispatch(strtolower($world));
                 $universalisBar->advance();
             }
@@ -99,5 +99,7 @@ class UpdateUniversalisCache extends Command {
         }
 
         $this->line('Done!');
+
+        return 0;
     }
 }
