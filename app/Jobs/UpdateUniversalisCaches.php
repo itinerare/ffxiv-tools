@@ -21,7 +21,7 @@ class UpdateUniversalisCaches implements ShouldQueue {
      * Create a new job instance.
      *
      * @param string $world
-     * @param @param \Illuminate\Support\Collection|null $items
+     * @param \Illuminate\Support\Collection|null $items
      */
     public function __construct(
         public $world,
