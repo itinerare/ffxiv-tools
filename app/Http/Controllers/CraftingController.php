@@ -59,20 +59,20 @@ class CraftingController extends Controller {
                 }
             }
 
-            if ($isValid && $request->get('character_job') && in_array($request->get('character_job'), array_keys((array) config('ffxiv.crafting.jobs')))) {
+            if ($isValid && $settings['character_job'] && in_array($settings['character_job'], array_keys((array) config('ffxiv.crafting.jobs')))) {
                 // Check and, if necessary, update cached data
                 $universalisUpdate = $this->checkUniversalisCache($request->get('world'));
 
                 $ranges = collect(config('ffxiv.crafting.ranges'));
                 $currentRange = $ranges->forPage($request->get('page') ?? 1, 1)->first();
 
-                $recipes = GameRecipe::job($request->get('character_job'))->with(['priceData' => function ($query) use ($request) {
+                $recipes = GameRecipe::job($settings['character_job'])->with(['priceData' => function ($query) use ($request) {
                     $query->where('world', $request->get('world'))->limit(1);
                 }])->orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $currentRange['min']);
                 if (isset($currentRange['max'])) {
                     $recipes = $recipes->where('rlvl', '<=', $currentRange['max']);
                 }
-                if ($request->get('no_master')) {
+                if ($settings['no_master']) {
                     $recipes = $recipes->where('stars', 0);
                 }
 
@@ -86,7 +86,7 @@ class CraftingController extends Controller {
                 });
                 $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients);
 
-                $rankedRecipes = collect($recipes)->filter(function ($recipe) use ($request, $settings, $ingredients) {
+                $rankedRecipes = collect($recipes)->filter(function ($recipe) use ($settings, $ingredients) {
                     if (($recipe->priceData->first()->hq_sale_velocity ?? 0) == 0 && ($recipe->priceData->first()->nq_sale_velocity ?? 0) == 0) {
                         return false;
                     }
@@ -96,11 +96,11 @@ class CraftingController extends Controller {
 
                     $profit = $recipe->calculateProfitPer($ingredients, 1, $settings);
                     if ($recipe->can_hq) {
-                        if (($profit['hq'] ?? 0) <= 0 || ($request->get('min_profit') && ($profit['hq'] ?? 0) < $request->get('min_profit'))) {
+                        if (($profit['hq'] ?? 0) <= 0 || ($settings['min_profit'] && ($profit['hq'] ?? 0) < $settings['min_profit'])) {
                             return false;
                         }
                     } else {
-                        if (($profit['nq'] ?? 0) <= 0 || ($request->get('min_profit') && ($profit['nq'] ?? 0) < $request->get('min_profit'))) {
+                        if (($profit['nq'] ?? 0) <= 0 || ($settings['min_profit'] && ($profit['nq'] ?? 0) < $settings['min_profit'])) {
                             return false;
                         }
                     }
@@ -132,7 +132,7 @@ class CraftingController extends Controller {
         return view('crafting.index', [
             'dataCenters'       => config('ffxiv.data_centers'),
             'world'             => $request->get('world') ?? null,
-            'settings'          => $settings ?? null,
+            'settings'          => $settings,
             'paginator'         => isset($recipes) ? (new LengthAwarePaginator($recipes, $ranges->count(), 1))->withPath('/crafting')->appends($request->query()) : null,
             'rankedRecipes'     => $rankedRecipes ?? null,
             'ingredients'       => $ingredients ?? null,
@@ -225,7 +225,7 @@ class CraftingController extends Controller {
         return view('gathering.index', [
             'dataCenters'       => config('ffxiv.data_centers'),
             'world'             => $request->get('world') ?? null,
-            'paginator'         => isset($items) ? (new LengthAwarePaginator($items ?? [], $ranges->count(), 1))->withPath('/gathering')->appends($request->query()) : null,
+            'paginator'         => isset($items) ? (new LengthAwarePaginator($items, $ranges?->count(), 1))->withPath('/gathering')->appends($request->query()) : null,
             'rankedItems'       => $rankedItems ?? null,
             'universalisUpdate' => $universalisUpdate ?? null,
         ]);
