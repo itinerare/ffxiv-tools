@@ -133,7 +133,7 @@ class CraftingController extends Controller {
             'dataCenters'       => config('ffxiv.data_centers'),
             'world'             => $request->get('world') ?? null,
             'settings'          => $settings,
-            'paginator'         => isset($recipes) ? (new LengthAwarePaginator($recipes, $ranges->count(), 1))->withPath('/crafting')->appends($request->query()) : null,
+            'paginator'         => isset($recipes) ? (new LengthAwarePaginator($recipes, count((array) config('ffxiv.crafting.ranges')), 1))->withPath('/crafting')->appends($request->query()) : null,
             'rankedRecipes'     => $rankedRecipes ?? null,
             'ingredients'       => $ingredients ?? null,
             'universalisUpdate' => $universalisUpdate ?? null,
@@ -225,7 +225,7 @@ class CraftingController extends Controller {
         return view('gathering.index', [
             'dataCenters'       => config('ffxiv.data_centers'),
             'world'             => $request->get('world') ?? null,
-            'paginator'         => isset($items) ? (new LengthAwarePaginator($items, $ranges?->count(), 1))->withPath('/gathering')->appends($request->query()) : null,
+            'paginator'         => isset($items) ? (new LengthAwarePaginator($items, count((array) config('ffxiv.crafting.ranges')), 1))->withPath('/gathering')->appends($request->query()) : null,
             'rankedItems'       => $rankedItems ?? null,
             'universalisUpdate' => $universalisUpdate ?? null,
         ]);
