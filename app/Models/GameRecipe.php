@@ -401,7 +401,7 @@ class GameRecipe extends Model {
             return -1;
         }
 
-        $cost += $ingredient['priceData']?->min_price_nq * ($ingredient['amount'] * $quantity);
+        $cost += $ingredient['priceData']->min_price_nq * ($ingredient['amount'] * $quantity);
 
         return $cost;
     }
