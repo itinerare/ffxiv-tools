@@ -36,7 +36,7 @@ class UpdateUniversalisCache extends Command {
         $this->line('Initializing records as necessary...');
         if ($items->count() > GameItem::whereIn('item_id', $items->toArray())->whereNotNull('name')->count()) {
             $this->info('Queuing jobs to create game item records...');
-            $gameItemsBar = $this->output->createProgressBar(ceil($items->count() / 100));
+            $gameItemsBar = $this->output->createProgressBar((int) ceil($items->count() / 100));
             $gameItemsBar->start();
 
             foreach ($items->chunk(100) as $chunk) {
@@ -50,7 +50,7 @@ class UpdateUniversalisCache extends Command {
 
         if ((collect(config('ffxiv.data_centers'))->flatten()->count() * $items->count()) > UniversalisCache::whereIn('item_id', $items->toArray())->count()) {
             $this->info('Queuing jobs to create Universalis cache records...');
-            $universalisRecordsBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count() * ceil($items->count() / 100));
+            $universalisRecordsBar = $this->output->createProgressBar(collect(config('ffxiv.data_centers'))->flatten()->count() * (int) ceil($items->count() / 100));
             $universalisRecordsBar->start();
 
             foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
