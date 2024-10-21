@@ -7,7 +7,6 @@ use App\Jobs\UpdateGameItem;
 use App\Jobs\UpdateUniversalisCaches;
 use App\Models\GameRecipe;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -48,9 +47,6 @@ class CraftingTest extends TestCase {
         Queue::fake();
 
         if ($job) {
-            // Fake requests to XIVAPI to save time/requests
-            Http::fake(['xivapi.com/*' => Http::response(['Results' => []])]);
-
             // Initialize recipe, game item, and Universalis records, echoing the chunking usually used to do so
             (new GameRecipe)->retrieveRecipes($job);
 
@@ -109,9 +105,6 @@ class CraftingTest extends TestCase {
         Queue::fake();
 
         if ($world) {
-            // Fake requests to XIVAPI to save time/requests
-            Http::fake(['xivapi.com/*' => Http::response(['Results' => []])]);
-
             // Initialize recipe, game item, and Universalis records, echoing the chunking usually used to do so
             (new GameRecipe)->retrieveRecipes(15);
 

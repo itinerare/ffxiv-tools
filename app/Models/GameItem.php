@@ -86,19 +86,26 @@ class GameItem extends Model {
     **********************************************************************************************/
 
     /**
-     * Record items by ID, fetching names from XIVAPI.
+     * Record items by ID, retrieving data from Teamcraft's dumps.
      *
      * @param \Illuminate\Support\Collection $chunk
      *
      * @return bool
      */
     public function recordItem($chunk) {
-        // Format a comma-separated string of item IDs to make a request to XIVAPI
-        $idString = implode(',', $chunk->toArray());
-
-        $response = Http::retry(3, 100, throw: false)->get('https://xivapi.com/item?ids='.$idString);
-
-        // Fetch Teamcraft's monster drop data and gathering data
+        // Fetch Teamcraft's item, monster drop, and gathering data
+        $itemData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/refs/heads/staging/libs/data/src/lib/json/items.json');
+        if ($itemData->successful()) {
+            $itemData = json_decode($itemData->getBody(), true);
+            if (is_array($itemData)) {
+                // Format the response for easy access to item info
+                $itemData = collect($itemData)->mapWithKeys(function ($value, $key) {
+                    return [$key => $value['en']];
+                });
+            } else {
+                unset($itemData);
+            }
+        }
         $dropData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/drop-sources.json');
         if ($dropData->successful()) {
             $dropData = json_decode($dropData->getBody(), true);
@@ -130,59 +137,36 @@ class GameItem extends Model {
             });
         }
 
-        // Start processing the XIVAPI response
-        if ($response->successful()) {
-            // The response is then returned as JSON
-            $response = json_decode($response->getBody(), true);
-
-            // Affirm that the response is an array for safety
-            if (is_array($response)) {
-                // Format the response for easy access to item info
-                $response = collect($response['Results'])->mapWithKeys(function ($value, $key) {
-                    return [$value['ID'] => $value];
-                });
-
-                foreach ($chunk as $item) {
-                    if (self::where('item_id', $item)->exists()) {
-                        if (self::where('item_id', $item)->whereNull('name')->exists()) {
-                            self::where('item_id', $item)->update([
-                                'name'        => $response[$item]['Name'] ?? null,
-                                'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
-                                'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
-                                    'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
-                                    'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
-                                ] : null,
-                                'shop_data' => isset($shopItems[$item]) ? [
-                                    'currency' => $shopItems[$item]['id'] ?? null,
-                                    'cost'     => $shopItems[$item]['amount'] ?? null,
-                                ] : null,
-                            ]);
-                        }
-                    } else {
-                        self::create([
-                            'item_id'     => $item,
-                            'name'        => $response[$item]['Name'] ?? null,
-                            'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
-                            'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
-                                'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
-                                'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
-                            ] : null,
-                            'shop_data' => isset($shopItems[$item]) ? [
-                                'currency' => $shopItems[$item]['id'] ?? null,
-                                'cost'     => $shopItems[$item]['amount'] ?? null,
-                            ] : null,
-                        ]);
-                    }
-                }
-            }
-        } else {
-            foreach ($chunk as $item) {
-                if (!self::where('item_id', $item)->exists()) {
-                    self::create([
-                        'item_id' => $item,
-                        'name'    => null,
+        foreach ($chunk as $item) {
+            if (self::where('item_id', $item)->exists()) {
+                if (self::where('item_id', $item)->whereNull('name')->exists()) {
+                    self::where('item_id', $item)->update([
+                        'name'        => $itemData[$item] ?? null,
+                        'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
+                        'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
+                            'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
+                            'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
+                        ] : null,
+                        'shop_data' => isset($shopItems[$item]) ? [
+                            'currency' => $shopItems[$item]['id'] ?? null,
+                            'cost'     => $shopItems[$item]['amount'] ?? null,
+                        ] : null,
                     ]);
                 }
+            } else {
+                self::create([
+                    'item_id'     => $item,
+                    'name'        => $itemData[$item] ?? null,
+                    'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
+                    'gather_data' => $gatheringData->where('itemId', $item)->first() ? [
+                        'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
+                        'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
+                    ] : null,
+                    'shop_data' => isset($shopItems[$item]) ? [
+                        'currency' => $shopItems[$item]['id'] ?? null,
+                        'cost'     => $shopItems[$item]['amount'] ?? null,
+                    ] : null,
+                ]);
             }
         }
 

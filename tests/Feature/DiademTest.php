@@ -6,7 +6,6 @@ use App\Jobs\CreateUniversalisRecords;
 use App\Jobs\UpdateGameItem;
 use App\Jobs\UpdateUniversalisCaches;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -26,9 +25,6 @@ class DiademTest extends TestCase {
         Queue::fake();
 
         if ($initialized) {
-            // Fake requests to XIVAPI to save time/requests
-            Http::fake(['xivapi.com/*' => Http::response(['Results' => []])]);
-
             $items = collect(config('ffxiv.diadem_items.node_data'))->flatten();
 
             // Initialize game item and Universalis records, echoing the chunking usually used to do so
