@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\CraftingController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
 
 class GameItem extends Model {
     use HasFactory;
@@ -93,8 +93,10 @@ class GameItem extends Model {
      * @return bool
      */
     public function recordItem($chunk) {
+        $requestHelper = new CraftingController;
+
         // Fetch Teamcraft's item, monster drop, and gathering data
-        $itemData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/refs/heads/staging/libs/data/src/lib/json/items.json');
+        $itemData = $requestHelper->teamcraftDataRequest('items.json');
         if ($itemData->successful()) {
             $itemData = json_decode($itemData->getBody(), true);
             if (is_array($itemData)) {
@@ -106,14 +108,16 @@ class GameItem extends Model {
                 unset($itemData);
             }
         }
-        $dropData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/drop-sources.json');
+
+        $dropData = $requestHelper->teamcraftDataRequest('drop-sources.json');
         if ($dropData->successful()) {
             $dropData = json_decode($dropData->getBody(), true);
             if (!is_array($dropData)) {
                 unset($dropData);
             }
         }
-        $gatheringData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/gathering-items.json');
+
+        $gatheringData = $requestHelper->teamcraftDataRequest('gathering-items.json');
         if ($gatheringData->successful()) {
             $gatheringData = json_decode($gatheringData->getBody(), true);
             if (is_array($gatheringData)) {
@@ -122,7 +126,8 @@ class GameItem extends Model {
                 unset($gatheringData);
             }
         }
-        $shopData = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/72867c936b7d46a52c176d374b0969d6f24e3877/libs/data/src/lib/json/shops.json');
+
+        $shopData = $requestHelper->teamcraftDataRequest('shops.json');
         if ($shopData->successful()) {
             $shopData = json_decode($shopData->getBody(), true);
 

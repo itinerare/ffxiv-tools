@@ -6,6 +6,7 @@ use App\Models\GameRecipe;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
 
 class CraftingController extends Controller {
@@ -228,5 +229,18 @@ class CraftingController extends Controller {
             'rankedItems'       => $rankedItems ?? null,
             'universalisUpdate' => $universalisUpdate ?? null,
         ]);
+    }
+
+    /**
+     * Fetches a given file from Teamcraft's dumps.
+     *
+     * @param string $filename
+     *
+     * @return $request
+     */
+    public function teamcraftDataRequest($filename) {
+        $request = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/refs/heads/staging/libs/data/src/lib/json/'.$filename);
+
+        return $request;
     }
 }

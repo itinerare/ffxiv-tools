@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\CraftingController;
 use App\Jobs\CreateUniversalisRecords;
 use App\Jobs\UpdateGameItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
 
 class GameRecipe extends Model {
     use HasFactory;
@@ -104,9 +104,10 @@ class GameRecipe extends Model {
      * @return bool
      */
     public function retrieveRecipes($job) {
-        // Fetch Teamcraft's recipe and market items dumps from GitHub
-        $response = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/recipes-per-item.json');
-        $marketItems = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json/market-items.json');
+        $requestHelper = new CraftingController;
+
+        // Fetch Teamcraft's recipe and market item dumps
+        $marketItems = $requestHelper->teamcraftDataRequest('market-items.json');
         if ($marketItems->successful()) {
             $marketItems = json_decode($marketItems->getBody(), true);
 
@@ -115,6 +116,7 @@ class GameRecipe extends Model {
             }
         }
 
+        $response = $requestHelper->teamcraftDataRequest('recipes-per-item.json');
         if ($response->successful()) {
             $response = json_decode($response->getBody(), true);
 
