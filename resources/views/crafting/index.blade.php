@@ -137,14 +137,14 @@
                     <div class="card-body">
                         <div id="recipe-{{ $recipe->item_id }}" class="recipe-body mb-2">
                             <h4 class="mb-3">
+                                <div class="float-end text-end ms-1">
+                                    <a href="{{ $recipe->gameItem->universalisUrl }}" class="btn btn-secondary btn-sm">Universalis</a>
+                                    <a href="{{ $recipe->gameItem->teamcraftUrl }}" class="btn btn-secondary btn-sm">Teamcraft</a>
+                                </div>
                                 {{ $recipe->gameItem->name ?? 'Unknown Item' }}
                                 <small class="text-muted">
                                     ・ @include('crafting._recipe_info_display')
                                 </small>
-                                <div class="float-end text-end">
-                                    <a href="{{ $recipe->gameItem->universalisUrl }}" class="btn btn-secondary btn-sm">Universalis</a>
-                                    <a href="{{ $recipe->gameItem->teamcraftUrl }}" class="btn btn-secondary btn-sm">Teamcraft</a>
-                                </div>
                             </h4>
                             <div class="row">
                                 <div class="col-md-5">
