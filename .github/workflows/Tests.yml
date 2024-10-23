@@ -1,4 +1,4 @@
-name: Laravel Tests
+name: Tests
 
 on:
   pull_request:
@@ -6,7 +6,6 @@ on:
       - '**'
     types:
       - opened
-      - edited
       - synchronize
       - reopened
 
