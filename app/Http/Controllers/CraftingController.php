@@ -236,7 +236,7 @@ class CraftingController extends Controller {
      *
      * @param string $filename
      *
-     * @return $request
+     * @return \Illuminate\Http\Client\Response $request
      */
     public function teamcraftDataRequest($filename) {
         $request = Http::retry(3, 100, throw: false)->get('https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/refs/heads/staging/libs/data/src/lib/json/'.$filename);
