@@ -6,6 +6,7 @@ use App\Models\GameItem;
 use App\Models\UniversalisCache;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class DiademController extends Controller {
     /**
@@ -15,27 +16,19 @@ class DiademController extends Controller {
      */
     public function getDiadem(Request $request) {
         $inputs = [
-            'world' => 'nullable|string',
+            'world' => [
+                'nullable', 'string',
+                Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
+            ],
         ];
         $request->validate($inputs);
 
         $request = $this->handleSettingsCookie($request, 'diademSettings', $inputs);
 
         if ($request->get('world')) {
-            // Validate that the world exists
-            $isValid = false;
-            foreach (config('ffxiv.data_centers') as $dataCenters) {
-                foreach ($dataCenters as $dataCenter) {
-                    if (in_array(ucfirst($request->get('world')), $dataCenter)) {
-                        $isValid = true;
-                        break;
-                    }
-                }
-            }
-
             $diademItems = collect(config('ffxiv.diadem_items.node_data'))->flatten();
 
-            if ($isValid && $diademItems->count() == UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems->toArray())->count() && $diademItems->count() == GameItem::whereIn('item_id', $diademItems->toArray())->count()) {
+            if ($diademItems->count() == UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems->toArray())->count() && $diademItems->count() == GameItem::whereIn('item_id', $diademItems->toArray())->count()) {
                 // Check and, if necessary, update cached data
                 $universalisUpdate = $this->checkUniversalisCache($request->get('world'));
 
@@ -98,12 +91,6 @@ class DiademController extends Controller {
                         });
                     });
                 });
-            } elseif ($isValid) {
-                // Do nothing, and do not unset the selected world
-            } else {
-                // If the world name is invalid, unset it
-                // so that the frontend treats it as not having selected anything
-                $request->offsetUnset('world');
             }
         }
 

@@ -17,7 +17,10 @@ class CraftingController extends Controller {
      */
     public function getCraftingCalculator(Request $request) {
         $inputs = [
-            'world'                 => 'nullable|string',
+            'world'                 => [
+                'nullable', 'string',
+                Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
+            ],
             'character_job'         => ['nullable', Rule::in(array_keys((array) config('ffxiv.crafting.jobs')))],
             'no_master'             => 'nullable|boolean',
             'min_profit'            => 'nullable|numeric',
@@ -48,18 +51,7 @@ class CraftingController extends Controller {
         ];
 
         if ($request->get('world')) {
-            // Validate that the world exists
-            $isValid = false;
-            foreach (config('ffxiv.data_centers') as $dataCenters) {
-                foreach ($dataCenters as $dataCenter) {
-                    if (in_array($request->get('world'), $dataCenter)) {
-                        $isValid = true;
-                        break;
-                    }
-                }
-            }
-
-            if ($isValid && $settings['character_job'] && in_array($settings['character_job'], array_keys((array) config('ffxiv.crafting.jobs')))) {
+            if ($settings['character_job'] && in_array($settings['character_job'], array_keys((array) config('ffxiv.crafting.jobs')))) {
                 // Check and, if necessary, update cached data
                 $universalisUpdate = $this->checkUniversalisCache($request->get('world'));
 
@@ -120,12 +112,6 @@ class CraftingController extends Controller {
 
                     return ($recipe->priceData->first()->nq_sale_velocity ?? 0) * $weight;
                 })->take(4);
-            } elseif ($isValid) {
-                // Do nothing, and do not unset the selected world
-            } else {
-                // If the world name is invalid, unset it
-                // so that the frontend treats it as not having selected anything
-                $request->offsetUnset('world');
             }
         }
 
@@ -147,7 +133,10 @@ class CraftingController extends Controller {
      */
     public function getGatheringCalculator(Request $request) {
         $inputs = [
-            'world'           => 'nullable|string',
+            'world'           => [
+                'nullable', 'string',
+                Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
+            ],
             'character_job'   => ['nullable', Rule::in(array_keys((array) config('ffxiv.gathering.jobs')))],
             'include_limited' => 'nullable|in:0,1,2',
         ];
@@ -156,70 +145,53 @@ class CraftingController extends Controller {
         $request = $this->handleSettingsCookie($request, 'gatheringSettings', $inputs);
 
         if ($request->get('world')) {
-            // Validate that the world exists
-            $isValid = false;
-            foreach (config('ffxiv.data_centers') as $dataCenters) {
-                foreach ($dataCenters as $dataCenter) {
-                    if (in_array($request->get('world'), $dataCenter)) {
-                        $isValid = true;
-                        break;
-                    }
-                }
-            }
-
             $ranges = collect(config('ffxiv.crafting.ranges'));
             $currentRange = $ranges->forPage($request->get('page') ?? 1, 1)->first();
 
-            if ($isValid) {
-                // Check and, if necessary, update cached data
-                $universalisUpdate = $this->checkUniversalisCache($request->get('world'));
+            // Check and, if necessary, update cached data
+            $universalisUpdate = $this->checkUniversalisCache($request->get('world'));
 
-                // Collect recipes so as to collect their ingredients
-                $recipes = GameRecipe::orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $currentRange['min']);
-                if (isset($currentRange['max'])) {
-                    $recipes = $recipes->where('rlvl', '<=', $currentRange['max']);
-                }
-                $recipes = $recipes->get();
-
-                // Gather ingredients and assemble common info for them
-                $ingredients = $recipes->pluck('ingredients')->transform(function ($ingredient, $key) {
-                    return collect($ingredient)->transform(function ($item, $key) {
-                        return $item['id'];
-                    });
-                });
-                $items = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients)
-                    ->whereNotNull('gameItem.gather_data')
-                    ->whereNotNull('priceData')->sortByDesc('priceData.min_price_nq');
-
-                // Filter down to only unrestricted mats
-                if (!$request->get('include_limited')) {
-                    $items = $items->where('gameItem.gather_data.perceptionReq', 0);
-                }
-
-                $rankedItems = $items->filter(function ($item, $itemId) {
-                    if (($item['priceData']->hq_sale_velocity ?? 0) == 0 && ($item['priceData']->nq_sale_velocity ?? 0) == 0) {
-                        return false;
-                    }
-                    if ($item['priceData']->last_upload_time < Carbon::now()->subHours(12)) {
-                        return false;
-                    }
-
-                    if (in_array($itemId, (array) config('ffxiv.crafting.crystals'))) {
-                        return false;
-                    }
-
-                    return true;
-                })->sortByDesc(function ($item, $itemId) {
-                    $weight = 1 - ($item['priceData']->last_upload_time->diffInHours(Carbon::now()) / 100);
-                    $weight += (($item['priceData']->nq_sale_velocity ?? 0) / 100);
-
-                    return $item['priceData']->min_price_nq * $weight;
-                })->take(8);
-            } else {
-                // If the world name is invalid, unset it
-                // so that the frontend treats it as not having selected anything
-                $request->offsetUnset('world');
+            // Collect recipes so as to collect their ingredients
+            $recipes = GameRecipe::orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $currentRange['min']);
+            if (isset($currentRange['max'])) {
+                $recipes = $recipes->where('rlvl', '<=', $currentRange['max']);
             }
+            $recipes = $recipes->get();
+
+            // Gather ingredients and assemble common info for them
+            $ingredients = $recipes->pluck('ingredients')->transform(function ($ingredient, $key) {
+                return collect($ingredient)->transform(function ($item, $key) {
+                    return $item['id'];
+                });
+            });
+            $items = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients)
+                ->whereNotNull('gameItem.gather_data')
+                ->whereNotNull('priceData')->sortByDesc('priceData.min_price_nq');
+
+            // Filter down to only unrestricted mats
+            if (!$request->get('include_limited')) {
+                $items = $items->where('gameItem.gather_data.perceptionReq', 0);
+            }
+
+            $rankedItems = $items->filter(function ($item, $itemId) {
+                if (($item['priceData']->hq_sale_velocity ?? 0) == 0 && ($item['priceData']->nq_sale_velocity ?? 0) == 0) {
+                    return false;
+                }
+                if ($item['priceData']->last_upload_time < Carbon::now()->subHours(12)) {
+                    return false;
+                }
+
+                if (in_array($itemId, (array) config('ffxiv.crafting.crystals'))) {
+                    return false;
+                }
+
+                return true;
+            })->sortByDesc(function ($item) {
+                $weight = 1 - ($item['priceData']->last_upload_time->diffInHours(Carbon::now()) / 100);
+                $weight += (($item['priceData']->nq_sale_velocity ?? 0) / 100);
+
+                return $item['priceData']->min_price_nq * $weight;
+            })->take(8);
         }
 
         return view('gathering.index', [
