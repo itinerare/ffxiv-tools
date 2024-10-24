@@ -40,10 +40,12 @@ class CraftingTest extends TestCase {
      *
      * @param string   $world
      * @param int|null $job
+     * @param bool     $withCookie
      * @param bool     $expected
+     * @param int      $status
      */
     #[DataProvider('craftingProfitProvider')]
-    public function testGetCraftingCalc($world, $job, $expected): void {
+    public function testGetCraftingCalc($world, $job, $withCookie, $expected, $status): void {
         Queue::fake();
 
         if ($job) {
@@ -60,12 +62,14 @@ class CraftingTest extends TestCase {
             }
         }
 
-        $response = $this->get('crafting'.($world ? '?world='.$world.($job ? '&character_job='.$job : '') : ''));
+        $response = $this->withCookies($withCookie ? [
+            'craftingSettings' => json_encode(['world' => $world, 'character_job' => $job]),
+        ] : [])->get('crafting'.($world && !$withCookie ? '?world='.$world.($job ? '&character_job='.$job : '') : ''));
+
+        $response->assertStatus($status);
 
         if ($expected && $job) {
-            $response->assertStatus(200);
             $response->assertSessionHasNoErrors();
-
             $response->assertSee('Showing '.config('ffxiv.crafting.jobs')[$job].' results for '.ucfirst($world));
 
             //Queue::assertPushed(UpdateUniversalisCaches::class);
@@ -73,24 +77,29 @@ class CraftingTest extends TestCase {
             $response->assertSessionHasErrors();
             Queue::assertNotPushed(UpdateUniversalisCaches::class);
         } elseif ($expected) {
-            $response->assertStatus(200);
             $response->assertSee('Settings');
             Queue::assertNotPushed(UpdateUniversalisCaches::class);
         } else {
-            $response->assertStatus(200);
+            if ($world) {
+                $response->assertSessionHasErrors();
+                $response->assertCookieMissing('craftingSettings');
+            } else {
+                $response->assertSee('Please select a world!');
+            }
 
-            $response->assertSee('Please select a world!');
             Queue::assertNotPushed(UpdateUniversalisCaches::class);
         }
     }
 
     public static function craftingProfitProvider() {
         return [
-            'no world'                 => [null, 0, 0],
-            'valid world'              => ['zalera', 0, 1],
-            'valid world, valid job'   => ['zalera', 15, 1],
-            'valid world, invalid job' => ['zalera', 16, 0],
-            'invalid world'            => ['fake', 0, 0],
+            'no world'                            => [null, 0, 0, 0, 200],
+            'valid world'                         => ['zalera', 0, 0, 1, 200],
+            'valid world, with cookie'            => ['zalera', 0, 1, 1, 200],
+            'valid world, valid job'              => ['zalera', 15, 0, 1, 200],
+            'valid world, valid job, with cookie' => ['zalera', 15, 1, 1, 200],
+            'valid world, invalid job'            => ['zalera', 16, 0, 0, 302],
+            'invalid world'                       => ['fake', 0, 0, 0, 302],
         ];
     }
 
@@ -98,10 +107,12 @@ class CraftingTest extends TestCase {
      * Test getting the gathering profit calculator.
      *
      * @param string $world
+     * @param bool   $withCookie
      * @param bool   $expected
+     * @param int    $status
      */
     #[DataProvider('gatheringProfitProvider')]
-    public function testGetGatheringCalc($world, $expected): void {
+    public function testGetGatheringCalc($world, $withCookie, $expected, $status): void {
         Queue::fake();
 
         if ($world) {
@@ -118,28 +129,36 @@ class CraftingTest extends TestCase {
             }
         }
 
-        $response = $this->get('gathering'.($world ? '?world='.$world : ''));
+        $response = $this->withCookies($withCookie ? [
+            'gatheringSettings' => json_encode(['world' => $world]),
+        ] : [])->get('gathering'.($world && !$withCookie ? '?world='.$world : ''));
+
+        $response->assertStatus($status);
 
         if ($expected) {
-            $response->assertStatus(200);
             $response->assertSessionHasNoErrors();
-
             $response->assertSee('Showing results for '.ucfirst($world));
 
+            $response->assertCookie('gatheringSettings', json_encode(['world' => $world]));
             //Queue::assertPushed(UpdateUniversalisCaches::class);
         } else {
-            $response->assertStatus(200);
+            if ($world) {
+                $response->assertSessionHasErrors();
+                $response->assertCookieMissing('gatheringSettings');
+            } else {
+                $response->assertSee('Please select a world!');
+            }
 
-            $response->assertSee('Please select a world!');
             Queue::assertNotPushed(UpdateUniversalisCaches::class);
         }
     }
 
     public static function gatheringProfitProvider() {
         return [
-            'no world'      => [null, 0],
-            'valid world'   => ['zalera', 1],
-            'invalid world' => ['fake', 0],
+            'no world'                 => [null, 0, 0, 200],
+            'valid world'              => ['zalera', 0, 1, 200],
+            'valid world, with cookie' => ['zalera', 1, 1, 200],
+            'invalid world'            => ['fake', 0, 0, 302],
         ];
     }
 }

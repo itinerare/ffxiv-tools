@@ -59,6 +59,7 @@ class DiademTest extends TestCase {
         } else {
             if ($world) {
                 $response->assertSessionHasErrors();
+                $response->assertCookieMissing('diademSettings');
             } else {
                 $response->assertSee('Please select a world!');
             }

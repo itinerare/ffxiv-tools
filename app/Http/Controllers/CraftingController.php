@@ -137,7 +137,6 @@ class CraftingController extends Controller {
                 'nullable', 'string',
                 Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
             ],
-            'character_job'   => ['nullable', Rule::in(array_keys((array) config('ffxiv.gathering.jobs')))],
             'include_limited' => 'nullable|in:0,1,2',
         ];
         $request->validate($inputs);
