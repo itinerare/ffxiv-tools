@@ -18,10 +18,12 @@ class DiademTest extends TestCase {
      *
      * @param string $world
      * @param bool   $initialized
+     * @param bool   $withCookie
      * @param bool   $expected
+     * @param int    $status
      */
     #[DataProvider('diademProvider')]
-    public function testGetDiadem($world, $initialized, $expected): void {
+    public function testGetDiadem($world, $initialized, $withCookie, $expected, $status): void {
         Queue::fake();
 
         if ($initialized) {
@@ -36,28 +38,43 @@ class DiademTest extends TestCase {
             }
         }
 
-        $response = $this->get('diadem'.($world ? '?world='.$world : ''));
+        $response = $this->withCookies($withCookie ? [
+            'diademSettings' => json_encode(['world' => $world]),
+        ] : [])->get('diadem'.($world && !$withCookie ? '?world='.$world : ''));
 
-        $response->assertStatus(200);
+        $response->assertStatus($status);
 
         if ($expected && $initialized) {
             $response->assertSee('Showing Results for '.ucfirst($world));
+            $response->assertSessionHasNoErrors();
+
             //Queue::assertPushed(UpdateUniversalisCaches::class);
+            $response->assertCookie('diademSettings', json_encode(['world' => $world]));
         } elseif ($expected) {
             $response->assertSee('Item data for '.ucfirst($world));
+            $response->assertSessionHasNoErrors();
+
             Queue::assertNotPushed(UpdateUniversalisCaches::class);
+            $response->assertCookie('diademSettings', json_encode(['world' => $world]));
         } else {
-            $response->assertSee('Please select a world!');
+            if ($world) {
+                $response->assertSessionHasErrors();
+            } else {
+                $response->assertSee('Please select a world!');
+            }
+
             Queue::assertNotPushed(UpdateUniversalisCaches::class);
         }
     }
 
     public static function diademProvider() {
         return [
-            'no world'                 => [null, 0, 0],
-            'valid world'              => ['zalera', 0, 1],
-            'valid world, initialized' => ['zalera', 1, 1],
-            'invalid world'            => ['fake', 0, 0],
+            'no world'                              => [null, 0, 0, 0, 200],
+            'valid world'                           => ['zalera', 0, 0, 1, 200],
+            'valid world, with cookie'              => ['zalera', 0, 1, 1, 200],
+            'valid world, initialized'              => ['zalera', 1, 0, 1, 200],
+            'valid world, initialized, with cookie' => ['zalera', 1, 1, 1, 200],
+            'invalid world'                         => ['fake', 0, 0, 0, 302],
         ];
     }
 }
