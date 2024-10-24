@@ -7,46 +7,46 @@ return [
 
     'North America' => [
         'Aether' => [
-            'Adamantoise', 'Cactuar', 'Faerie', 'Gilgamesh', 'Jenova', 'Midgardsormr', 'Sargatanas', 'Siren',
+            'adamantoise', 'cactuar', 'faerie', 'gilgamesh', 'jenova', 'midgardsormr', 'sargatanas', 'siren',
         ],
         'Primal' => [
-            'Behemoth', 'Excalibur', 'Exodus', 'Famfrit', 'Hyperion', 'Lamia', 'Leviathan', 'Ultros',
+            'behemoth', 'excalibur', 'exodus', 'famfrit', 'hyperion', 'lamia', 'leviathan', 'ultros',
         ],
         'Crystal' => [
-            'Balmung', 'Brynhildr', 'Coeurl', 'Diabolos', 'Goblin', 'Malboro', 'Mateus', 'Zalera',
+            'balmung', 'brynhildr', 'coeurl', 'diabolos', 'goblin', 'malboro', 'mateus', 'zalera',
         ],
         'Dynamis' => [
-            'Cuchulainn', 'Golem', 'Halicarnassus', 'Kraken', 'Maduin', 'Marilith', 'Rafflesia', 'Seraph',
+            'cuchulainn', 'golem', 'halicarnassus', 'kraken', 'maduin', 'marilith', 'rafflesia', 'seraph',
         ],
     ],
     'Europe' => [
         'Chaos' => [
-            'Cerberus', 'Louisoix', 'Moogle', 'Omega', 'Phantom', 'Ragnarok', 'Sagittarius', 'Spriggan',
+            'cerberus', 'louisoix', 'moogle', 'omega', 'phantom', 'ragnarok', 'sagittarius', 'spriggan',
         ],
         'Light' => [
-            'Alpha', 'Lich', 'Odin', 'Phoenix', 'Raiden', 'Shiva', 'Twintania', 'Zodiark',
+            'alpha', 'lich', 'odin', 'phoenix', 'raiden', 'shiva', 'twintania', 'zodiark',
         ],
         'Shadow' => [
-            'Titania', 'Innocence', 'Pixie', 'Tycoon',
+            'titania', 'innocence', 'pixie', 'tycoon',
         ],
     ],
     'Japan' => [
         'Elemental' => [
-            'Aegis', 'Atomos', 'Carbuncle', 'Garuda', 'Gungnir', 'Kujata', 'Tonberry', 'Typhon',
+            'aegis', 'atomos', 'carbuncle', 'garuda', 'gungnir', 'kujata', 'tonberry', 'typhon',
         ],
         'Gaia' => [
-            'Alexander', 'Bahamut', 'Durandal', 'Fenrir', 'Ifrit', 'Ridill', 'Tiamat', 'Ultima',
+            'alexander', 'bahamut', 'durandal', 'fenrir', 'ifrit', 'ridill', 'tiamat', 'ultima',
         ],
         'Mana' => [
-            'Anima', 'Asura', 'Chocobo', 'Hades', 'Ixion', 'Masamune', 'Pandaemonium', 'Titan',
+            'anima', 'asura', 'chocobo', 'hades', 'ixion', 'masamune', 'pandaemonium', 'titan',
         ],
         'Meteor' => [
-            'Belias', 'Mandragora', 'Ramuh', 'Shinryu', 'Unicorn', 'Valefor', 'Yojimbo', 'Zeromus',
+            'belias', 'mandragora', 'ramuh', 'shinryu', 'unicorn', 'valefor', 'yojimbo', 'zeromus',
         ],
     ],
     'Oceania' => [
         'Materia' => [
-            'Bismarck', 'Ravana', 'Sephirot', 'Sophia', 'Zurvan',
+            'bismarck', 'ravana', 'sephirot', 'sophia', 'zurvan',
         ],
     ],
 ];

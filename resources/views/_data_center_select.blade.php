@@ -33,7 +33,7 @@
                         <div class="mb-2">
                             <span class="h5">{{ $dataCenter }}:</span>
                             @foreach ($servers as $server)
-                                <a href="?world={{ strtolower($server) }}{{ $settingsString ?? '' }}" class="btn {{ $world == strtolower($server) ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">{{ $server }}</a>
+                                <a href="?world={{ $server }}{{ $settingsString ?? '' }}" class="btn {{ $world == $server ? 'btn-success' : 'btn-primary' }} py-0 my-1 my-md-0">{{ ucfirst($server) }}</a>
                             @endforeach
                         </div>
                     @endforeach

@@ -54,9 +54,9 @@ class UpdateUniversalisCache extends Command {
             $universalisRecordsBar->start();
 
             foreach (collect((array) config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
-                if ($items->count() > UniversalisCache::world(strtolower($world))->whereIn('item_id', $items->toArray())->count()) {
+                if ($items->count() > UniversalisCache::world($world)->whereIn('item_id', $items->toArray())->count()) {
                     foreach ($items->chunk(100) as $chunk) {
-                        CreateUniversalisRecords::dispatch(strtolower($world), $chunk);
+                        CreateUniversalisRecords::dispatch($world, $chunk);
                         $universalisRecordsBar->advance();
                     }
                 } else {
@@ -85,7 +85,7 @@ class UpdateUniversalisCache extends Command {
             $this->info('Queuing jobs to update cached Universalis data...');
             $universalisBar = $this->output->createProgressBar(collect((array) config('ffxiv.data_centers'))->flatten()->count());
             foreach (collect((array) config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
-                UpdateUniversalisCaches::dispatch(strtolower($world));
+                UpdateUniversalisCaches::dispatch($world);
                 $universalisBar->advance();
             }
             $universalisBar->finish();

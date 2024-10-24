@@ -182,7 +182,7 @@ class GameRecipe extends Model {
             // is large enough that it's worth only dispatching jobs if necessary
             if ($chunk->count()) {
                 foreach (collect(config('ffxiv.data_centers'))->flatten()->toArray() as $world) {
-                    CreateUniversalisRecords::dispatch(strtolower($world), $chunk);
+                    CreateUniversalisRecords::dispatch($world, $chunk);
                 }
             }
         }

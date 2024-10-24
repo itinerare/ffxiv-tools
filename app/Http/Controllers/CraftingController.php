@@ -52,7 +52,7 @@ class CraftingController extends Controller {
             $isValid = false;
             foreach (config('ffxiv.data_centers') as $dataCenters) {
                 foreach ($dataCenters as $dataCenter) {
-                    if (in_array(ucfirst($request->get('world')), $dataCenter)) {
+                    if (in_array($request->get('world'), $dataCenter)) {
                         $isValid = true;
                         break;
                     }
@@ -160,7 +160,7 @@ class CraftingController extends Controller {
             $isValid = false;
             foreach (config('ffxiv.data_centers') as $dataCenters) {
                 foreach ($dataCenters as $dataCenter) {
-                    if (in_array(ucfirst($request->get('world')), $dataCenter)) {
+                    if (in_array($request->get('world'), $dataCenter)) {
                         $isValid = true;
                         break;
                     }
