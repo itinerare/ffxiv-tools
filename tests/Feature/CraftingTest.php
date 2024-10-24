@@ -75,9 +75,13 @@ class CraftingTest extends TestCase {
             //Queue::assertPushed(UpdateUniversalisCaches::class);
         } elseif (!$expected && $job) {
             $response->assertSessionHasErrors();
+
+            $response->assertCookieMissing('craftingSettings');
             Queue::assertNotPushed(UpdateUniversalisCaches::class);
         } elseif ($expected) {
             $response->assertSee('Settings');
+
+            $response->assertCookie('craftingSettings', json_encode(['world' => $world] + ($job ? ['character_job' => $job] : [])));
             Queue::assertNotPushed(UpdateUniversalisCaches::class);
         } else {
             if ($world) {
@@ -93,13 +97,13 @@ class CraftingTest extends TestCase {
 
     public static function craftingProfitProvider() {
         return [
-            'no world'                            => [null, 0, 0, 0, 200],
-            'valid world'                         => ['zalera', 0, 0, 1, 200],
-            'valid world, with cookie'            => ['zalera', 0, 1, 1, 200],
+            'no world'                            => [null, null, 0, 0, 200],
+            'valid world'                         => ['zalera', null, 0, 1, 200],
+            'valid world, with cookie'            => ['zalera', null, 1, 1, 200],
             'valid world, valid job'              => ['zalera', 15, 0, 1, 200],
             'valid world, valid job, with cookie' => ['zalera', 15, 1, 1, 200],
             'valid world, invalid job'            => ['zalera', 16, 0, 0, 302],
-            'invalid world'                       => ['fake', 0, 0, 0, 302],
+            'invalid world'                       => ['fake', null, 0, 0, 302],
         ];
     }
 

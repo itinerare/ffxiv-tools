@@ -48,14 +48,14 @@ class DiademTest extends TestCase {
             $response->assertSee('Showing Results for '.ucfirst($world));
             $response->assertSessionHasNoErrors();
 
-            //Queue::assertPushed(UpdateUniversalisCaches::class);
             $response->assertCookie('diademSettings', json_encode(['world' => $world]));
+            //Queue::assertPushed(UpdateUniversalisCaches::class);
         } elseif ($expected) {
             $response->assertSee('Item data for '.ucfirst($world));
             $response->assertSessionHasNoErrors();
 
-            Queue::assertNotPushed(UpdateUniversalisCaches::class);
             $response->assertCookie('diademSettings', json_encode(['world' => $world]));
+            Queue::assertNotPushed(UpdateUniversalisCaches::class);
         } else {
             if ($world) {
                 $response->assertSessionHasErrors();
