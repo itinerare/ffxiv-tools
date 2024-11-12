@@ -56,7 +56,7 @@ abstract class Controller {
         }
 
         foreach (array_keys($inputs) as $value) {
-            if ($request->get($value)) {
+            if ($request->get($value) !== null) {
                 // If set in the incoming request, just set the input from the request to be stored
                 $inputs[$value] = $request->get($value);
             } elseif (isset($cookieInputs[$value])) {
