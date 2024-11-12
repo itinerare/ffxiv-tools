@@ -31,6 +31,11 @@ class LevelingController extends Controller {
         ];
         $request->validate($inputs);
 
+        if ($request->all() && !$request->get('use_lodestone')) {
+            // Ensure that the bool is set even if disabled
+            // so that manual entry options aren't overridden by the cookie
+            $request->merge(['use_lodestone' => 0]);
+        }
         $request = $this->handleSettingsCookie($request, 'levelingSettings', $inputs);
 
         if ($request->get('use_lodestone')) {
@@ -61,10 +66,6 @@ class LevelingController extends Controller {
             } else {
                 flash('Please enter both a character ID and valid combat class/job to retrieve information from The Lodestone.')->error();
             }
-        } elseif ($request->all()) {
-            // Ensure that the bool is set even if disabled
-            // so that the manual entry options display persistently
-            $request->merge(['use_lodestone' => 0]);
         }
 
         // Cap out EXP at whatever is appropriate for the level
