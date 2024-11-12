@@ -78,10 +78,12 @@
                         @foreach ($paginator->items() as $itemId => $item)
                             {!! $loop->first || $loop->iteration == ceil($paginator->count() / 2) + 1 ? '<div class="col-md"><ol start="' . $loop->iteration . '">' : '' !!}
                             <li id="item-{{ $itemId }}">
-                                <span class="float-end text-end">
-                                    <a href="{{ $item['gameItem']?->universalisUrl }}" class="btn btn-secondary btn-sm py-0">Universalis</a>
-                                    <a href="{{ $item['gameItem']?->teamcraftUrl }}" class="btn btn-secondary btn-sm py-0">Teamcraft</a>
-                                </span>
+                                @if ($item['gameItem'] ?? false)
+                                    <span class="float-end text-end">
+                                        <a href="{{ $item['gameItem']?->universalisUrl }}" class="btn btn-secondary btn-sm py-0">Universalis</a>
+                                        <a href="{{ $item['gameItem']?->teamcraftUrl }}" class="btn btn-secondary btn-sm py-0">Teamcraft</a>
+                                    </span>
+                                @endif
                                 {{ $item['gameItem']?->name ?? 'Unknown Item' }} - @include('_item_price_display', ['priceData' => $item['priceData']])
                             </li>
                             {!! $loop->last || $loop->iteration == ceil($paginator->count() / 2) ? '</ol></div>' : '' !!}
