@@ -5,8 +5,7 @@ namespace App\Console\Commands;
 use App\Models\GameRecipe;
 use Illuminate\Console\Command;
 
-class PruneErroneousRecipes extends Command
-{
+class PruneErroneousRecipes extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -24,8 +23,7 @@ class PruneErroneousRecipes extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
+    public function handle() {
         $recipes = GameRecipe::all();
 
         foreach ($recipes as $recipe) {
