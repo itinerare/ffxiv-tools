@@ -203,6 +203,16 @@ class GameRecipe extends Model {
         // Add the result item to items to record
         $items[] = $recipe['result'];
 
+        // Sanity check recipe values
+        if ($recipe['yields'] > 10) {
+            return $items;
+        }
+        foreach ($recipe['ingredients'] as $ingredient) {
+            if ($ingredient['amount'] < 1) {
+                return $items;
+            }
+        }
+
         if (!self::where('recipe_id', $recipe['id'])->exists()) {
             self::create([
                 'recipe_id'   => $recipe['id'],
