@@ -55,8 +55,14 @@ abstract class Controller {
             $cookieInputs = json_decode(Cookie::get($name), true);
         }
 
+        // Determine whether or not this is a complete restore from cookie
+        $isRestore = count($request->all()) ? false : true;
+
         foreach (array_keys($inputs) as $value) {
-            if ($request->get($value) !== null) {
+            if (!$isRestore && !$request->get($value) && str_contains(is_string($inputs[$value]) ? $inputs[$value] : '', 'boolean')) {
+                // Handle checkboxes unset in the incoming request, as otherwise these will be treated as absent and re-set (if previously set)
+                unset($inputs[$value]);
+            } elseif ($request->get($value) !== null) {
                 // If set in the incoming request, just set the input from the request to be stored
                 $inputs[$value] = $request->get($value);
             } elseif (isset($cookieInputs[$value])) {

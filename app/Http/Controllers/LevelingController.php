@@ -31,11 +31,6 @@ class LevelingController extends Controller {
         ];
         $request->validate($inputs);
 
-        if ($request->all() && !$request->get('use_lodestone')) {
-            // Ensure that the bool is set even if disabled
-            // so that manual entry options aren't overridden by the cookie
-            $request->merge(['use_lodestone' => 0]);
-        }
         $request = $this->handleSettingsCookie($request, 'levelingSettings', $inputs);
 
         if ($request->get('use_lodestone')) {
