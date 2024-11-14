@@ -4,6 +4,46 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.18.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.17.0...v2.18.0) (2024-11-14)
+
+### Features
+
+* Use teamcraft's data for item names ([430a9e](https://code.itinerare.net/itinerare/ffxiv-tools/commit/430a9eb7f0675d28b42b75c289a7ce2a1c9cfc21))
+
+##### Commands
+
+* Add command to prune erroneous recipes ([847a66](https://code.itinerare.net/itinerare/ffxiv-tools/commit/847a6614f5a963240787702a6f873d8902c5169f))
+
+##### Tests
+
+* Update crafting, gathering tests ([055f22](https://code.itinerare.net/itinerare/ffxiv-tools/commit/055f222512fd4a6fa95dfbc3f9b8fd898a351b0f))
+* Update diadem tests ([2ae4b7](https://code.itinerare.net/itinerare/ffxiv-tools/commit/2ae4b7cc04c9ccacdb3cfb2410a79f32dffb349f))
+
+### Bug Fixes
+
+* Better handle unset checkboxes when handling settings cookie ([e4a6c3](https://code.itinerare.net/itinerare/ffxiv-tools/commit/e4a6c39b466fecb9e2b1d2d786589c3ee5a26537))
+* Check for game item existence before showing universalis etc buttons ([1cd512](https://code.itinerare.net/itinerare/ffxiv-tools/commit/1cd512ec4d506ba27dc26a4977f6c502df5ecf28))
+* Check if request value is not null in settings cookie handling ([42a776](https://code.itinerare.net/itinerare/ffxiv-tools/commit/42a77696254b33c0b0d2f7fbaf84171be4b32d96))
+* Clearer checks for if vars are set ([6931d8](https://code.itinerare.net/itinerare/ffxiv-tools/commit/6931d8c8ecbb4bc477d38d07bd5592695352feb7))
+* Ensure controller vars are defined or have a fallback ([cf1d80](https://code.itinerare.net/itinerare/ffxiv-tools/commit/cf1d803a26758e6abe2e574ee5d5b8461422d4f2))
+* Sanity check recipe values before recording ([913eb0](https://code.itinerare.net/itinerare/ffxiv-tools/commit/913eb04fa3f7c8fe2b4eaae3e9c57f7c498959e6))
+
+##### Crafting
+
+* Get range count from config when paginating ([534386](https://code.itinerare.net/itinerare/ffxiv-tools/commit/534386e50d807e2509cbf383a55aa36c287ad34a))
+* Improve universalis/teamcraft button display on small screens/mobile ([84965b](https://code.itinerare.net/itinerare/ffxiv-tools/commit/84965b2c318beb544a53a84bfe1214c220c891a2))
+
+##### Leveling
+
+* Explicitly disable use lodestone before handling settings cookie ([8073cb](https://code.itinerare.net/itinerare/ffxiv-tools/commit/8073cbfe4823a7a1aa506dcbb990fc9e4e1e9e9f))
+
+##### Tests
+
+* Add missing cookie assertions to crafting tests ([f85182](https://code.itinerare.net/itinerare/ffxiv-tools/commit/f8518213f7b9b15dddf04bea4365c9fcdd205887))
+
+
+---
+
 ## [2.17.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.16.0...v2.17.0) (2024-10-11)
 
 ### Features
