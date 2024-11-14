@@ -86,7 +86,7 @@ class LevelingController extends Controller {
                 ($request->get('character_road') ? 100 : 0) +
                 ($request->get('gear_brand_new') ? 30 : 0) +
                 ($request->get('gear_earring') ? 30 : 0),
-            31 => $bonusBase +
+            61 => $bonusBase +
                 ($request->get('character_highest') > $request->get('character_level') ? floor(100 * $fcBonus) : 0) +
                 ($request->get('character_road') ? 100 : 0) +
                 ($request->get('gear_earring') ? 30 : 0),

@@ -74,7 +74,7 @@
                     <div class="row">
                         <div class="col-md mb-3">
                             {{ html()->checkbox('gear_brand_new', request()->get('gear_brand_new') ?? 0)->class('form-check-input') }}
-                            {{ html()->label('Brand New Ring', 'gear_brand_new')->class('form-check-label') }}
+                            {{ html()->label('Neophyte\'s Ring', 'gear_brand_new')->class('form-check-label') }}
                         </div>
 
                         <div class="col-md mb-3">
@@ -105,10 +105,10 @@
 
                     <p>
                         The calculated % bonus is
-                        @if ($bonus[1] != $bonus[31])
-                            {{ $bonus[1] }}% at 30 or below,
+                        @if ($bonus[1] != $bonus[61])
+                            {{ $bonus[1] }}% at 60 or below,
                         @endif
-                        {{ $bonus[31] }}% at
+                        {{ $bonus[61] }}% at
                         {{ config('ffxiv.leveling_data.level_data.level_cap') - 10 }} or below,
                         and {{ $bonus[config('ffxiv.leveling_data.level_data.level_cap') - 9] }}% at
                         {{ config('ffxiv.leveling_data.level_data.level_cap') - 9 }} and above, plus an additional 50% with rested EXP when and where applicable. If this does not match values observed in game, you may specify an override value here.

@@ -6,8 +6,8 @@ return [
      */
 
     'motd'      => [
-        'last_patch' => '7.0',
-        'message'    => '7.0 updates and data verification are occurring as data is gathered. Thank you for your patience!',
+        'last_patch' => '7.1',
+        'message'    => null,
     ],
 
     'level_ranges' => [
