@@ -88,11 +88,11 @@ class CraftingController extends Controller {
 
                     $profit = $recipe->calculateProfitPer($ingredients, true, $settings);
                     if ($recipe->can_hq) {
-                        if ($profit['hq'] <= 0 || ($settings['min_profit'] && $profit['hq'] < $settings['min_profit'])) {
+                        if ($profit['hq'] <= 0 || (($settings['min_profit'] ?? false) && $profit['hq'] < $settings['min_profit'])) {
                             return false;
                         }
                     } else {
-                        if ($profit['nq'] <= 0 || ($settings['min_profit'] && $profit['nq'] < $settings['min_profit'])) {
+                        if ($profit['nq'] <= 0 || (($settings['min_profit'] ?? false) && $profit['nq'] < $settings['min_profit'])) {
                             return false;
                         }
                     }
