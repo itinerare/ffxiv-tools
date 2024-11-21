@@ -155,6 +155,7 @@ class GameItem extends Model {
                         'gather_data' => isset($gatheringData) && $gatheringData->where('itemId', $item)->first() ? [
                             'stars'          => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
                             'perception_req' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
+                            'is_fish'        => false,
                         ] : (isset($fishData[$item]) ? [
                             'stars'    => $fishData[$item]['stars'] ?? 0,
                             'folklore' => $fishData[$item]['folklore'] ?? null,
@@ -174,6 +175,7 @@ class GameItem extends Model {
                     'gather_data' => isset($gatheringData) && $gatheringData->where('itemId', $item)->first() ? [
                         'stars'          => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
                         'perception_req' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
+                        'is_fish'        => false,
                     ] : (isset($fishData[$item]) ? [
                         'stars'    => $fishData[$item]['stars'] ?? 0,
                         'folklore' => $fishData[$item]['folklore'] ?? null,
