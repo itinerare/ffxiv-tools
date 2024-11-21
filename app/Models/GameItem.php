@@ -126,6 +126,10 @@ class GameItem extends Model {
                 unset($gatheringData);
             }
         }
+        $fishData = $requestHelper->teamcraftDataRequest('fish-parameter.json');
+        if ($fishData->successful()) {
+            $fishData = json_decode($fishData->getBody(), true);
+        }
 
         $shopData = $requestHelper->teamcraftDataRequest('shops.json');
         if ($shopData->successful()) {
@@ -149,9 +153,13 @@ class GameItem extends Model {
                         'name'        => $itemData[$item] ?? null,
                         'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
                         'gather_data' => isset($gatheringData) && $gatheringData->where('itemId', $item)->first() ? [
-                            'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
-                            'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
-                        ] : null,
+                            'stars'          => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
+                            'perception_req' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
+                        ] : (isset($fishData[$item]) ? [
+                            'stars'    => $fishData[$item]['stars'] ?? 0,
+                            'folklore' => $fishData[$item]['folklore'] ?? null,
+                            'is_fish'  => true,
+                        ] : null),
                         'shop_data' => isset($shopItems[$item]) ? [
                             'currency' => $shopItems[$item]['id'] ?? null,
                             'cost'     => $shopItems[$item]['amount'] ?? null,
@@ -164,9 +172,13 @@ class GameItem extends Model {
                     'name'        => $itemData[$item] ?? null,
                     'is_mob_drop' => in_array($item, array_keys($dropData ?? [])),
                     'gather_data' => isset($gatheringData) && $gatheringData->where('itemId', $item)->first() ? [
-                        'stars'         => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
-                        'perceptionReq' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
-                    ] : null,
+                        'stars'          => $gatheringData->where('itemId', $item)->first()['stars'] ?? null,
+                        'perception_req' => $gatheringData->where('itemId', $item)->first()['perceptionReq'] ?? null,
+                    ] : (isset($fishData[$item]) ? [
+                        'stars'    => $fishData[$item]['stars'] ?? 0,
+                        'folklore' => $fishData[$item]['folklore'] ?? null,
+                        'is_fish'  => true,
+                    ] : null),
                     'shop_data' => isset($shopItems[$item]) ? [
                         'currency' => $shopItems[$item]['id'] ?? null,
                         'cost'     => $shopItems[$item]['amount'] ?? null,
