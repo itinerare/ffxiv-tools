@@ -72,8 +72,13 @@
                                     <div class="mw-100"></div>
 
                                     <div class="col-md mb-3">
-                                        {{ html()->label('Gatherable Preference', 'gatherable_preference')->class('form-label') }}
+                                        {{ html()->label('Gatherable Preference (MIN/BTN)', 'gatherable_preference')->class('form-label') }}
                                         {{ html()->select('gatherable_preference', [0 => 'Gather nothing/purchase all gatherables', 1 => 'Gather unrestricted (no perception requirement) materials', 2 => 'Gather all materials'], request()->get('gatherable_preference') ?? 0)->class('form-select') }}
+                                    </div>
+
+                                    <div class="col-md mb-3">
+                                        {{ html()->label('Fish Preference', 'fish_preference')->class('form-label') }}
+                                        {{ html()->select('fish_preference', [0 => 'Gather nothing/purchase all fish', 1 => 'Gather unrestricted (no perception requirement) fish', 2 => 'Gather all fish'], request()->get('fish_preference') ?? 0)->class('form-select') }}
                                     </div>
 
                                     <div class="mw-100"></div>

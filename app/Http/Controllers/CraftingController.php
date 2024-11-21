@@ -30,6 +30,7 @@ class CraftingController extends Controller {
             'include_aethersands'   => 'nullable|boolean',
             'purchase_drops'        => 'nullable|boolean',
             'gatherable_preference' => 'nullable|in:0,1,2',
+            'fish_preference'       => 'nullable|in:0,1,2',
             'shop_preference'       => 'nullable|in:0,1,2',
         ];
         $request->validate($inputs);
@@ -47,6 +48,7 @@ class CraftingController extends Controller {
             'include_aethersands'   => $request->get('include_aethersands') ?? 0,
             'purchase_drops'        => $request->get('purchase_drops') ?? 0,
             'gatherable_preference' => $request->get('gatherable_preference') ?? 0,
+            'fish_preference'       => $request->get('fish_preference') ?? 0,
             'shop_preference'       => $request->get('shop_preference') ?? 0,
         ];
 

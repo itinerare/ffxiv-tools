@@ -356,22 +356,22 @@ class GameRecipe extends Model {
         $cost = 0;
 
         // Skip shard/crystal/clusters in recipes if not included in calculations
-        if ((!isset($settings['include_crystals']) || !$settings['include_crystals']) && in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+        if (!$settings['include_crystals'] && in_array($item, (array) config('ffxiv.crafting.crystals'))) {
             return $cost;
         }
 
         // Skip aethersands in recipes if not included in calculations
-        if ((!isset($settings['include_aethersands']) || !$settings['include_aethersands']) && preg_match('/[a-zA-Z]+ Aethersand/', $ingredient['gameItem']?->name)) {
+        if (!$settings['include_aethersands'] && preg_match('/[a-zA-Z]+ Aethersand/', $ingredient['gameItem']?->name)) {
             return $cost;
         }
 
         // Skip mob drops if not purchasing them
-        if ((!isset($settings['purchase_drops']) || !$settings['purchase_drops']) && $ingredient['gameItem']?->is_mob_drop) {
+        if (!$settings['purchase_drops'] && $ingredient['gameItem']?->is_mob_drop) {
             return $cost;
         }
 
-        if (isset($settings['gatherable_preference']) && $settings['gatherable_preference'] > 0 && (isset($ingredient['gameItem']->gather_data) && $ingredient['gameItem']->gather_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
-            if ($settings['gatherable_preference'] == 1 && !$ingredient['gameItem']->gather_data['perceptionReq']) {
+        if ($settings['gatherable_preference'] > 0 && ($ingredient['gameItem']->gather_data && !$ingredient['gameItem']->gather_data['is_fish']) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+            if ($settings['gatherable_preference'] == 1 && !$ingredient['gameItem']->gather_data['perception_req']) {
                 // Skip special gatherables if gathering only unrestricted mats
                 return $cost;
             } elseif ($settings['gatherable_preference'] == 2) {
@@ -380,7 +380,17 @@ class GameRecipe extends Model {
             }
         }
 
-        if (isset($settings['shop_preference']) && $settings['shop_preference'] > 0 && (isset($ingredient['gameItem']->shop_data) && $ingredient['gameItem']->shop_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+        if ($settings['fish_preference'] > 0 && ($ingredient['gameItem']->gather_data && $ingredient['gameItem']->gather_data['is_fish'])) {
+            if ($settings['fish_preference'] == 1 && !$ingredient['gameItem']->gather_data['folklore']) {
+                // Skip special fish if gathering only unrestricted mats
+                return $cost;
+            } elseif ($settings['fish_preference'] == 2) {
+                // Skip all fish if gathering everything
+                return $cost;
+            }
+        }
+
+        if ($settings['shop_preference'] > 0 && (isset($ingredient['gameItem']->shop_data) && $ingredient['gameItem']->shop_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
             if ($ingredient['gameItem']->shop_data['currency'] == 1) {
                 // If available for gil, add the vendor cost
                 $cost += $ingredient['gameItem']->shop_data['cost'] * ($ingredient['amount'] * $quantity);
@@ -394,12 +404,12 @@ class GameRecipe extends Model {
 
         // Handle precraft-related calculations
         if ($ingredient['recipe']) {
-            if (isset($settings['purchase_precrafts']) && $settings['purchase_precrafts'] && $settings['prefer_hq']) {
+            if ($settings['purchase_precrafts'] && $settings['prefer_hq']) {
                 // If both purchasing precrafts and prefering HQ materials, include HQ precraft price instead
                 $cost += $ingredient['priceData']?->min_price_hq * $ingredient['amount'];
 
                 return $cost;
-            } elseif (!isset($settings['purchase_precrafts']) || !$settings['purchase_precrafts']) {
+            } elseif (!$settings['purchase_precrafts']) {
                 // If not purchasing precrafts, include material costs recursively
                 $cost += $ingredient['recipe']->calculateCostPer($ingredients, $settings, ceil(($ingredient['amount'] * $quantity) / $ingredient['recipe']->yield));
 
