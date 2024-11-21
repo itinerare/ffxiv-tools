@@ -78,7 +78,7 @@
 
                                     <div class="col-md mb-3">
                                         {{ html()->label('Fish Preference', 'fish_preference')->class('form-label') }}
-                                        {{ html()->select('fish_preference', [0 => 'Gather nothing/purchase all fish', 1 => 'Gather unrestricted (no perception requirement) fish', 2 => 'Gather all fish'], request()->get('fish_preference') ?? 0)->class('form-select') }}
+                                        {{ html()->select('fish_preference', [0 => 'Gather nothing/purchase all fish', 1 => 'Gather unrestricted (no folklore requirement) fish', 2 => 'Gather all fish'], request()->get('fish_preference') ?? 0)->class('form-select') }}
                                     </div>
 
                                     <div class="mw-100"></div>

@@ -28,6 +28,13 @@
                                         {{ html()->checkbox('include_limited', request()->get('include_limited') ?? 0)->class('form-check-input') }}
                                         {{ html()->label('Include limited (perception requirement) nodes', 'include_limited')->class('form-check-label') }}
                                     </div>
+
+                                    <div class="mw-100"></div>
+
+                                    <div class="col-md mb-3">
+                                        {{ html()->label('Fish Preference', 'fish_preference')->class('form-label') }}
+                                        {{ html()->select('fish_preference', [0 => 'Do not include fish', 1 => 'Include unrestricted (no folklore requirement) fish', 2 => 'Include all fish'], request()->get('fish_preference') ?? 0)->class('form-select') }}
+                                    </div>
                                 </div>
                             </div>
                         </div>

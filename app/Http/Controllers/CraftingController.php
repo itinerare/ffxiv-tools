@@ -143,7 +143,8 @@ class CraftingController extends Controller {
                 'nullable', 'string',
                 Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
             ],
-            'include_limited' => 'nullable|in:0,1,2',
+            'include_limited' => 'nullable|boolean',
+            'fish_preference' => 'nullable|in:0,1,2',
         ];
         $request->validate($inputs);
 
@@ -173,9 +174,29 @@ class CraftingController extends Controller {
                 ->whereNotNull('gameItem.gather_data')
                 ->whereNotNull('priceData')->sortByDesc('priceData.min_price_nq');
 
-            // Filter down to only unrestricted mats
+            // Filter out fish
+            if (!$request->get('fish_preference')) {
+                $items = $items->where('gameItem.gather_data.is_fish', false);
+            } elseif ($request->get('fish_preference') == 1) {
+                // Filter out restricted fish, ignoring other mats
+                $items = $items->where(function ($item) {
+                    if (!$item['gameItem']->gather_data['is_fish'] || $item['gameItem']->gather_data['folklore'] == null) {
+                        return true;
+                    }
+
+                    return false;
+                });
+            }
+
+            // Filter down to only unrestricted mats, ignoring fish
             if (!$request->get('include_limited')) {
-                $items = $items->where('gameItem.gather_data.perceptionReq', 0);
+                $items = $items->where(function ($item) {
+                    if ($item['gameItem']->gather_data['is_fish'] || $item['gameItem']->gather_data['perception_req'] == 0) {
+                        return true;
+                    }
+
+                    return false;
+                });
             }
 
             $rankedItems = $items->filter(function ($item, $itemId) {
