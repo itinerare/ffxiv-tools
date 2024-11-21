@@ -3,7 +3,7 @@
 @endif
 Lvl {{ $recipe->level }}
 @if ($recipe->stars)
-    ・ @for ($i = 1; $i < $recipe->stars; $i++)
+    ・ @for ($i = 0; $i < $recipe->stars; $i++)
         ☆
     @endfor
 @endif
