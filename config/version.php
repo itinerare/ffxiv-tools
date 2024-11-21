@@ -4,14 +4,10 @@
 // Based on this tweet by @Xewl https://twitter.com/Xewl/status/1459219464369627144
 
 if (file_exists(base_path('version'))) {
-    $hash = file(base_path('version'))[0];
-    $date = Carbon\Carbon::parse(file(base_path('version'))[1]);
-    $string = sprintf('v%s-%s', $date->format('y.m'), $hash);
+    $gitVer = file(base_path('version'))[0];
 }
 
 return [
-    'date'   => $date ?? 'unknown',
-    'hash'   => $hash ?? 'unknown',
-    'string' => $string ?? 'v??.??-unknown',
+    'gitVer' => $gitVer ?? 'unknown',
     'tag'    => Composer\InstalledVersions::getRootPackage()['pretty_version'],
 ];

@@ -49,7 +49,7 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
-            "git describe --always --dirty > version && git log -n1 --pretty=%ci HEAD >> version"
+            "git describe --tags --dirty > version && git log -n1 --pretty=%ci HEAD >> version"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
