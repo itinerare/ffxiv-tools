@@ -4,6 +4,32 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.19.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.18.0...v2.19.0) (2024-11-21)
+
+### Features
+
+* Store fish data ([27e660](https://code.itinerare.net/itinerare/ffxiv-tools/commit/27e66053e40ce0727b8630d38face5b38e18747f))
+
+##### Crafting
+
+* Add fish preference, reflect in calculations ([d896fb](https://code.itinerare.net/itinerare/ffxiv-tools/commit/d896fbaeebdeac1f555d1defba8a5cef743048de))
+
+##### Gathering
+
+* Add fish preference ([7b79d2](https://code.itinerare.net/itinerare/ffxiv-tools/commit/7b79d2bfab2c74ed7468cdbd975a04e98db02d25))
+
+### Bug Fixes
+
+
+##### Crafting
+
+* Filter recipes whose profit can't be calculated when ranking ([907363](https://code.itinerare.net/itinerare/ffxiv-tools/commit/907363767d4ec5c482adab7ddb8e523c379471a3))
+* Fix star display off-by-one error ([37e918](https://code.itinerare.net/itinerare/ffxiv-tools/commit/37e918f717ac9f341ea50af2b1820e1e295b4022))
+* Improve min profit setting checks ([e6d1e5](https://code.itinerare.net/itinerare/ffxiv-tools/commit/e6d1e5f91cd9023347d2c251c124ff2825d43360))
+
+
+---
+
 ## [2.18.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.17.0...v2.18.0) (2024-11-14)
 
 ### Features
