@@ -132,7 +132,7 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-center">None!{{ request()->get('min_profit') && request()->get('min_profit') > 0 ? ' Consider adjusting your settings.' : '' }}</p>
+                        <p class="text-center">None!{{ request()->get('min_profit') && request()->get('min_profit') > 0 ? ' Consider adjusting your settings. Alternately,' : '' }} Universalis may be experiencing difficulties.</p>
                     @endif
                 </div>
             </div>
