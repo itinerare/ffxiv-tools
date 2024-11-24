@@ -144,8 +144,9 @@ class CraftingController extends Controller {
                 'nullable', 'string',
                 Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
             ],
-            'include_limited' => 'nullable|boolean',
-            'fish_preference' => 'nullable|in:0,1,2',
+            'include_limited'     => 'nullable|boolean',
+            'include_aethersands' => 'nullable|boolean',
+            'fish_preference'     => 'nullable|in:0,1,2',
         ];
         $request->validate($inputs);
 
@@ -172,7 +173,15 @@ class CraftingController extends Controller {
                 });
             });
             $items = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients)
-                ->whereNotNull('gameItem.gather_data')
+                ->where(function ($ingredient) use ($request) {
+                    if ($request->get('include_aethersands') && preg_match('/[a-zA-Z]+ Aethersand/', $ingredient['gameItem']?->name)) {
+                        return true;
+                    } elseif ($ingredient['gameItem']?->gather_data) {
+                        return true;
+                    }
+
+                    return false;
+                })
                 ->whereNotNull('priceData')->sortByDesc('priceData.min_price_nq');
 
             // Filter out fish
@@ -192,7 +201,7 @@ class CraftingController extends Controller {
             // Filter down to only unrestricted mats, ignoring fish
             if (!$request->get('include_limited')) {
                 $items = $items->where(function ($item) {
-                    if ($item['gameItem']->gather_data['is_fish'] || $item['gameItem']->gather_data['perception_req'] == 0) {
+                    if (!$item['gameItem']->gather_data || $item['gameItem']->gather_data['is_fish'] || $item['gameItem']->gather_data['perception_req'] == 0) {
                         return true;
                     }
 

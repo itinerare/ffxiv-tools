@@ -29,6 +29,11 @@
                                         {{ html()->label('Include limited (perception requirement) nodes', 'include_limited')->class('form-check-label') }}
                                     </div>
 
+                                    <div class="col-md mt-0 mt-md-4 mb-3">
+                                        {{ html()->checkbox('include_aethersands', request()->get('include_aethersands') ?? 0)->class('form-check-input') }}
+                                        {{ html()->label('Include aethersands', 'include_aethersands')->class('form-check-label') }}
+                                    </div>
+
                                     <div class="mw-100"></div>
 
                                     <div class="col-md mb-3">
