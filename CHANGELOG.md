@@ -4,6 +4,35 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.20.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.19.0...v2.20.0) (2024-11-24)
+
+### Features
+
+* Show tag/number of commits since tag instead of date in footer ([dc566e](https://code.itinerare.net/itinerare/ffxiv-tools/commit/dc566e482dc207c8d26df85161fe0e7fb72fe313))
+
+##### Gathering
+
+* Add option to include aethersands ([12aa83](https://code.itinerare.net/itinerare/ffxiv-tools/commit/12aa839a75ebaf0bc507ce633dbc6a111a0ddc0d))
+
+### Bug Fixes
+
+* Set is_fish for btn/min gatherables when recording item data ([4dd92b](https://code.itinerare.net/itinerare/ffxiv-tools/commit/4dd92bd7eb1e5a01db959fd18ef460219b94654e))
+
+##### Crafting
+
+* Weight data recency less aggressively when ranking ([6c3236](https://code.itinerare.net/itinerare/ffxiv-tools/commit/6c323619654b4fb9d15f88fc0381666cb9d29651))
+
+##### Diadem
+
+* Weight data recency less aggressively when ranking ([57edf1](https://code.itinerare.net/itinerare/ffxiv-tools/commit/57edf154b625b90c10d11d938e75cbb4cac43df6))
+
+##### Gathering
+
+* Weight data recency less aggressively when ranking ([dc100b](https://code.itinerare.net/itinerare/ffxiv-tools/commit/dc100b5920357b1def1ca78d59ac5eda24187487))
+
+
+---
+
 ## [2.19.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.18.0...v2.19.0) (2024-11-21)
 
 ### Features
