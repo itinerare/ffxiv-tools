@@ -190,7 +190,7 @@ class CraftingController extends Controller {
             } elseif ($request->get('fish_preference') == 1) {
                 // Filter out restricted fish, ignoring other mats
                 $items = $items->where(function ($item) {
-                    if (!$item['gameItem']->gather_data['is_fish'] || $item['gameItem']->gather_data['folklore'] == null) {
+                    if (!$item['gameItem']->gather_data || !$item['gameItem']->gather_data['is_fish'] || $item['gameItem']->gather_data['folklore'] == null) {
                         return true;
                     }
 
