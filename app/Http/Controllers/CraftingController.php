@@ -105,18 +105,19 @@ class CraftingController extends Controller {
 
                     return true;
                 })->sortByDesc(function ($recipe) use ($settings, $ingredients) {
-                    $weight = 1 - ($recipe->priceData->first()->last_upload_time->diffInMinutes(Carbon::now()) / 1000);
+                    $weight = 1;
                     $profit = $recipe->calculateProfitPer($ingredients, true, $settings);
 
                     if ($recipe->can_hq) {
                         $weight += (($profit['hq'] ?? 0) / 1000);
-
-                        return ($recipe->priceData->first()->hq_sale_velocity ?? 1) * $weight;
+                        $weight = (($recipe->priceData->first()->hq_sale_velocity ?? 1) / 100) * $weight;
+                    } else {
+                        $weight += (($profit['nq'] ?? 0) / 1000);
+                        $weight = (($recipe->priceData->first()->nq_sale_velocity ?? 1) / 100) * $weight;
                     }
+                    $weight -= ($recipe->priceData->first()->last_upload_time->diffInMinutes(Carbon::now()) / 1000);
 
-                    $weight += (($profit['nq'] ?? 0) / 1000);
-
-                    return ($recipe->priceData->first()->nq_sale_velocity ?? 1) * $weight;
+                    return $weight;
                 })->take(4);
             }
         }
