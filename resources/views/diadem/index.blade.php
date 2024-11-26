@@ -10,7 +10,7 @@
         <h3 class="text-center">Showing Results for {{ ucfirst(request()->get('world')) }}</h3>
         @include('_universalis_note')
         <p class="text-center">
-            "Top Five" items are listed on the basis of price, trade velocity, and data recency.
+            "Top Five" items are listed on the basis of trade velocity, price, and data recency.
         </p>
 
         <div class="card-group">

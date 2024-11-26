@@ -74,10 +74,7 @@ class DiademController extends Controller {
 
                         return true;
                     })->sortByDesc(function ($item) {
-                        $weight = 1 - ($item->last_upload_time->diffInHours(Carbon::now()) / 1000);
-                        $weight += (($item->nq_sale_velocity ?? 0) / 100);
-
-                        return $item->min_price_nq * $weight;
+                        return $item->calculateWeight();
                     })->take(5);
                 });
 

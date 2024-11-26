@@ -171,4 +171,39 @@ class UniversalisCache extends Model {
 
         return true;
     }
+
+    /**
+     * Calculate relative weight of the item, used for making recommendations.
+     *
+     * @param bool       $hq
+     * @param array|null $profit
+     *
+     * @return float
+     */
+    public function calculateWeight($hq = false, $profit = null) {
+        $weight = 1;
+        $priceWeight = $profit ? 7500 : 5000;
+        $velocityWeight = 100;
+
+        if ($hq) {
+            if ($profit) {
+                $weight += (($profit['hq'] ?? 0) / $priceWeight);
+            } else {
+                // This shouldn't come up (no more HQ gathering), but better safe than sorry
+                $weight += ($this->min_price_hq / $priceWeight);
+            }
+            $weight = ($this->hq_sale_velocity / $velocityWeight) * $weight;
+        } else {
+            if ($profit) {
+                $weight += (($profit['nq'] ?? 0) / $priceWeight);
+            } else {
+                $weight += ($this->min_price_nq / $priceWeight);
+            }
+            $weight = ($this->nq_sale_velocity / $velocityWeight) * $weight;
+        }
+
+        $weight -= ($this->last_upload_time->diffInHours(Carbon::now()) / 1000);
+
+        return $weight;
+    }
 }

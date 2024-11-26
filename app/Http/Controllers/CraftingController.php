@@ -91,7 +91,7 @@ class CraftingController extends Controller {
                         return false;
                     }
 
-                    $profit = $recipe->calculateProfitPer($ingredients, true, $settings);
+                    $profit = $recipe->calculateProfitPer($ingredients, $recipe->can_hq, $settings);
                     if ($profit) {
                         if ($recipe->can_hq) {
                             if ($profit['hq'] <= 0 || (($settings['min_profit'] ?? false) && $profit['hq'] < $settings['min_profit'])) {
@@ -108,19 +108,7 @@ class CraftingController extends Controller {
 
                     return true;
                 })->sortByDesc(function ($recipe) use ($settings, $ingredients) {
-                    $weight = 1;
-                    $profit = $recipe->calculateProfitPer($ingredients, true, $settings);
-
-                    if ($recipe->can_hq) {
-                        $weight += (($profit['hq'] ?? 0) / 10000);
-                        $weight = (($recipe->priceData->first()->hq_sale_velocity ?? 1) / 100) * $weight;
-                    } else {
-                        $weight += (($profit['nq'] ?? 0) / 10000);
-                        $weight = (($recipe->priceData->first()->nq_sale_velocity ?? 1) / 100) * $weight;
-                    }
-                    $weight -= ($recipe->priceData->first()->last_upload_time->diffInMinutes(Carbon::now()) / 1000);
-
-                    return $weight;
+                    return $recipe->priceData->first()->calculateWeight($recipe->can_hq, $recipe->calculateProfitPer($ingredients, $recipe->can_hq, $settings));
                 })->take(4);
             }
         }
@@ -213,7 +201,10 @@ class CraftingController extends Controller {
             }
 
             $rankedItems = $items->filter(function ($item, $itemId) {
-                if (($item['priceData']->hq_sale_velocity ?? 0) == 0 && ($item['priceData']->nq_sale_velocity ?? 0) == 0) {
+                if (!$item['priceData']) {
+                    return false;
+                }
+                if ($item['priceData']->hq_sale_velocity == 0 && $item['priceData']->nq_sale_velocity == 0) {
                     return false;
                 }
                 if ($item['priceData']->last_upload_time < Carbon::now()->subHours(config('ffxiv.universalis.data_lifetime'))) {
@@ -226,10 +217,7 @@ class CraftingController extends Controller {
 
                 return true;
             })->sortByDesc(function ($item) {
-                $weight = 1 - ($item['priceData']->last_upload_time->diffInHours(Carbon::now()) / 1000);
-                $weight += (($item['priceData']->nq_sale_velocity ?? 0) / 100);
-
-                return $item['priceData']->min_price_nq * $weight;
+                return $item['priceData']->calculateWeight();
             })->take(8);
         }
 
