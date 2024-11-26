@@ -4,6 +4,34 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.21.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.20.0...v2.21.0) (2024-11-26)
+
+### Features
+
+* Add data lifetime to universalis config, raise to 24 hours ([804fc6](https://code.itinerare.net/itinerare/ffxiv-tools/commit/804fc657187ff59cc707dbcc06ee731ad4cb7daa))
+* Unify, move recommendation logic to Universalis cache model ([5d46d7](https://code.itinerare.net/itinerare/ffxiv-tools/commit/5d46d7feddcd3811a527b64d50f410336595fdc4))
+
+##### Gathering
+
+* Add minimum price setting ([c606ef](https://code.itinerare.net/itinerare/ffxiv-tools/commit/c606efd67ee73e52dddc2694111627d50da3e896))
+
+### Bug Fixes
+
+* Allow clearing any settings value on non-restore ([ad8cf0](https://code.itinerare.net/itinerare/ffxiv-tools/commit/ad8cf09fd745c35a5b1df47047c6beb2c5be5136))
+
+##### Crafting
+
+* Add note about potential Universalis issues to "no recommendations" message ([eebf3a](https://code.itinerare.net/itinerare/ffxiv-tools/commit/eebf3a5e1c38b83b38021af68fe4be886602f91c))
+* Only filter recipes from recommended after 24 hours ([16e8e1](https://code.itinerare.net/itinerare/ffxiv-tools/commit/16e8e1c1b725d457e8846b66cc042d65635e52b2))
+* Weight profit less heavily for recommendations ([49cd2f](https://code.itinerare.net/itinerare/ffxiv-tools/commit/49cd2f21f402eddd0ab9df80baca35bcd0433ce6))
+
+##### Gathering
+
+* Check if item has gather data when filtering restricted fish ([242eae](https://code.itinerare.net/itinerare/ffxiv-tools/commit/242eae3bda2670825c13aa8c4ab0cccbe94e8c94))
+
+
+---
+
 ## [2.20.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.19.0...v2.20.0) (2024-11-24)
 
 ### Features
