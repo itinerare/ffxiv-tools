@@ -87,7 +87,7 @@ class CraftingController extends Controller {
                     if ($recipe->priceData->first()->hq_sale_velocity == 0 && $recipe->priceData->first()->nq_sale_velocity == 0) {
                         return false;
                     }
-                    if ($recipe->priceData->first()->last_upload_time < Carbon::now()->subHours(24)) {
+                    if ($recipe->priceData->first()->last_upload_time < Carbon::now()->subHours(config('ffxiv.universalis.data_lifetime'))) {
                         return false;
                     }
 
@@ -216,7 +216,7 @@ class CraftingController extends Controller {
                 if (($item['priceData']->hq_sale_velocity ?? 0) == 0 && ($item['priceData']->nq_sale_velocity ?? 0) == 0) {
                     return false;
                 }
-                if ($item['priceData']->last_upload_time < Carbon::now()->subHours(12)) {
+                if ($item['priceData']->last_upload_time < Carbon::now()->subHours(config('ffxiv.universalis.data_lifetime'))) {
                     return false;
                 }
 

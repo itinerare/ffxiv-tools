@@ -10,4 +10,7 @@ return [
 
     // How many minutes between requests for a given world (minimum).
     'rate_limit_lifetime' => 45,
+
+    // Number of hours for which data is considered "recent"/valid for recommendations
+    'data_lifetime' => 24,
 ];
