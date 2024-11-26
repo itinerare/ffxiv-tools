@@ -22,23 +22,33 @@
                         {{ html()->hidden('world', request()->get('world') ?? null) }}
 
                         <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    {{ html()->label('Minimum price per (impacts recommendations)', 'min_price')->class('form-label') }}
+                                    {{ html()->number('min_price', request()->get('min_price') ?? null)->class('form-control') }}
+                                </div>
+                            </div>
                             <div class="col-md">
                                 <div class="row">
-                                    <div class="col-md mt-0 mt-md-4 mb-3">
-                                        {{ html()->checkbox('include_limited', request()->get('include_limited') ?? 0)->class('form-check-input') }}
-                                        {{ html()->label('Include limited (perception requirement) nodes', 'include_limited')->class('form-check-label') }}
-                                    </div>
+                                    <div class="col-md">
+                                        <div class="row">
+                                            <div class="col-md mt-0 mt-md-4 mb-3">
+                                                {{ html()->checkbox('include_limited', request()->get('include_limited') ?? 0)->class('form-check-input') }}
+                                                {{ html()->label('Include limited (perception requirement) nodes', 'include_limited')->class('form-check-label') }}
+                                            </div>
 
-                                    <div class="col-md mt-0 mt-md-4 mb-3">
-                                        {{ html()->checkbox('include_aethersands', request()->get('include_aethersands') ?? 0)->class('form-check-input') }}
-                                        {{ html()->label('Include aethersands', 'include_aethersands')->class('form-check-label') }}
-                                    </div>
+                                            <div class="col-md mt-0 mt-md-4 mb-3">
+                                                {{ html()->checkbox('include_aethersands', request()->get('include_aethersands') ?? 0)->class('form-check-input') }}
+                                                {{ html()->label('Include aethersands', 'include_aethersands')->class('form-check-label') }}
+                                            </div>
 
-                                    <div class="mw-100"></div>
+                                            <div class="mw-100"></div>
 
-                                    <div class="col-md mb-3">
-                                        {{ html()->label('Fish Preference', 'fish_preference')->class('form-label') }}
-                                        {{ html()->select('fish_preference', [0 => 'Do not include fish', 1 => 'Include unrestricted (no folklore requirement) fish', 2 => 'Include all fish'], request()->get('fish_preference') ?? 0)->class('form-select') }}
+                                            <div class="col-md mb-3">
+                                                {{ html()->label('Fish Preference', 'fish_preference')->class('form-label') }}
+                                                {{ html()->select('fish_preference', [0 => 'Do not include fish', 1 => 'Include unrestricted (no folklore requirement) fish', 2 => 'Include all fish'], request()->get('fish_preference') ?? 0)->class('form-select') }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

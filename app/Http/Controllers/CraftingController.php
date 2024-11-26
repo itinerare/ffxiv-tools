@@ -135,6 +135,7 @@ class CraftingController extends Controller {
                 'nullable', 'string',
                 Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
             ],
+            'min_price'           => 'nullable|numeric',
             'include_limited'     => 'nullable|boolean',
             'include_aethersands' => 'nullable|boolean',
             'fish_preference'     => 'nullable|in:0,1,2',
@@ -200,7 +201,7 @@ class CraftingController extends Controller {
                 });
             }
 
-            $rankedItems = $items->filter(function ($item, $itemId) {
+            $rankedItems = $items->filter(function ($item, $itemId) use ($request) {
                 if (!$item['priceData']) {
                     return false;
                 }
@@ -212,6 +213,10 @@ class CraftingController extends Controller {
                 }
 
                 if (in_array($itemId, (array) config('ffxiv.crafting.crystals'))) {
+                    return false;
+                }
+
+                if ($item['priceData']->min_price_nq <= 0 || ($request->get('min_price') && $item['priceData']->min_price_nq < $request->get('min_price'))) {
                     return false;
                 }
 
