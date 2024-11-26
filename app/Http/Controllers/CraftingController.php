@@ -81,10 +81,13 @@ class CraftingController extends Controller {
                 $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients)->toArray();
 
                 $rankedRecipes = collect($recipes)->filter(function ($recipe) use ($settings, $ingredients) {
-                    if (($recipe->priceData->first()->hq_sale_velocity ?? 0) == 0 && ($recipe->priceData->first()->nq_sale_velocity ?? 0) == 0) {
+                    if (!$recipe->priceData->first()) {
                         return false;
                     }
-                    if ($recipe->priceData->first()->last_upload_time < Carbon::now()->subHours(12)) {
+                    if ($recipe->priceData->first()->hq_sale_velocity == 0 && $recipe->priceData->first()->nq_sale_velocity == 0) {
+                        return false;
+                    }
+                    if ($recipe->priceData->first()->last_upload_time < Carbon::now()->subHours(24)) {
                         return false;
                     }
 
