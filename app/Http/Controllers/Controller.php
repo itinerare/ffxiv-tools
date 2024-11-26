@@ -59,7 +59,7 @@ abstract class Controller {
         $isRestore = count($request->all()) ? false : true;
 
         foreach (array_keys($inputs) as $value) {
-            if (!$isRestore && !$request->get($value) && str_contains(is_string($inputs[$value]) ? $inputs[$value] : '', 'boolean')) {
+            if (!$isRestore && !$request->get($value)) {
                 // Handle checkboxes unset in the incoming request, as otherwise these will be treated as absent and re-set (if previously set)
                 unset($inputs[$value]);
             } elseif ($request->get($value) !== null) {
