@@ -60,7 +60,7 @@ abstract class Controller {
 
         foreach (array_keys($inputs) as $value) {
             if (!$isRestore && !$request->get($value)) {
-                // Handle checkboxes unset in the incoming request, as otherwise these will be treated as absent and re-set (if previously set)
+                // Handle input(s) unset in the incoming request, as otherwise these will be treated as absent and re-set (if previously set)
                 unset($inputs[$value]);
             } elseif ($request->get($value) !== null) {
                 // If set in the incoming request, just set the input from the request to be stored
