@@ -151,7 +151,7 @@ class LevelingController extends Controller {
                                 // Adjust the rested pool down accordingly
                                 $restedRemaining -= max(0, $dungeon[$level]['rested_used'] = $dungeon[$level]['rested'] / (int) config('ffxiv.leveling_data.level_data.level_exp.'.$level));
 
-                                // Calculate % of reseted EXP used
+                                // Calculate % of rested EXP used
                                 $dungeon[$level]['rested_used'] = round((($dungeon[$level]['rested_used'] / $restedPool) / $dungeon[$level]['runs']) * 100);
                             }
                         }
