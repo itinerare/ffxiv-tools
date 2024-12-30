@@ -49,7 +49,7 @@ class DiademTest extends TestCase {
             $response->assertSessionHasNoErrors();
 
             $response->assertCookie('diademSettings', json_encode(['world' => $world]));
-            //Queue::assertPushed(UpdateUniversalisCaches::class);
+            // Queue::assertPushed(UpdateUniversalisCaches::class);
         } elseif ($expected) {
             $response->assertSee('Item data for '.ucfirst($world));
             $response->assertSessionHasNoErrors();
