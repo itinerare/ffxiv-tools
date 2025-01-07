@@ -30,7 +30,7 @@ $ git clone https://code.itinerare.net/itinerare/ffxiv-tools.git
 $ cp .env.example .env
 ```
 
-This only needs the bare minimum (e.g. this doesn't use a database for anything).
+This only needs the bare minimum (e.g. no database connection info needs to be provided).
 
 ### Setting up
 
