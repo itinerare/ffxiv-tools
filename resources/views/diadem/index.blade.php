@@ -4,6 +4,10 @@
     ・ Diadem Gil Optimization
 @endsection
 
+@section('meta-desc')
+    Diadem profit calculator for Final Fantasy XIV. Lists the most profitable diadem item(s) to gather from each node.
+@endsection
+
 @section('content')
     @include('_data_center_select', ['world' => request()->get('world') ?? null])
     @if (request()->get('world') && $items)

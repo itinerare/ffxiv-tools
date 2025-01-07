@@ -4,6 +4,10 @@
     ・ Leveling Calculator
 @endsection
 
+@section('meta-desc')
+    Leveling/EXP calculator for Final Fantasy XIV. Updated for {{ config('ffxiv.leveling_data.level_data.motd.xpac') }}/{{ config('ffxiv.leveling_data.level_data.motd.last_patch') }}.
+@endsection
+
 @section('content')
     <div class="accordion mb-4" id="SettingsSelect">
         <div class="accordion-item">
@@ -180,7 +184,7 @@
     </div>
 
     <p class="text-center">
-        Up-to-date for {{ config('ffxiv.leveling_data.level_data.motd.last_patch') }}.
+        Up-to-date for {{ config('ffxiv.leveling_data.level_data.motd.xpac') }}/{{ config('ffxiv.leveling_data.level_data.motd.last_patch') }}.
         {{ config('ffxiv.leveling_data.level_data.motd.message') ?? '' }}
     </p>
 

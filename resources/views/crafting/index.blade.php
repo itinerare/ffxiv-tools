@@ -4,6 +4,10 @@
     ・ Crafting Profit Calculator
 @endsection
 
+@section('meta-desc')
+    Crafting profit calculator for Final Fantasy XIV. Offers recommendations for profitable items to craft, with configurable settings.
+@endsection
+
 @section('content')
     @include('_data_center_select', ['currentWorld' => $world ?? null])
     @if (request()->get('world'))

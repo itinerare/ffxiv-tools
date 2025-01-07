@@ -19,6 +19,21 @@
         @endif
     </title>
 
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="FFXIV Tools @if (View::hasSection('title')) ・@yield('title') @endif">
+    <meta name="description" content="@if (View::hasSection('meta-desc')) @yield('meta-desc') @else A selection of browser utilities for Final Fantasy XIV. @endif">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ config('app.url', 'http://localhost') }}">
+    <meta property="og:site_name" content="FFXIV Tools" />
+    @if (View::hasSection('title'))
+        <meta property="og:title" content="
+            @yield('title')
+        ">
+    @endif
+    <meta property="og:description" content="@if (View::hasSection('meta-desc')) @yield('meta-desc') @else A selection of browser utilities for Final Fantasy XIV. @endif">
+
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     @include('layouts._theme_switch_js')
