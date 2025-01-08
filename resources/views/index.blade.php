@@ -10,7 +10,7 @@
     </p>
 
     <p class="text-center">
-        Additionally, if any of the utilities here are useful to you, consider donating via Ko-fi!<br />
+        Additionally, if any of the utilities here are useful to you, consider donating via Ko-fi! Donations help support development and cover hosting costs.<br />
         <a href='https://ko-fi.com/A86644L3' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
     </p>
 
