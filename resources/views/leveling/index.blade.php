@@ -5,7 +5,7 @@
 @endsection
 
 @section('meta-desc')
-    Leveling/EXP calculator for Final Fantasy XIV. Updated for {{ config('ffxiv.leveling_data.level_data.motd.xpac') }}/{{ config('ffxiv.leveling_data.level_data.motd.last_patch') }}.
+    Leveling/EXP calculator for Final Fantasy XIV. Updated for {{ config('ffxiv.leveling_data.level_data.motd.xpac') }}. Calculates how many dungeon, deep dungeon, or avg. Frontline runs are needed to level based on configured settings.
 @endsection
 
 @section('content')
