@@ -4,6 +4,24 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.22.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.21.0...v2.22.0) (2025-01-08)
+
+### Features
+
+* Add changelog display to index ([e028a3](https://code.itinerare.net/itinerare/ffxiv-tools/commit/e028a3dc3ed6b0d9f67fbc9c75b69d8fa77f1ff2))
+* Add meta tags ([176aec](https://code.itinerare.net/itinerare/ffxiv-tools/commit/176aecad18e5513bd3b77864c2859fb6ee308b34))
+
+##### Crafting
+
+* Add info about updates ([10faa5](https://code.itinerare.net/itinerare/ffxiv-tools/commit/10faa5be3ddacadbeef7d28dd77becc41be253e3))
+
+##### Gathering
+
+* Add info about updates ([349984](https://code.itinerare.net/itinerare/ffxiv-tools/commit/349984dc156b28fbfaad50df5f9ca4753de176a5))
+
+
+---
+
 ## [2.21.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.20.0...v2.21.0) (2024-11-26)
 
 ### Features
