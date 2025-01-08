@@ -111,6 +111,10 @@
                 Recommendations are made on the basis of trade velocity, profit margin (given the currently selected settings), and data recency.
             </p>
 
+            <p class="text-center">
+                Recipes are updated periodically based on Teamcraft's data and (in theory) should always be up-to-date.
+            </p>
+
             {{ $paginator->links('crafting.pagination', ['itemName' => 'recipe']) }}
 
             <div class="card bg-light-subtle border-0 mb-4">
