@@ -24,11 +24,14 @@
             <div id="changelog" class="accordion-collapse collapse" data-bs-parent="#changelogContainer">
                 <div class="accordion-body">
                     @foreach ($changelog as $entry)
-                        {!! $entry !!}
+                        @if ($loop->last)
+                            <div class="text-end h5">
+                                <a href="https://code.itinerare.net/itinerare/ffxiv-tools/src/tag/v{{ config('version.tag') }}/CHANGELOG.md#{{ $entry }}">See more...</a>
+                            </div>
+                        @else
+                            {!! $entry !!}
+                        @endif
                     @endforeach
-                    <div class="text-end h5">
-                        <a href="https://code.itinerare.net/itinerare/ffxiv-tools/src/tag/v{{ config('version.tag') }}/CHANGELOG.md">See more...</a>
-                    </div>
                 </div>
             </div>
         </div>
