@@ -75,6 +75,10 @@
                 recency, while the complete list is ordered by price alone.
             </p>
 
+            <p class="text-center">
+                Items listed are updated periodically based on Teamcraft's data and (in theory) should always be up-to-date.
+            </p>
+
             {{ $paginator->links('crafting.pagination', ['itemName' => 'item']) }}
 
             <div class="card bg-light-subtle border-0 mb-4">
