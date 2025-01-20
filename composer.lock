@@ -6218,7 +6218,7 @@
             "source": {
                 "type": "git",
                 "url": "https://code.itinerare.net/itinerare/lodestone-parser",
-                "reference": "ba68f2cc6ff1546380cd62df66789150143cdebd"
+                "reference": "ae4e13af55b8268a60e31a20f6bac6ff6d9918c6"
             },
             "require": {
                 "nesbot/carbon": "^3.0",
@@ -6267,7 +6267,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2025-01-06T00:08:29+00:00"
+            "time": "2025-01-13T10:05:58+00:00"
         }
     ],
     "packages-dev": [
