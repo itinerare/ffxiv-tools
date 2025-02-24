@@ -12,7 +12,7 @@
         "erusev/parsedown": "^1.7",
         "guzzlehttp/guzzle": "^7.2",
         "laracasts/flash": "^3.2",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^12.0",
         "laravel/tinker": "^2.7",
         "nesbot/carbon": "^3.7",
         "spatie/laravel-html": "^3.5",
