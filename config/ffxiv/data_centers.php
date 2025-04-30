@@ -26,9 +26,6 @@ return [
         'Light' => [
             'alpha', 'lich', 'odin', 'phoenix', 'raiden', 'shiva', 'twintania', 'zodiark',
         ],
-        'Shadow' => [
-            'titania', 'innocence', 'pixie', 'tycoon',
-        ],
     ],
     'Japan' => [
         'Elemental' => [
