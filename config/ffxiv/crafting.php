@@ -26,7 +26,7 @@ return [
     // Rarity level min/max to target per xpac
     'ranges' => [
         '99-100' => [
-            'min' => 684,
+            'min' => 670,
             'max' => null,
         ],
 
