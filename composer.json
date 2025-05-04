@@ -21,7 +21,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://code.itinerare.net/itinerare/lodestone-parser"
+            "url": "https://code.itinerare.net/internal/lodestone-parser"
         }
     ],
     "require-dev": {
