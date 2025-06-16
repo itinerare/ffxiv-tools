@@ -6199,7 +6199,7 @@
             "source": {
                 "type": "git",
                 "url": "https://code.itinerare.net/internal/lodestone-parser",
-                "reference": "87d1e523091e6f6dd2dc961606facc279b49b386"
+                "reference": "ab708e5c91fca39f82f51ebce71a42d34bcaeb33"
             },
             "require": {
                 "nesbot/carbon": "^3.8",
@@ -6248,7 +6248,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2025-06-08T12:21:05+00:00"
+            "time": "2025-06-13T06:04:50+00:00"
         }
     ],
     "packages-dev": [
@@ -6317,16 +6317,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.18.1",
+            "version": "2.18.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "8fcc6a862f2e7b94eb4221fd0819ddba3d30ab26"
+                "reference": "59a123a3d459c5a23055802237cb317f609867e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/8fcc6a862f2e7b94eb4221fd0819ddba3d30ab26",
-                "reference": "8fcc6a862f2e7b94eb4221fd0819ddba3d30ab26",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/59a123a3d459c5a23055802237cb317f609867e5",
+                "reference": "59a123a3d459c5a23055802237cb317f609867e5",
                 "shasum": ""
             },
             "require": {
@@ -6376,7 +6376,7 @@
             ],
             "support": {
                 "issues": "https://github.com/filp/whoops/issues",
-                "source": "https://github.com/filp/whoops/tree/2.18.1"
+                "source": "https://github.com/filp/whoops/tree/2.18.3"
             },
             "funding": [
                 {
@@ -6384,7 +6384,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-06-03T18:56:14+00:00"
+            "time": "2025-06-16T00:02:10+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
