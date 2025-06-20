@@ -173,15 +173,15 @@ class LevelingController extends Controller {
             switch ($level) {
                 // What deep dungeon is relevant depends on level range
                 // and there's no relevant deep dungeon for ShB
-                case $level <= 60:
+                case $level <= 59:
                     $deepDungeon[$level]['dungeon'] = 'PotD';
                     $deepDungeon[$level]['level'] = config('ffxiv.leveling_data.potd.label');
                     break;
-                case $level >= 61 && $level <= 70:
+                case $level >= 61 && $level <= 69:
                     $deepDungeon[$level]['dungeon'] = 'HoH';
                     $deepDungeon[$level]['level'] = config('ffxiv.leveling_data.hoh.label');
                     break;
-                case $level >= 81 && $level <= 90:
+                case $level >= 81 && $level <= 89:
                     $deepDungeon[$level]['dungeon'] = 'EO';
                     $deepDungeon[$level]['level'] = config('ffxiv.leveling_data.eo.label');
                     break;

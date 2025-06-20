@@ -1,12 +1,16 @@
 <ul class="nav nav-pills justify-content-end" role="tablist">
     @foreach (['dungeon' => $dungeon, 'deep-dungeon' => $deepDungeon, 'frontline' => $frontline] as $label => $source)
-        @if (isset($source[$floor]) || ($range['ceiling'] != config('ffxiv.leveling_data.level_data.level_cap') ? isset($source[$range['ceiling']]) : isset($source[$range['ceiling'] - 1])))
+        @if (isset($source[$floor]) || isset($source[$range['ceiling']]))
             <li class="nav-item">
                 <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $label }}-tab-{{ $floor }}" data-bs-toggle="tab" data-bs-target="#exp-{{ $label }}-{{ $floor }}" type="button" role="tab"
                     aria-controls="exp-{{ $label }}-{{ $floor }}" aria-selected="true">
                     {{ ucwords(str_replace('-', ' ', $label)) }}
-                    ({{ $source[$range['ceiling']]['total_runs'] ?? $source[$range['ceiling'] - 1]['total_runs'] }}
-                    {{ $label == 'frontline' ? 'match' : 'run' }}{{ ($source[$range['ceiling']]['total_runs'] ?? $source[$range['ceiling'] - 1]['total_runs']) > 1 ? ($label == 'frontline' ? 'es' : 's') : '' }})
+                    @if (isset($source[$range['ceiling']]['total_runs']))
+                        ({{ $source[$range['ceiling']]['total_runs'] ?? '-' }}
+                        {{ $label == 'frontline' ? 'match' : 'run' }}{{ $source[$range['ceiling']]['total_runs'] > 1 ? ($label == 'frontline' ? 'es' : 's') : '' }})
+                    @else
+                        (Partial)
+                    @endif
                 </a>
             </li>
         @endif
@@ -63,12 +67,11 @@
                     </div>
                 </div>
             @endif
-            @if (isset($deepDungeon[$floor]) || ($range['ceiling'] != config('ffxiv.leveling_data.level_data.level_cap') ? isset($deepDungeon[$range['ceiling']]) : isset($deepDungeon[$range['ceiling'] - 1])))
+            @if (isset($deepDungeon[$floor]) || isset($deepDungeon[$range['ceiling']]))
                 <div class="tab-pane" id="exp-deep-dungeon-{{ $floor }}" role="tabpanel" aria-labelledby="deep-dungeon-tab-{{ $floor }}" tabindex="0">
                     <div class="row ms-md-2 text-center">
                         <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-2 border-info border-bottom">
-                            <div class="col-6 col-md-2 font-weight-bold">
-                                {{ $deepDungeon[$range['ceiling'] - 1]['dungeon'] ?? 'Dungeon' }}</div>
+                            <div class="col-6 col-md-2 font-weight-bold">{{ $deepDungeon[$range['ceiling']]['dungeon'] ?? 'Dungeon' }}</div>
                             <div class="col-6 col-md-3 font-weight-bold">EXP</div>
                             <div class="col-3 col-md-2 font-weight-bold">Runs</div>
                             <div class="col-3 col-md-2 font-weight-bold">Overage</div>
