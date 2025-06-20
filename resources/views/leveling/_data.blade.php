@@ -1,5 +1,5 @@
 <ul class="nav nav-pills justify-content-end" role="tablist">
-    @foreach (['dungeon' => $dungeon, 'deep-dungeon' => $deepDungeon, 'frontline' => $frontline] as $label => $source)
+    @foreach (['dungeon' => $dungeon, 'deep-dungeon' => $deepDungeon, 'society-quest' => $societyQuest, 'frontline' => $frontline] as $label => $source)
         @if (isset($source[$floor]) || isset($source[$range['ceiling']]))
             <li class="nav-item">
                 <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $label }}-tab-{{ $floor }}" data-bs-toggle="tab" data-bs-target="#exp-{{ $label }}-{{ $floor }}" type="button" role="tab"
@@ -7,7 +7,18 @@
                     {{ ucwords(str_replace('-', ' ', $label)) }}
                     @if (isset($source[$range['ceiling']]['total_runs']))
                         ({{ $source[$range['ceiling']]['total_runs'] ?? '-' }}
-                        {{ $label == 'frontline' ? 'match' : 'run' }}{{ $source[$range['ceiling']]['total_runs'] > 1 ? ($label == 'frontline' ? 'es' : 's') : '' }})
+                        @switch($label)
+                            @case('frontline')
+                                match{{ $source[$range['ceiling']]['total_runs'] > 1 ? 'es' : '' }})
+                            @break
+
+                            @case('society-quest')
+                                day{{ $source[$range['ceiling']]['total_runs'] > 1 ? 's' : '' }})
+                            @break
+
+                            @default
+                                run{{ $source[$range['ceiling']]['total_runs'] > 1 ? 's' : '' }})
+                        @endswitch
                     @else
                         (Partial)
                     @endif
@@ -89,6 +100,39 @@
                                     {{ isset($deepDungeon[$level]['overage']) ? number_format($deepDungeon[$level]['overage']) : '' }}
                                 </div>
                                 <div class="col-6 col-md-3">{{ $deepDungeon[$level]['total_runs'] ?? '' }}</div>
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+            @endif
+            @if (isset($societyQuest[$floor]) || ($range['ceiling'] != config('ffxiv.leveling_data.level_data.level_cap') ? isset($societyQuest[$range['ceiling']]) : isset($societyQuest[$range['ceiling'] - 1])))
+                <div class="tab-pane" id="exp-society-quest-{{ $floor }}" role="tabpanel" aria-labelledby="society-quest-tab-{{ $floor }}" tabindex="0">
+                    <div class="row ms-md-2 text-center">
+                        <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-2 border-info border-bottom">
+                            <div class="col-6 col-md-2 font-weight-bold">Society</div>
+                            <div class="col-6 col-md-3 font-weight-bold">
+                                EXP
+                                <span class="text-primary" data-bs-toggle="tooltip" data-toggle="tooltip" title="At Bloodsworn rank"><strong>*</strong></span>
+                            </div>
+                            <div class="col-3 col-md-2 font-weight-bold">Days</div>
+                            <div class="col-3 col-md-2 font-weight-bold">Overage</div>
+                            <div class="col-6 col-md-3 font-weight-bold">Total Days</div>
+                        </div>
+
+                        @for ($level = max(request()->get('character_level') && request()->get('character_level') < config('ffxiv.leveling_data.level_data.level_cap') ? request()->get('character_level') : 1, $floor); $level <= ($range['ceiling'] == config('ffxiv.leveling_data.level_data.level_cap') ? config('ffxiv.leveling_data.level_data.level_cap') - 1 : $range['ceiling']); $level++)
+                            <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 border-light-subtle border-top">
+                                <div class="col-6 col-md-2">{{ $societyQuest[$level]['dungeon'] ?? '-' }}</div>
+                                <div class="col-6 col-md-3">
+                                    {{ isset($societyQuest[$level]['day_exp']) ? number_format($societyQuest[$level]['day_exp']) : '-' }}
+                                    @if (isset($societyQuest[$level]['exp']))
+                                        <span class="text-primary" data-bs-toggle="tooltip" data-toggle="tooltip" title="3 quests per day, at {{ number_format($societyQuest[$level]['exp']) }} per quest"><strong>*</strong></span>
+                                    @endif
+                                </div>
+                                <div class="col-3 col-md-2">{{ $societyQuest[$level]['runs'] ?? '' }}</div>
+                                <div class="col-3 col-md-2">
+                                    {{ isset($societyQuest[$level]['overage']) ? number_format($societyQuest[$level]['overage']) : '' }}
+                                </div>
+                                <div class="col-6 col-md-3">{{ $societyQuest[$level]['total_runs'] ?? '-' }}</div>
                             </div>
                         @endfor
                     </div>

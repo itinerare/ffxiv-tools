@@ -238,6 +238,49 @@ class LevelingController extends Controller {
                 $deepDungeon[$level]['total_runs'] = (isset($deepDungeon[$level - 1]['total_runs']) && !in_array($level, array_keys((array) config('ffxiv.leveling_data.level_data.level_ranges'))) ? $deepDungeon[$level - 1]['total_runs'] : 0) + $deepDungeon[$level]['runs'];
             }
 
+            // Calculate Society Quest values
+            if ($level >= 80) {
+                // Society quest EXP values are only calculated for EW on,
+                // as they're a much more significant source of EXP beginning in EW
+                switch ($level) {
+                    case $level >= 80 && $level <= 89:
+                        $societyQuest[$level]['dungeon'] = 'Arkasodara';
+                        break;
+                    case $level >= 90 && $level <= 99:
+                        $societyQuest[$level]['dungeon'] = 'Pelupelu';
+                        break;
+                }
+
+                if (isset($societyQuest[$level]['dungeon'])) {
+                    // Society quest EXP is impacted only by rank with the society
+                    // Only the end ("Bloodsworn") EXP values are stored; this is because standing with a given society is a linear progression
+
+                    // If there was excess EXP from the last calculated level, remove it from the remaining EXP
+                    $societyQuest[$level]['remaining_exp'] = max(0, $remainingExp - ($societyQuest[$level - 1]['overage'] ?? 0));
+                    if ($societyQuest[$level]['remaining_exp'] == 0) {
+                        // If there is excess overage, carry it forward
+                        $societyQuest[$level]['overage'] = ($societyQuest[$level - 1]['overage'] ?? 0) - $remainingExp;
+                    }
+
+                    if ($societyQuest[$level]['remaining_exp'] > 0) {
+                        // Three quests are available per day
+                        $societyQuest[$level]['exp'] = config('ffxiv.leveling_data.society.'.strtolower($societyQuest[$level]['dungeon']).'.'.$level);
+                        $societyQuest[$level]['day_exp'] = $societyQuest[$level]['exp'] * 3;
+
+                        $societyQuest[$level]['runs'] = max(0, ceil($societyQuest[$level]['remaining_exp'] / $societyQuest[$level]['day_exp']));
+                    } else {
+                        // If overage accounts for the entirety of a level, set some empty values
+                        // This helps keep the frontend display clear as to what's happening
+                        $societyQuest[$level]['exp'] = null;
+                        $societyQuest[$level]['day_exp'] = null;
+                        $societyQuest[$level]['runs'] = 0;
+                    }
+
+                    $societyQuest[$level]['overage'] = (($societyQuest[$level]['day_exp'] * $societyQuest[$level]['runs']) - $societyQuest[$level]['remaining_exp']) + ($societyQuest[$level]['overage'] ?? 0);
+                    $societyQuest[$level]['total_runs'] = (isset($societyQuest[$level - 1]['total_runs']) && !in_array($level, array_keys((array) config('ffxiv.leveling_data.level_data.level_ranges'))) ? $societyQuest[$level - 1]['total_runs'] : 0) + $societyQuest[$level]['runs'];
+                }
+            }
+
             // Calculate Frontline values
             if ($level >= 30 && config('ffxiv.leveling_data.frontline.level_data.'.$level)) {
                 // If there was excess EXP from the last calculated level, remove it from the remaining EXP
@@ -269,10 +312,11 @@ class LevelingController extends Controller {
         }
 
         return view('leveling.index', [
-            'bonus'       => $bonus,
-            'dungeon'     => $dungeon ?? null,
-            'deepDungeon' => $deepDungeon ?? null,
-            'frontline'   => $frontline ?? null,
+            'bonus'        => $bonus,
+            'dungeon'      => $dungeon ?? null,
+            'deepDungeon'  => $deepDungeon ?? null,
+            'societyQuest' => $societyQuest ?? null,
+            'frontline'    => $frontline ?? null,
         ]);
     }
 }

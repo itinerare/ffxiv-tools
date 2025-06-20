@@ -8,7 +8,7 @@ return [
     'motd'      => [
         'xpac'       => 'Dawntrail',
         'last_patch' => '7.2',
-        'message'    => null,
+        'message'    => 'Now with Allied Society quest EXP data for Endwalker onward!',
     ],
 
     'level_ranges' => [

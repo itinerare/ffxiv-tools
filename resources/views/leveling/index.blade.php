@@ -203,7 +203,7 @@
                         <div class="accordion-body">
                             <p>{!! $range['text'] !!}</p>
 
-                            <p>Note that the number of runs given on each tab is how many are required to reach the end of this level range.</p>
+                            <p>Note that the number of runs, etc. given on each tab is how many are required to reach the end of this level range, not to level once.</p>
 
                             @include('leveling._data')
                         </div>
