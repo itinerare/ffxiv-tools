@@ -7,7 +7,7 @@ return [
 
     'motd'      => [
         'xpac'       => 'Dawntrail',
-        'last_patch' => '7.1',
+        'last_patch' => '7.2',
         'message'    => null,
     ],
 
