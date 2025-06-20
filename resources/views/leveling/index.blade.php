@@ -252,7 +252,7 @@
         <a href="https://docs.google.com/spreadsheets/d/1M4gteurUKCGrniPqESBDBbsPpvi8p0oC_V41ShJZJ-s/edit?usp=sharing">HoH</a>,
         <a href="https://docs.google.com/spreadsheets/d/1yJ9cr606u0WKDVzHFXoa_DPt-bCJTJfUUcwVtQSHxJI/edit?usp=sharing">Dungeons</a>,
         <a href="https://docs.google.com/spreadsheets/d/1IJl01GIUmrjEpfiVK0ZKqTR-ExTO38dSxG9QIIIBxbk/edit?usp=sharing">own
-            data (EO, Frontline)</a><br />
+            data (EO, Society Quests, Frontline)</a><br />
         Inspired by <a href="https://docs.google.com/spreadsheets/d/1OwfD4w0KMkvaUK-l5-piquWrjYKQDnorTZ_nMWCeCp4/edit?usp=sharing">Deep
             Dungeon Runs Calculator</a>
     </p>
