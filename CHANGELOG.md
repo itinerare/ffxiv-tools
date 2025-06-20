@@ -4,6 +4,28 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.23.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.22.0...v2.23.0) (2025-06-20)
+
+### Features
+
+* Link index changelog "see more" to first version omitted ([f66673](https://code.itinerare.net/itinerare/ffxiv-tools/commit/f66673c7592e31591d8524010b730567ba0adbaf))
+
+##### Crafting
+
+* Include lv 96+ crafting recipes ([4f687d](https://code.itinerare.net/itinerare/ffxiv-tools/commit/4f687d04f3378ca6760b1ba667987c891b38ecb7))
+
+##### Leveling
+
+* Add society quest data ([c395a0](https://code.itinerare.net/itinerare/ffxiv-tools/commit/c395a0b54119b8e3deec5ec70950209f1043d332))
+* Make level ranges x0-x9 ([3e307f](https://code.itinerare.net/itinerare/ffxiv-tools/commit/3e307fae11160e9c6e31010b1d507e8bec751bcd))
+
+### Bug Fixes
+
+* Drop support for Shadow data center ([981f37](https://code.itinerare.net/itinerare/ffxiv-tools/commit/981f37a830ea8e24f6eb849901238e29ecaa5c1a))
+
+
+---
+
 ## [2.22.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.21.0...v2.22.0) (2025-01-08)
 
 ### Features
