@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ba61467f9f9ec162d3bdb7975a3a19b",
+    "content-hash": "7256d8163ee1be4f985959dfbc4c9eda",
     "packages": [
         {
             "name": "brick/math",
@@ -2218,16 +2218,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "3.10.0",
+            "version": "3.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon.git",
-                "reference": "c1397390dd0a7e0f11660f0ae20f753d88c1f3d9"
+                "reference": "1fd1935b2d90aef2f093c5e35f7ae1257c448d00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/c1397390dd0a7e0f11660f0ae20f753d88c1f3d9",
-                "reference": "c1397390dd0a7e0f11660f0ae20f753d88c1f3d9",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/1fd1935b2d90aef2f093c5e35f7ae1257c448d00",
+                "reference": "1fd1935b2d90aef2f093c5e35f7ae1257c448d00",
                 "shasum": ""
             },
             "require": {
@@ -2319,7 +2319,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-12T10:24:28+00:00"
+            "time": "2025-06-21T15:19:35+00:00"
         },
         {
             "name": "nette/schema",
@@ -6199,7 +6199,7 @@
             "source": {
                 "type": "git",
                 "url": "https://code.itinerare.net/internal/lodestone-parser",
-                "reference": "ab708e5c91fca39f82f51ebce71a42d34bcaeb33"
+                "reference": "64d66878408ef6c5221df9e899a93a0a2c299cc2"
             },
             "require": {
                 "nesbot/carbon": "^3.8",
@@ -6248,7 +6248,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2025-06-13T06:04:50+00:00"
+            "time": "2025-06-21T16:04:05+00:00"
         }
     ],
     "packages-dev": [
