@@ -188,6 +188,10 @@
         {{ config('ffxiv.leveling_data.level_data.motd.message') ?? '' }}
     </p>
 
+    @if (request()->get('use_lodestone') && request()->get('character_job'))
+        @include('_job_select', ['jobs' => config('ffxiv.classjob')])
+    @endif
+
     <div class="accordion" id="levelAccordion">
         @foreach (config('ffxiv.leveling_data.level_data.level_ranges') as $floor => $range)
             @if ((request()->get('character_level') && (request()->get('character_level') <= $range['ceiling'] || request()->get('character_level') == config('ffxiv.leveling_data.level_data.level_cap'))) || !request()->get('character_level'))
