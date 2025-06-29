@@ -105,6 +105,8 @@
         </div>
 
         @if ($paginator)
+            @include('_job_select', ['jobs' => config('ffxiv.crafting.jobs')])
+
             <h3 class="text-center">Showing {{ config('ffxiv.crafting.jobs')[request()->get('character_job')] }} results for {{ ucfirst(request()->get('world')) }}</h3>
             @include('_universalis_note')
             <p class="text-center">
