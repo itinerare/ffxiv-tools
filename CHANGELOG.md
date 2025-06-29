@@ -4,6 +4,30 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [2.24.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.23.0...v2.24.0) (2025-06-29)
+
+### Features
+
+* Add job select widget ([2eb3f1](https://code.itinerare.net/itinerare/ffxiv-tools/commit/2eb3f17404cf5e5ffc97d00fc5ca8c34b2e9cdde))
+
+##### Crafting
+
+* Add quick job switcher ([ff677a](https://code.itinerare.net/itinerare/ffxiv-tools/commit/ff677a90d7c4753287c9ffd0dbc03b92e98420f9))
+
+##### Leveling
+
+* Add quick job switcher if using lodestone ([7ef4bd](https://code.itinerare.net/itinerare/ffxiv-tools/commit/7ef4bdfb7c08ab01bd27038b37dad487cc149916))
+
+### Bug Fixes
+
+
+##### Leveling
+
+* Update footer ([49d7ef](https://code.itinerare.net/itinerare/ffxiv-tools/commit/49d7efa798f8c60236102d6e4b1d87219e37c836))
+
+
+---
+
 ## [2.23.0](https://code.itinerare.net/itinerare/ffxiv-tools/compare/v2.22.0...v2.23.0) (2025-06-20)
 
 ### Features
