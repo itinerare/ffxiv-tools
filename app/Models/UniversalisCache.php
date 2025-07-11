@@ -173,6 +173,25 @@ class UniversalisCache extends Model {
     }
 
     /**
+     * Performs basic filtering to support recommendations.
+     *
+     * @param bool $hq
+     * @param int|null $minPrice
+     *
+     * @return bool
+     */
+    public function filterRecommendations($hq = false) {
+        if ($this->hq_sale_velocity == 0 && $this->nq_sale_velocity == 0) {
+            return false;
+        }
+        if ($this->last_upload_time < Carbon::now()->subHours(config('ffxiv.universalis.data_lifetime'))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Calculate relative weight of the item, used for making recommendations.
      *
      * @param bool       $hq

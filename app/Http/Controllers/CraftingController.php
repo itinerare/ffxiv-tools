@@ -81,13 +81,7 @@ class CraftingController extends Controller {
                 $ingredients = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients)->toArray();
 
                 $rankedRecipes = collect($recipes)->filter(function ($recipe) use ($settings, $ingredients) {
-                    if (!$recipe->priceData->first()) {
-                        return false;
-                    }
-                    if ($recipe->priceData->first()->hq_sale_velocity == 0 && $recipe->priceData->first()->nq_sale_velocity == 0) {
-                        return false;
-                    }
-                    if ($recipe->priceData->first()->last_upload_time < Carbon::now()->subHours(config('ffxiv.universalis.data_lifetime'))) {
+                    if (!$recipe->priceData->first() || !$recipe->priceData->first()->filterRecommendations($recipe->can_hq)) {
                         return false;
                     }
 
@@ -202,13 +196,7 @@ class CraftingController extends Controller {
             }
 
             $rankedItems = $items->filter(function ($item, $itemId) use ($request) {
-                if (!$item['priceData']) {
-                    return false;
-                }
-                if ($item['priceData']->hq_sale_velocity == 0 && $item['priceData']->nq_sale_velocity == 0) {
-                    return false;
-                }
-                if ($item['priceData']->last_upload_time < Carbon::now()->subHours(config('ffxiv.universalis.data_lifetime'))) {
+                if (!$item['priceData'] || !$item['priceData']->filterRecommendations(false)) {
                     return false;
                 }
 

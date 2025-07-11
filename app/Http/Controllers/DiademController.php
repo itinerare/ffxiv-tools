@@ -61,12 +61,10 @@ class DiademController extends Controller {
 
                         return [$itemCache->gameItem->name => $itemCache];
                     })->filter(function ($item, $itemId) {
-                        if (($item->hq_sale_velocity ?? 0) == 0 && ($item->nq_sale_velocity ?? 0) == 0) {
+                        if (!$item->filterRecommendations(false)) {
                             return false;
                         }
-                        if ($item->last_upload_time < Carbon::now()->subHours(config('ffxiv.universalis.data_lifetime'))) {
-                            return false;
-                        }
+
                         // Filter out items priced higher than 250,000 gil, as these in all likelihood do not reflect actual prices
                         if ($item->min_price_nq > 250000) {
                             return false;
