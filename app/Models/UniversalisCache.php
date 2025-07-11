@@ -176,7 +176,6 @@ class UniversalisCache extends Model {
      * Performs basic filtering to support recommendations.
      *
      * @param bool $hq
-     * @param int|null $minPrice
      *
      * @return bool
      */
