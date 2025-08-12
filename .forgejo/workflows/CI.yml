@@ -20,7 +20,7 @@ jobs:
     container: code.itinerare.net/internal/php-node:${{ matrix.target }}-${{ vars.NODE_VER }}-alpine
 
     steps:
-    - name: Set up PHP/Laravel
+    - name: Install dependencies
       uses: https://code.itinerare.net/internal/laravel-setup-action@main
       with:
         php-version: ${{ matrix.target }}
@@ -37,7 +37,7 @@ jobs:
     needs: laravel-tests
 
     steps:
-    - name: Set up PHP
+    - name: Install dependencies
       uses: https://code.itinerare.net/internal/php-setup-action@main
       with:
         php-version: 8.2
