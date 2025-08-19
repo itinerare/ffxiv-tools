@@ -223,6 +223,81 @@ class CraftingController extends Controller {
     }
 
     /**
+     * Show the drops profit calculator page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getDropsCalculator(Request $request) {
+        $inputs = [
+            'world'           => [
+                'nullable', 'string',
+                Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
+            ],
+            'min_price' => 'nullable|numeric',
+        ];
+        $request->validate($inputs);
+
+        $request = $this->handleSettingsCookie($request, 'dropsSettings', $inputs);
+
+        if ($request->get('world')) {
+            $ranges = collect(config('ffxiv.crafting.ranges'));
+            $currentRange = $ranges->forPage($request->get('page') ?? 1, 1)->first();
+
+            // Check and, if necessary, update cached data
+            $universalisUpdate = $this->checkUniversalisCache($request->get('world'));
+
+            // Collect recipes so as to collect their ingredients
+            $recipes = GameRecipe::orderBy('rlvl', 'DESC')->orderBy('recipe_id', 'DESC')->where('rlvl', '>=', $currentRange['min']);
+            if (isset($currentRange['max'])) {
+                $recipes = $recipes->where('rlvl', '<=', $currentRange['max']);
+            }
+            $recipes = $recipes->get();
+
+            // Gather ingredients and assemble common info for them
+            $ingredients = $recipes->pluck('ingredients')->transform(function ($ingredient, $key) {
+                return collect($ingredient)->transform(function ($item, $key) {
+                    return $item['id'];
+                });
+            });
+            $items = (new GameRecipe)->collectIngredients(request()->get('world'), $ingredients)
+                ->where(function ($ingredient) {
+                    if ($ingredient['gameItem']?->is_mob_drop) {
+                        return true;
+                    }
+
+                    return false;
+                })
+                ->whereNotNull('priceData')->sortByDesc('priceData.min_price_nq');
+
+            $rankedItems = $items->filter(function ($item, $itemId) use ($request) {
+                if (!$item['priceData'] || !$item['priceData']->filterRecommendations(false)) {
+                    return false;
+                }
+
+                if (in_array($itemId, (array) config('ffxiv.crafting.crystals'))) {
+                    return false;
+                }
+
+                if ($item['priceData']->min_price_nq <= 0 || ($request->get('min_price') && $item['priceData']->min_price_nq < $request->get('min_price'))) {
+                    return false;
+                }
+
+                return true;
+            })->sortByDesc(function ($item) {
+                return $item['priceData']->calculateWeight();
+            })->take(8);
+        }
+
+        return view('drops.index', [
+            'dataCenters'       => config('ffxiv.data_centers'),
+            'world'             => $request->get('world') ?? null,
+            'paginator'         => isset($items) ? (new LengthAwarePaginator($items, count((array) config('ffxiv.crafting.ranges')), 1))->withPath('/gathering')->appends($request->query()) : null,
+            'rankedItems'       => $rankedItems ?? null,
+            'universalisUpdate' => $universalisUpdate ?? null,
+        ]);
+    }
+
+    /**
      * Fetches a given file from Teamcraft's dumps.
      *
      * @param string $filename

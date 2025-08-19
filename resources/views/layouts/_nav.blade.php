@@ -13,17 +13,22 @@
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="economy-dropdown">
             <li>
                 <a class="dropdown-item {{ url()->current() == url('crafting') ? 'active' : '' }}" href="{{ url('crafting') }}">
-                    Crafting Profit Calculator
+                    Crafting
                 </a>
             </li>
             <li>
                 <a class="dropdown-item {{ url()->current() == url('gathering') ? 'active' : '' }}" href="{{ url('gathering') }}">
-                    Gathering Profit Calculator
+                    Gathering
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ url()->current() == url('drops') ? 'active' : '' }}" href="{{ url('drops') }}">
+                    Mob Drops
                 </a>
             </li>
             <li>
                 <a class="dropdown-item {{ url()->current() == url('diadem') ? 'active' : '' }}" href="{{ url('diadem') }}">
-                    Diadem Gil Optimization
+                    Diadem
                 </a>
             </li>
         </ul>

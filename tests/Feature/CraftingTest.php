@@ -165,4 +165,54 @@ class CraftingTest extends TestCase {
             'invalid world'            => ['fake', 0, 0, 302],
         ];
     }
+
+    /**
+     * Test getting the drops profit calculator.
+     *
+     * @param string $world
+     * @param bool   $withCookie
+     * @param bool   $expected
+     * @param int    $status
+     */
+    #[DataProvider('gatheringProfitProvider')]
+    public function testGetDropsCalc($world, $withCookie, $expected, $status): void {
+        Queue::fake();
+
+        if ($world) {
+            // Initialize recipe, game item, and Universalis records, echoing the chunking usually used to do so
+            (new GameRecipe)->retrieveRecipes(15);
+
+            $items = GameRecipe::where('job', 15)->pluck('item_id');
+
+            foreach ($items->chunk(100) as $chunk) {
+                (new UpdateGameItem($chunk))->handle();
+            }
+            foreach ($items->chunk(100) as $chunk) {
+                (new CreateUniversalisRecords($world, $chunk))->handle();
+            }
+        }
+
+        $response = $this->withCookies($withCookie ? [
+            'dropsSettings' => json_encode(['world' => $world]),
+        ] : [])->get('drops'.($world && !$withCookie ? '?world='.$world : ''));
+
+        $response->assertStatus($status);
+
+        if ($expected) {
+            $response->assertSessionHasNoErrors();
+            $response->assertSee('Showing results for '.ucfirst($world));
+
+            $response->assertCookie('dropsSettings', json_encode(['world' => $world]));
+            // Queue::assertPushed(UpdateUniversalisCaches::class);
+        } else {
+            if ($world) {
+                $response->assertSessionHasErrors();
+                $response->assertCookieMissing('dropsSettings');
+            } else {
+                $response->assertSee('Please select a world!');
+            }
+
+            Queue::assertNotPushed(UpdateUniversalisCaches::class);
+        }
+    }
 }
