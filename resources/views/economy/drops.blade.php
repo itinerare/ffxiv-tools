@@ -55,7 +55,7 @@
                 Items listed are updated periodically based on Teamcraft's data and (in theory) should always be up-to-date.
             </p>
 
-            {{ $paginator->links('crafting.pagination', ['itemName' => 'item']) }}
+            {{ $paginator->links('economy.pagination', ['itemName' => 'item']) }}
 
             <div class="card bg-light-subtle border-0 mb-4">
                 <div class="card-body">
@@ -90,7 +90,7 @@
                                         <a href="{{ $item['gameItem']?->teamcraftUrl }}" class="btn btn-secondary btn-sm py-0">Teamcraft</a>
                                     </span>
                                 @endif
-                                {{ $item['gameItem']?->name ?? 'Unknown Item' }} - @include('_item_price_display', ['priceData' => $item['priceData']])
+                                {{ $item['gameItem']?->name ?? 'Unknown Item' }} - @include('economy._item_price_display', ['priceData' => $item['priceData']])
                             </li>
                             {!! $loop->last || $loop->iteration == ceil($paginator->count() / 2) ? '</ol></div>' : '' !!}
                         @endforeach
@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-            {{ $paginator->links('crafting.pagination', ['itemName' => 'item']) }}
+            {{ $paginator->links('economy.pagination', ['itemName' => 'item']) }}
         @endif
     @else
         <h1 class="text-center">Please select a world!</h1>

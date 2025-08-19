@@ -1,5 +1,5 @@
 @if (isset($job) && $recipe->job != $job)
-    {{ config('ffxiv.crafting.jobs')[$recipe->job] }} ・
+    {{ config('ffxiv.economy.crafting.jobs')[$recipe->job] }} ・
 @endif
 Lvl {{ $recipe->level }}
 @if ($recipe->stars)

@@ -30,7 +30,7 @@ abstract class Controller {
      * @return bool
      */
     public function checkUniversalisCache($world) {
-        if (!UniversalisCache::world($world)->where('updated_at', '>', Carbon::now()->subMinutes(config('ffxiv.universalis.rate_limit_lifetime')))->exists() && UniversalisCache::world($world)->needsUpdate()->exists()) {
+        if (!UniversalisCache::world($world)->where('updated_at', '>', Carbon::now()->subMinutes(config('ffxiv.economy.universalis.rate_limit_lifetime')))->exists() && UniversalisCache::world($world)->needsUpdate()->exists()) {
             UpdateUniversalisCaches::dispatch($world);
 
             flash('An update has been queued to fetch the latest price data from Universalis. This page will refresh in one minute to load the new data.')->success();

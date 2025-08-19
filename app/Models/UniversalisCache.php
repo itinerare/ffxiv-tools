@@ -77,7 +77,7 @@ class UniversalisCache extends Model {
      */
     public function scopeNeedsUpdate($query) {
         return $query->where(function ($query) {
-            $query->where('updated_at', '<', Carbon::now()->subMinutes(config('ffxiv.universalis.cache_lifetime')))
+            $query->where('updated_at', '<', Carbon::now()->subMinutes(config('ffxiv.economy.universalis.cache_lifetime')))
                 ->orWhereNull('min_price_nq');
         });
     }
@@ -183,7 +183,7 @@ class UniversalisCache extends Model {
         if ($this->hq_sale_velocity == 0 && $this->nq_sale_velocity == 0) {
             return false;
         }
-        if ($this->last_upload_time < Carbon::now()->subHours(config('ffxiv.universalis.data_lifetime'))) {
+        if ($this->last_upload_time < Carbon::now()->subHours(config('ffxiv.economy.universalis.data_lifetime'))) {
             return false;
         }
 

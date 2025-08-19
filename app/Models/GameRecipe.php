@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\CraftingController;
+use App\Http\Controllers\EconomyController;
 use App\Jobs\CreateUniversalisRecords;
 use App\Jobs\UpdateGameItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -104,7 +104,7 @@ class GameRecipe extends Model {
      * @return bool
      */
     public function retrieveRecipes($job) {
-        $requestHelper = new CraftingController;
+        $requestHelper = new EconomyController;
 
         // Fetch Teamcraft's recipe and market item dumps
         $marketItems = $requestHelper->teamcraftDataRequest('market-items.json');
@@ -133,7 +133,7 @@ class GameRecipe extends Model {
                 }
 
                 // Filter recipes down further to those within per-xpac ranges
-                foreach (config('ffxiv.crafting.ranges') as $key => $range) {
+                foreach (config('ffxiv.economy.crafting.ranges') as $key => $range) {
                     if (isset($range['max'])) {
                         $recipes[$key] = $rawRecipes->where('rlvl', '>=', $range['min'])->where('rlvl', '<=', $range['max']);
                     } else {
@@ -356,7 +356,7 @@ class GameRecipe extends Model {
         $cost = 0;
 
         // Skip shard/crystal/clusters in recipes if not included in calculations
-        if (!$settings['include_crystals'] && in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+        if (!$settings['include_crystals'] && in_array($item, (array) config('ffxiv.economy.crafting.crystals'))) {
             return $cost;
         }
 
@@ -370,7 +370,7 @@ class GameRecipe extends Model {
             return $cost;
         }
 
-        if ($settings['gatherable_preference'] > 0 && ($ingredient['gameItem']->gather_data && !$ingredient['gameItem']->gather_data['is_fish']) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+        if ($settings['gatherable_preference'] > 0 && ($ingredient['gameItem']->gather_data && !$ingredient['gameItem']->gather_data['is_fish']) && !in_array($item, (array) config('ffxiv.economy.crafting.crystals'))) {
             if ($settings['gatherable_preference'] == 1 && !$ingredient['gameItem']->gather_data['perception_req']) {
                 // Skip special gatherables if gathering only unrestricted mats
                 return $cost;
@@ -390,7 +390,7 @@ class GameRecipe extends Model {
             }
         }
 
-        if ($settings['shop_preference'] > 0 && (isset($ingredient['gameItem']->shop_data) && $ingredient['gameItem']->shop_data) && !in_array($item, (array) config('ffxiv.crafting.crystals'))) {
+        if ($settings['shop_preference'] > 0 && (isset($ingredient['gameItem']->shop_data) && $ingredient['gameItem']->shop_data) && !in_array($item, (array) config('ffxiv.economy.crafting.crystals'))) {
             if ($ingredient['gameItem']->shop_data['currency'] == 1) {
                 // If available for gil, add the vendor cost
                 $cost += $ingredient['gameItem']->shop_data['cost'] * ($ingredient['amount'] * $quantity);

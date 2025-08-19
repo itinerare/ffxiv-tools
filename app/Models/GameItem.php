@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\CraftingController;
+use App\Http\Controllers\EconomyController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -93,7 +93,7 @@ class GameItem extends Model {
      * @return bool
      */
     public function recordItem($chunk) {
-        $requestHelper = new CraftingController;
+        $requestHelper = new EconomyController;
 
         // Fetch Teamcraft's item, monster drop, and gathering data
         $itemData = $requestHelper->teamcraftDataRequest('items.json');

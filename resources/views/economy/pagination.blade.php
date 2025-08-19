@@ -64,9 +64,9 @@
                         @if (is_array($element))
                             @foreach ($element as $page => $url)
                                 @if ($page == $paginator->currentPage())
-                                    <li class="page-item active" aria-current="page"><span class="page-link">{{ array_keys((array) config('ffxiv.crafting.ranges'))[$page - 1] }}</span></li>
+                                    <li class="page-item active" aria-current="page"><span class="page-link">{{ array_keys((array) config('ffxiv.economy.crafting.ranges'))[$page - 1] }}</span></li>
                                 @else
-                                    <li class="page-item"><a class="page-link" href="{{ $url }}">{{ array_keys((array) config('ffxiv.crafting.ranges'))[$page - 1] }}</a></li>
+                                    <li class="page-item"><a class="page-link" href="{{ $url }}">{{ array_keys((array) config('ffxiv.economy.crafting.ranges'))[$page - 1] }}</a></li>
                                 @endif
                             @endforeach
                         @endif

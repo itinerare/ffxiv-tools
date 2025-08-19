@@ -29,7 +29,7 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     {{ html()->label('Job', 'character_job')->class('form-label') }}
-                                    {{ html()->select('character_job', config('ffxiv.crafting.jobs'), request()->get('character_job') ?? null)->class('form-select')->placeholder('Select Job') }}
+                                    {{ html()->select('character_job', config('ffxiv.economy.crafting.jobs'), request()->get('character_job') ?? null)->class('form-select')->placeholder('Select Job') }}
                                 </div>
 
                                 <div class="mt-0 mt-md-4 mb-3">
@@ -105,9 +105,9 @@
         </div>
 
         @if ($paginator)
-            @include('_job_select', ['jobs' => config('ffxiv.crafting.jobs')])
+            @include('_job_select', ['jobs' => config('ffxiv.economy.crafting.jobs')])
 
-            <h3 class="text-center">Showing {{ config('ffxiv.crafting.jobs')[request()->get('character_job')] }} results for {{ ucfirst(request()->get('world')) }}</h3>
+            <h3 class="text-center">Showing {{ config('ffxiv.economy.crafting.jobs')[request()->get('character_job')] }} results for {{ ucfirst(request()->get('world')) }}</h3>
             @include('_universalis_note')
             <p class="text-center">
                 Recommendations are made on the basis of trade velocity, profit margin (given the currently selected settings), and data recency.
@@ -117,7 +117,7 @@
                 Recipes are updated periodically based on Teamcraft's data and (in theory) should always be up-to-date.
             </p>
 
-            {{ $paginator->links('crafting.pagination', ['itemName' => 'recipe']) }}
+            {{ $paginator->links('economy.pagination', ['itemName' => 'recipe']) }}
 
             <div class="card bg-light-subtle border-0 mb-4">
                 <div class="card-body">
@@ -160,13 +160,13 @@
                                 @endif
                                 {{ $recipe->gameItem->name ?? 'Unknown Item' }}
                                 <small class="text-muted">
-                                    ・ @include('crafting._recipe_info_display')
+                                    ・ @include('economy.crafting._recipe_info_display')
                                 </small>
                             </h4>
                             <div class="row">
                                 <div class="col-md-5">
                                     <p>
-                                        @include('_item_price_display', ['priceData' => $recipe->priceData->first(), 'displayHQ' => $recipe->can_hq])
+                                        @include('economy._item_price_display', ['priceData' => $recipe->priceData->first(), 'displayHQ' => $recipe->can_hq])
                                     </p>
                                     <div class="accordion" id="ingredients{{ $recipe->item_id }}">
                                         <div class="accordion-item bg-light-subtle border-0">
@@ -180,7 +180,7 @@
                                                 <div class="accordion-body">
                                                     <ul>
                                                         @foreach ($recipe->formatIngredients($ingredients, $settings) as $ingredientId => $ingredient)
-                                                            @include('crafting._ingredient_display')
+                                                            @include('economy.crafting._ingredient_display')
                                                         @endforeach
                                                     </ul>
                                                 </div>
@@ -231,7 +231,7 @@
                 </div>
             @endforeach
 
-            {{ $paginator->links('crafting.pagination', ['itemName' => 'recipe']) }}
+            {{ $paginator->links('economy.pagination', ['itemName' => 'recipe']) }}
         @endif
     @else
         <h1 class="text-center">Please select a world!</h1>

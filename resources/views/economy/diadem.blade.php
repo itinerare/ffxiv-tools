@@ -34,7 +34,7 @@
                                         </div>
                                     @endif
                                     <strong>{{ $name }}</strong> -
-                                    @include('_item_price_display', ['priceData' => $item])
+                                    @include('economy._item_price_display', ['priceData' => $item])
                                 </li>
                             @endforeach
                         </ol>
@@ -49,7 +49,7 @@
                                                 </div>
                                             @endif
                                             <strong>{{ $name }}</strong> -
-                                            @include('_item_price_display', ['priceData' => $item])
+                                            @include('economy._item_price_display', ['priceData' => $item])
                                         </li>
                                     @endforeach
                                 </ul>

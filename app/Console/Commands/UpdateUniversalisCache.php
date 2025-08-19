@@ -31,7 +31,7 @@ class UpdateUniversalisCache extends Command {
      */
     public function handle(): int {
         // Gather all relevant game item IDs
-        $items = collect((array) config('ffxiv.diadem_items.node_data'))->flatten();
+        $items = collect((array) config('ffxiv.economy.diadem_items.node_data'))->flatten();
 
         $this->line('Initializing records as necessary...');
         if ($items->count() > GameItem::whereIn('item_id', $items->toArray())->whereNotNull('name')->count()) {
@@ -70,10 +70,10 @@ class UpdateUniversalisCache extends Command {
         }
 
         $this->info('Queueing jobs to retrieve recipes and associated items...');
-        $craftingRecipesBar = $this->output->createProgressBar(count((array) config('ffxiv.crafting.jobs')));
+        $craftingRecipesBar = $this->output->createProgressBar(count((array) config('ffxiv.economy.crafting.jobs')));
         $craftingRecipesBar->start();
 
-        foreach (array_keys((array) config('ffxiv.crafting.jobs')) as $jobId) {
+        foreach (array_keys((array) config('ffxiv.economy.crafting.jobs')) as $jobId) {
             RecordRecipes::dispatch($jobId);
             $craftingRecipesBar->advance();
         }

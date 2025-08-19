@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GameItem;
 use App\Models\GameRecipe;
+use App\Models\UniversalisCache;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
 
-class CraftingController extends Controller {
+class EconomyController extends Controller {
     /**
      * Show the crafting profit calculator page.
      *
@@ -20,7 +22,7 @@ class CraftingController extends Controller {
                 'nullable', 'string',
                 Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
             ],
-            'character_job'         => ['nullable', Rule::in(array_keys((array) config('ffxiv.crafting.jobs')))],
+            'character_job'         => ['nullable', Rule::in(array_keys((array) config('ffxiv.economy.crafting.jobs')))],
             'no_master'             => 'nullable|boolean',
             'min_profit'            => 'nullable|numeric',
             'purchase_precrafts'    => 'nullable|boolean',
@@ -52,11 +54,11 @@ class CraftingController extends Controller {
         ];
 
         if ($request->get('world')) {
-            if ($settings['character_job'] && in_array($settings['character_job'], array_keys((array) config('ffxiv.crafting.jobs')))) {
+            if ($settings['character_job'] && in_array($settings['character_job'], array_keys((array) config('ffxiv.economy.crafting.jobs')))) {
                 // Check and, if necessary, update cached data
                 $universalisUpdate = $this->checkUniversalisCache($request->get('world'));
 
-                $ranges = collect(config('ffxiv.crafting.ranges'));
+                $ranges = collect(config('ffxiv.economy.crafting.ranges'));
                 $currentRange = $ranges->forPage($request->get('page') ?? 1, 1)->first();
 
                 $recipes = GameRecipe::job($settings['character_job'])->with(['priceData' => function ($query) use ($request) {
@@ -106,11 +108,11 @@ class CraftingController extends Controller {
             }
         }
 
-        return view('crafting.index', [
+        return view('economy.crafting.index', [
             'dataCenters'       => config('ffxiv.data_centers'),
             'world'             => $request->get('world') ?? null,
             'settings'          => $settings,
-            'paginator'         => isset($recipes) ? (new LengthAwarePaginator($recipes, count((array) config('ffxiv.crafting.ranges')), 1))->withPath('/crafting')->appends($request->query()) : null,
+            'paginator'         => isset($recipes) ? (new LengthAwarePaginator($recipes, count((array) config('ffxiv.economy.crafting.ranges')), 1))->withPath('/crafting')->appends($request->query()) : null,
             'rankedRecipes'     => $rankedRecipes ?? null,
             'ingredients'       => $ingredients ?? null,
             'universalisUpdate' => $universalisUpdate ?? null,
@@ -138,7 +140,7 @@ class CraftingController extends Controller {
         $request = $this->handleSettingsCookie($request, 'gatheringSettings', $inputs);
 
         if ($request->get('world')) {
-            $ranges = collect(config('ffxiv.crafting.ranges'));
+            $ranges = collect(config('ffxiv.economy.crafting.ranges'));
             $currentRange = $ranges->forPage($request->get('page') ?? 1, 1)->first();
 
             // Check and, if necessary, update cached data
@@ -199,7 +201,7 @@ class CraftingController extends Controller {
                     return false;
                 }
 
-                if (in_array($itemId, (array) config('ffxiv.crafting.crystals'))) {
+                if (in_array($itemId, (array) config('ffxiv.economy.crafting.crystals'))) {
                     return false;
                 }
 
@@ -213,10 +215,10 @@ class CraftingController extends Controller {
             })->take(8);
         }
 
-        return view('gathering.index', [
+        return view('economy.gathering', [
             'dataCenters'       => config('ffxiv.data_centers'),
             'world'             => $request->get('world') ?? null,
-            'paginator'         => isset($items) ? (new LengthAwarePaginator($items, count((array) config('ffxiv.crafting.ranges')), 1))->withPath('/gathering')->appends($request->query()) : null,
+            'paginator'         => isset($items) ? (new LengthAwarePaginator($items, count((array) config('ffxiv.economy.crafting.ranges')), 1))->withPath('/gathering')->appends($request->query()) : null,
             'rankedItems'       => $rankedItems ?? null,
             'universalisUpdate' => $universalisUpdate ?? null,
         ]);
@@ -240,7 +242,7 @@ class CraftingController extends Controller {
         $request = $this->handleSettingsCookie($request, 'dropsSettings', $inputs);
 
         if ($request->get('world')) {
-            $ranges = collect(config('ffxiv.crafting.ranges'));
+            $ranges = collect(config('ffxiv.economy.crafting.ranges'));
             $currentRange = $ranges->forPage($request->get('page') ?? 1, 1)->first();
 
             // Check and, if necessary, update cached data
@@ -274,7 +276,7 @@ class CraftingController extends Controller {
                     return false;
                 }
 
-                if (in_array($itemId, (array) config('ffxiv.crafting.crystals'))) {
+                if (in_array($itemId, (array) config('ffxiv.economy.crafting.crystals'))) {
                     return false;
                 }
 
@@ -288,11 +290,98 @@ class CraftingController extends Controller {
             })->take(8);
         }
 
-        return view('drops.index', [
+        return view('economy.drops', [
             'dataCenters'       => config('ffxiv.data_centers'),
             'world'             => $request->get('world') ?? null,
-            'paginator'         => isset($items) ? (new LengthAwarePaginator($items, count((array) config('ffxiv.crafting.ranges')), 1))->withPath('/gathering')->appends($request->query()) : null,
+            'paginator'         => isset($items) ? (new LengthAwarePaginator($items, count((array) config('ffxiv.economy.crafting.ranges')), 1))->withPath('/drops')->appends($request->query()) : null,
             'rankedItems'       => $rankedItems ?? null,
+            'universalisUpdate' => $universalisUpdate ?? null,
+        ]);
+    }
+
+    /**
+     * Show the diadem calculator page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getDiademCalculator(Request $request) {
+        $inputs = [
+            'world' => [
+                'nullable', 'string',
+                Rule::in(collect((array) config('ffxiv.data_centers'))->flatten()->toArray()),
+            ],
+        ];
+        $request->validate($inputs);
+
+        $request = $this->handleSettingsCookie($request, 'diademSettings', $inputs);
+
+        if ($request->get('world')) {
+            $diademItems = collect(config('ffxiv.economy.diadem_items.node_data'))->flatten();
+
+            if ($diademItems->count() == UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems->toArray())->count() && $diademItems->count() == GameItem::whereIn('item_id', $diademItems->toArray())->count()) {
+                // Check and, if necessary, update cached data
+                $universalisUpdate = $this->checkUniversalisCache($request->get('world'));
+
+                // Get cached item records
+                $items = UniversalisCache::world($request->get('world'))->whereIn('item_id', $diademItems)->with('gameItem')->get();
+
+                // Collect individual node data
+                $availableItems = [];
+                foreach (config('ffxiv.economy.diadem_items.node_data.BTN') as $node) {
+                    $availableItems['BTN'][] = collect($node);
+                }
+                foreach (config('ffxiv.economy.diadem_items.node_data.MIN') as $node) {
+                    $availableItems['MIN'][] = collect($node);
+                }
+                $availableItems = collect($availableItems);
+                $rankedItems = [];
+
+                // Assemble a list of available items ranked by price for each class
+                // This provides a very simple overview
+                foreach ($availableItems as $class => $chunk) {
+                    foreach ($chunk as $node) {
+                        foreach ($node as $id => $item) {
+                            $rankedItems[$class][$item] = $items->where('item_id', $item)->first();
+                        }
+                    }
+                }
+                $rankedItems = collect($rankedItems)->map(function ($class) use ($items) {
+                    return collect($class)->mapWithKeys(function ($item, $id) use ($items) {
+                        $itemCache = $items->where('item_id', $id)->first();
+
+                        return [$itemCache->gameItem->name => $itemCache];
+                    })->filter(function ($item, $itemId) {
+                        if (!$item->filterRecommendations(false)) {
+                            return false;
+                        }
+
+                        // Filter out items priced higher than 250,000 gil, as these in all likelihood do not reflect actual prices
+                        if ($item->min_price_nq > 250000) {
+                            return false;
+                        }
+
+                        return true;
+                    })->sortByDesc(function ($item) {
+                        return $item->calculateWeight();
+                    })->take(5);
+                });
+
+                // Update the list organized by node with price information
+                $availableItems = $availableItems->map(function ($chunk) use ($items) {
+                    return collect($chunk)->map(function ($node) use ($items) {
+                        return $node->mapWithKeys(function ($item, $id) use ($items) {
+                            $itemCache = $items->where('item_id', $item)->first();
+
+                            return [$itemCache->gameItem->name => $itemCache];
+                        });
+                    });
+                });
+            }
+        }
+
+        return view('economy.diadem', [
+            'items'             => $availableItems ?? [],
+            'rankedItems'       => $rankedItems ?? [],
             'universalisUpdate' => $universalisUpdate ?? null,
         ]);
     }

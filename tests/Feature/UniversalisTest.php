@@ -20,7 +20,7 @@ class UniversalisTest extends TestCase {
         parent::setUp();
 
         Queue::fake();
-        $this->items = collect(config('ffxiv.diadem_items.node_data'))->flatten();
+        $this->items = collect(config('ffxiv.economy.diadem_items.node_data'))->flatten();
     }
 
     /**
