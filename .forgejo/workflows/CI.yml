@@ -16,8 +16,7 @@ jobs:
       matrix:
         target: ['8.2', '8.3']
 
-    runs-on: docker-cli
-    container: code.itinerare.net/internal/php-alpine:${{ matrix.target }}
+    runs-on: php-alpine-${{ matrix.target }}
 
     steps:
     - name: Install dependencies
@@ -31,8 +30,7 @@ jobs:
       run: php artisan test
 
   pint:
-    runs-on: docker-cli
-    container: code.itinerare.net/internal/php-alpine:8.2
+    runs-on: php-alpine-8.2
     needs: laravel-tests
 
     steps:
@@ -50,13 +48,12 @@ jobs:
       with:
         message: 'refactor: fix PHP styling'
         gpg_key: ${{ secrets.CI_GPG }}
-    
+
     - name: Organize logs
       run: echo "Complete!"
 
   blade-formatter:
-    runs-on: docker-cli
-    container: code.itinerare.net/internal/node-alpine:3.22
+    runs-on: node-alpine
     needs: laravel-tests
 
     steps:
@@ -71,13 +68,12 @@ jobs:
       with:
         message: 'refactor: fix blade formatting'
         gpg_key: ${{ secrets.CI_GPG }}
-    
+
     - name: Organize logs
       run: echo "Complete!"
 
   rebuild-vite-assets:
-    runs-on: docker-cli
-    container: code.itinerare.net/internal/node-alpine:3.22
+    runs-on: node-alpine
     needs: laravel-tests
 
     steps:
@@ -92,6 +88,6 @@ jobs:
       with:
         message: 'chore(deps): rebuild vite assets'
         gpg_key: ${{ secrets.CI_GPG }}
-    
+
     - name: Organize logs
       run: echo "Complete!"
